@@ -14,8 +14,11 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
 from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.button import Button, ButtonBehavior
+from kivy.uix.button import ButtonBehavior
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.carousel import Carousel
+from kivy.uix.image import AsyncImage
+from card_view import Card
 
 class ImageButton(ButtonBehavior, Image):
     pass
@@ -40,16 +43,25 @@ class MyApp(App):
 
     def build(self):
         anchor_layout = AnchorLayout(anchor_x='center', anchor_y='bottom')
-
         screen_manager = ScreenManager()
+
         home_screen = Screen(name='Home')
         home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='Inter-SemiBold.ttf', font_size='40', markup=True))
+        carousel = Carousel(direction='right')
+        for i in range(10):
+            card = Card().build()
+            carousel.add_widget(card)
+        home_screen.add_widget(carousel)
+
         report_screen = Screen(name='Report')
         report_screen.add_widget(Label(text='[color=150470]Report Screen', font_name='Inter-SemiBold.ttf', font_size='40', markup=True))
+
         message_screen = Screen(name='Message')
         message_screen.add_widget(Label(text='[color=150470]Message Screen', font_name='Inter-SemiBold.ttf', font_size='40', markup=True))
+
         pin_screen = Screen(name='Pin')
         pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='Inter-SemiBold.ttf', font_size='40', markup=True))
+
         screen_manager.add_widget(home_screen)
         screen_manager.add_widget(report_screen)
         screen_manager.add_widget(message_screen)
