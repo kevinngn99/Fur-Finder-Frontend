@@ -56,11 +56,14 @@ class Card:
 
     def details(self, pos, size):
         anchor_layout = AnchorLayout(pos=pos, size=size, anchor_x='center', anchor_y='center')
-        label = Label(padding=(15, 15),
-                      text='[color=150470][size=20][font=Inter-Bold.ttf]Waffles\n[size=18][font=Inter-SemiBold.ttf]11 Months\n[size=16][font=Inter-Regular]Male',
-                      size_hint=(1.0, 1.0), halign="left", valign="top", markup=True)
-        label.bind(size=label.setter('text_size'))
-        anchor_layout.add_widget(label)
+        pet = Label(padding=(15, 15), size_hint=(1.0, 1.0), halign='left', valign='top', markup=True,
+                      text='[color=150470][size=20][font=Inter-SemiBold.ttf]Waffles\n[size=18][font=Inter-Medium.ttf]11 Months\n[size=16][font=Inter-Regular]Male')
+        pet.bind(size=pet.setter('text_size'))
+        time = Label(padding=(15, 15), halign='right', valign='bottom', markup=True,
+                     text='[color=150470][size=18][font=Feather.ttf] [font=Inter-Medium.ttf]Lost 5 Hours Ago')
+        time.bind(size=time.setter('text_size'))
+        anchor_layout.add_widget(pet)
+        anchor_layout.add_widget(time)
 
         return anchor_layout
 
