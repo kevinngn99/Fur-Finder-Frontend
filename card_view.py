@@ -4,6 +4,7 @@ from kivy.graphics import Color, RoundedRectangle
 from kivy.utils import get_color_from_hex
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.graphics import stencil_instructions
+from kivy.uix.label import Label
 
 
 class Card:
@@ -51,11 +52,21 @@ class Card:
         anchor_layout.add_widget(circle)
 
         border.add_widget(anchor_layout)
-
         return border
 
-    def build(self, pos):
+    def details(self, pos, size):
+        anchor_layout = AnchorLayout(pos=pos, size=size, anchor_x='center', anchor_y='center')
+        label = Label(padding=(15, 15),
+                      text='[color=150470][size=20][font=Inter-Bold.ttf]Waffles\n[size=18][font=Inter-SemiBold.ttf]11 Months\n[size=16][font=Inter-Regular]Male',
+                      size_hint=(1.0, 1.0), halign="left", valign="top", markup=True)
+        label.bind(size=label.setter('text_size'))
+        anchor_layout.add_widget(label)
+
+        return anchor_layout
+
+    def build(self, pos=(0, 0)):
         card_view = self.CardView(pos=pos, size=(250, 200), size_hint=(None, None))
         card_view.prepare()
         card_view.add_widget(self.circular_image(card_view.pos, card_view.size))
+        card_view.add_widget(self.details(card_view.pos, card_view.size))
         return card_view
