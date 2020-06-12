@@ -41,7 +41,7 @@ class Card:
         border = self.Border(pos=(x, y), size=(110, 110))
         border.prepare()
 
-        circle = self.Circle(source='corgi.jpg', pos=border.pos)
+        circle = self.Circle(source='images/corgi.jpg', pos=border.pos)
         if circle.image_ratio < 1:
             circle.size_hint = (circle.image_ratio + 1, circle.image_ratio + 1)
         else:
@@ -57,10 +57,10 @@ class Card:
     def details(self, pos, size):
         anchor_layout = AnchorLayout(pos=pos, size=size, anchor_x='center', anchor_y='center')
         pet = Label(padding=(15, 15), size_hint=(1.0, 1.0), halign='left', valign='top', markup=True,
-                      text='[color=150470][size=20][font=Inter-SemiBold.ttf]Waffles\n[size=18][font=Inter-Medium.ttf]11 Months\n[size=16][font=Inter-Regular]Male')
+                      text='[color=150470][size=20][font=assets/Inter-SemiBold.ttf]Waffles\n[size=18][font=assets/Inter-Medium.ttf]11 Months\n[size=16][font=assets/Inter-Regular.ttf]Male')
         pet.bind(size=pet.setter('text_size'))
         time = Label(padding=(15, 15), halign='right', valign='bottom', markup=True,
-                     text='[color=150470][size=18][font=Feather.ttf] [font=Inter-Medium.ttf]Lost 5 Hours Ago')
+                     text='[color=150470][size=18][font=assets/Feather.ttf] [font=assets/Inter-Medium.ttf]Lost 5 Hours Ago')
         time.bind(size=time.setter('text_size'))
         anchor_layout.add_widget(pet)
         anchor_layout.add_widget(time)

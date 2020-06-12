@@ -47,7 +47,7 @@ class MyApp(App):
         screen_manager = ScreenManager()
 
         home_screen = Screen(name='Home')
-        home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='Inter-SemiBold.ttf', font_size='40', markup=True))
+        home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40', markup=True))
 
         carousel = CustomCarousel(direction='right', pos=(0, 100), size=(375, 200), size_hint=(None, None))
         for i in range(10):
@@ -56,23 +56,23 @@ class MyApp(App):
         home_screen.add_widget(carousel)
 
         report_screen = Screen(name='Report')
-        report_screen.add_widget(Label(text='[color=150470]Report Screen', font_name='Inter-SemiBold.ttf', font_size='40', markup=True))
+        report_screen.add_widget(Label(text='[color=150470]Report Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40', markup=True))
 
         message_screen = Screen(name='Message')
-        message_screen.add_widget(Label(text='[color=150470]Message Screen', font_name='Inter-SemiBold.ttf', font_size='40', markup=True))
+        message_screen.add_widget(Label(text='[color=150470]Message Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40', markup=True))
 
         pin_screen = Screen(name='Pin')
-        pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='Inter-SemiBold.ttf', font_size='40', markup=True))
+        pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40', markup=True))
 
         screen_manager.add_widget(home_screen)
         screen_manager.add_widget(report_screen)
         screen_manager.add_widget(message_screen)
         screen_manager.add_widget(pin_screen)
 
-        home_button = ImageButton(source='home.png', on_press=lambda b: self.home_callback(screen_manager))
-        report_button = ImageButton(source='report.png', on_press=lambda b: self.report_callback(screen_manager))
-        message_button = ImageButton(source='message.png', on_press=lambda b: self.message_callback(screen_manager))
-        pin_button = ImageButton(source='heart.png', on_press=lambda b: self.pin_callback(screen_manager))
+        home_button = ImageButton(source='images/home.png', on_press=lambda b: self.home_callback(screen_manager))
+        report_button = ImageButton(source='images/report.png', on_press=lambda b: self.report_callback(screen_manager))
+        message_button = ImageButton(source='images/message.png', on_press=lambda b: self.message_callback(screen_manager))
+        pin_button = ImageButton(source='images/heart.png', on_press=lambda b: self.pin_callback(screen_manager))
 
         box_layout = BoxLayout(orientation='horizontal', size_hint=(None, None), size=(375, 50))
         box_layout.add_widget(home_button)
