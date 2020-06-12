@@ -1,4 +1,4 @@
-from kivy.uix.image import Image
+from kivy.uix.image import AsyncImage
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, RoundedRectangle
 from kivy.utils import get_color_from_hex
@@ -20,7 +20,7 @@ class Card:
                 Color(rgb=get_color_from_hex('#150470'))
                 RoundedRectangle(pos=self.pos, size=self.size, radius=[55])
 
-    class Circle(Image):
+    class Circle(AsyncImage):
         def prepare(self):
             with self.canvas.before:
                 stencil_instructions.StencilPush()
@@ -29,6 +29,14 @@ class Card:
             with self.canvas.after:
                 stencil_instructions.StencilUnUse()
                 stencil_instructions.StencilPop()
+
+    def __init__(self, name, gender, image, breed, color, date):
+        self._name = name,
+        self._gender = gender,
+        self._image = image,
+        self._breed = breed,
+        self._color = color,
+        self._date = date
 
     def circular_image(self, pos, size):
         card_x, card_y = pos
@@ -41,7 +49,7 @@ class Card:
         border = self.Border(pos=(x, y), size=(110, 110))
         border.prepare()
 
-        circle = self.Circle(source='images/corgi.jpg', pos=border.pos)
+        circle = self.Circle(source=self._image[0], pos=border.pos)
         if circle.image_ratio < 1:
             circle.size_hint = (circle.image_ratio + 1, circle.image_ratio + 1)
         else:
@@ -57,10 +65,10 @@ class Card:
     def details(self, pos, size):
         anchor_layout = AnchorLayout(pos=pos, size=size, anchor_x='center', anchor_y='center')
         pet = Label(padding=(15, 15), size_hint=(1.0, 1.0), halign='left', valign='top', markup=True,
-                      text='[color=150470][size=20][font=assets/Inter-SemiBold.ttf]Waffles\n[size=18][font=assets/Inter-Medium.ttf]11 Months\n[size=16][font=assets/Inter-Regular.ttf]Male')
+                      text='[color=150470][size=20][font=assets/Inter-SemiBold.ttf]'+self._name[0]+'\n[size=18][font=assets/Inter-Medium.ttf]'+self._gender[0]+'\n[size=16][font=assets/Inter-Regular.ttf]'+self._date.split(':')[0])
         pet.bind(size=pet.setter('text_size'))
         time = Label(padding=(15, 15), halign='right', valign='bottom', markup=True,
-                     text='[color=150470][size=18][font=assets/Feather.ttf] [font=assets/Inter-Medium.ttf]Lost 5 Hours Ago')
+                     text='[color=150470][size=18][font=assets/Feather.ttf] [font=assets/Inter-Medium.ttf]5 Hours Ago')
         time.bind(size=time.setter('text_size'))
         anchor_layout.add_widget(pet)
         anchor_layout.add_widget(time)
