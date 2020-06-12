@@ -5,6 +5,7 @@ from kivy.config import Config
 Config.set('graphics', 'width', '375')
 Config.set('graphics', 'height', '812')
 Config.set('graphics', 'resizable', False)
+Config.set('graphics', 'multisamples', '5')
 
 from kivy.core.window import Window
 Window.clearcolor = (1, 1, 1, 1)
@@ -14,17 +15,17 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
 from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.button import ButtonBehavior
+from kivy.uix.button import ButtonBehavior, Button
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.uix.carousel import Carousel
-from kivy.uix.image import AsyncImage
+from custom_carousel import CustomCarousel
 from card_view import Card
+
 
 class ImageButton(ButtonBehavior, Image):
     pass
 
-class MyApp(App):
 
+class MyApp(App):
     def home_callback(self, screen_manager):
         print('The home button is being pressed')
         screen_manager.current = 'Home'
@@ -47,9 +48,10 @@ class MyApp(App):
 
         home_screen = Screen(name='Home')
         home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='Inter-SemiBold.ttf', font_size='40', markup=True))
-        carousel = Carousel(direction='right')
+
+        carousel = CustomCarousel(direction='right', pos=(0, 100), size=(375, 200), size_hint=(None, None))
         for i in range(10):
-            card = Card().build()
+            card = Card().build((0, 0))
             carousel.add_widget(card)
         home_screen.add_widget(carousel)
 

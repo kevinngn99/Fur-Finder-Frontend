@@ -5,6 +5,7 @@ from kivy.utils import get_color_from_hex
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.graphics import stencil_instructions
 
+
 class Card:
     class CardView(Widget):
         def prepare(self):
@@ -28,13 +29,13 @@ class Card:
                 stencil_instructions.StencilUnUse()
                 stencil_instructions.StencilPop()
 
-
     def circular_image(self, pos, size):
         card_x, card_y = pos
         card_width, card_height = size
+        padding = 15
 
-        x = card_x + card_width - (110 + 10)
-        y = card_y + card_height - (110 + 10)
+        x = card_x + card_width - (110 + padding)
+        y = card_y + card_height - (110 + padding)
 
         border = self.Border(pos=(x, y), size=(110, 110))
         border.prepare()
@@ -53,8 +54,8 @@ class Card:
 
         return border
 
-    def build(self):
-        card_view = self.CardView(pos=(0, 0), size=(250, 200))
+    def build(self, pos):
+        card_view = self.CardView(pos=pos, size=(250, 200), size_hint=(None, None))
         card_view.prepare()
         card_view.add_widget(self.circular_image(card_view.pos, card_view.size))
         return card_view
