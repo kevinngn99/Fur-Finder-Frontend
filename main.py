@@ -1,20 +1,21 @@
 import kivy
-<<<<<<< Updated upstream
-=======
-kivy.require('1.11.1') # replace with your current kivy version !
 
-#:include KivyFile/login.kv
+kivy.require('1.11.1')# replace with your current kivy version !
 
->>>>>>> Stashed changes
+
+
+from kivy.lang import Builder
+
 from kivy.config import Config
 from kivy.core.window import Window
-<<<<<<< Updated upstream
-from kivy.app import App
-=======
 Window.clearcolor = (1, 1, 1, 1)
 
 from kivymd.app import MDApp
->>>>>>> Stashed changes
+
+Builder.load_string("""
+#:include KivyFile/login.kv
+
+""")
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
@@ -25,7 +26,6 @@ from custom_carousel import CustomCarousel
 from card_view import Card
 import requests
 import json
-
 
 class ImageButton(ButtonBehavior, Image):
     pass
@@ -54,6 +54,7 @@ class MyApp(MDApp):
         screen_manager.current = 'Pin'
 
     def build(self):
+        self.theme_cls.primary_palette = "DeepPurple"
         anchor_layout = AnchorLayout(anchor_x='center', anchor_y='bottom')
 
         screen_manager = ScreenManager()
@@ -83,7 +84,6 @@ class MyApp(MDApp):
         screen_manager.add_widget(report_screen)
         screen_manager.add_widget(message_screen)
         screen_manager.add_widget(pin_screen)
-
 
         home_button = ImageButton(source='images/home.png', on_press=lambda b: self.home_callback(screen_manager))
         report_button = ImageButton(source='images/report.png', on_press=lambda b: self.report_callback(screen_manager))
