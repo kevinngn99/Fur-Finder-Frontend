@@ -1,7 +1,20 @@
 import kivy
+<<<<<<< Updated upstream
+=======
+kivy.require('1.11.1') # replace with your current kivy version !
+
+#:include KivyFile/login.kv
+
+>>>>>>> Stashed changes
 from kivy.config import Config
 from kivy.core.window import Window
+<<<<<<< Updated upstream
 from kivy.app import App
+=======
+Window.clearcolor = (1, 1, 1, 1)
+
+from kivymd.app import MDApp
+>>>>>>> Stashed changes
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
@@ -17,8 +30,13 @@ import json
 class ImageButton(ButtonBehavior, Image):
     pass
 
+class BackgroundBox(BoxLayout):
+    pass
 
-class MyApp(App):
+class LoginView(Screen):
+    pass
+
+class MyApp(MDApp):
     def home_callback(self, screen_manager):
         print('The home button is being pressed')
         screen_manager.current = 'Home'
@@ -37,7 +55,9 @@ class MyApp(App):
 
     def build(self):
         anchor_layout = AnchorLayout(anchor_x='center', anchor_y='bottom')
+
         screen_manager = ScreenManager()
+        login_screen = LoginView(name='login')
 
         home_screen = Screen(name='Home')
         home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
@@ -58,10 +78,12 @@ class MyApp(App):
         pin_screen = Screen(name='Pin')
         pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
 
+        screen_manager.add_widget(login_screen)
         screen_manager.add_widget(home_screen)
         screen_manager.add_widget(report_screen)
         screen_manager.add_widget(message_screen)
         screen_manager.add_widget(pin_screen)
+
 
         home_button = ImageButton(source='images/home.png', on_press=lambda b: self.home_callback(screen_manager))
         report_button = ImageButton(source='images/report.png', on_press=lambda b: self.report_callback(screen_manager))

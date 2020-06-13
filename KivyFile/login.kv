@@ -1,0 +1,43 @@
+#:import utils kivy.utils
+#:import md_icons kivymd.icon_definitions
+<LoginView>:
+    name: "login"
+    BackgroundBox:
+
+    MDCard:
+        orientation:'vertical'
+        #size_hint: [0.8,0.8]
+        #pos_hint: {"center_x": .5, "center_y": .5}
+        BoxLayout:
+            orientation:'vertical'
+            MDLabel:
+                text:"test"
+                text_size: self.size
+                font_size: 20
+                halign: "center"
+                valign: "middle"
+            MDTextField:
+                text: "Username"
+            MDRoundFlatIconButton:
+                icon: "account-cirle"
+                text: "Sign Up"
+                width: dp(250)
+
+
+
+<BackgroundBox>:
+    orientation: 'vertical'
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: utils.get_color_from_hex('#D6B3F8')
+            RoundedRectangle:
+                pos:self.pos
+                size: 250, 200
+                radius: [0,0,40,40]
+    BoxLayout:
+        orientation: 'horizontal'
+
+
+
