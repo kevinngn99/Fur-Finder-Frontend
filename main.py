@@ -43,7 +43,7 @@ class MyApp(App):
         home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
 
         carousel = CustomCarousel(direction='right', pos=(0, 100), size=(375, 200), size_hint=(None, None))
-        data = json.loads(requests.get('http://10.0.0.30:8000/api/pets/').text)
+        data = json.loads(requests.get('https://fur-finder.herokuapp.com/api/pets/').text)
         for dict in data[:10]:
             card = Card(dict['name'], dict['gender'], dict['image'], dict['breed'], dict['color'], dict['date']).build()
             carousel.add_widget(card)
