@@ -10,20 +10,31 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
 from kivy.graphics import stencil_instructions
 from kivy.metrics import dp, sp
+from kivy.uix.widget import Widget
 
 
 class Home:
+    class Profile(Image):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self.rect = None
+
+        def create(self):
+            with self.canvas.before:
+                stencil_instructions.StencilPush()
+                self.rect = RoundedRectangle(pos=self.pos, size_hint=self.size_hint, size=self.size, radius=(dp(25), dp(25), dp(25), dp(25)))
+                stencil_instructions.StencilUse()
+            with self.canvas.after:
+                stencil_instructions.StencilUnUse()
+                stencil_instructions.StencilPop()
+
     class Header:
-        class Profile(Image):
+        class Border(Widget):
             def __init__(self, **kwargs):
                 super().__init__(**kwargs)
-                with self.canvas.before:
-                    stencil_instructions.StencilPush()
-                    self._rect = RoundedRectangle(pos=self.pos, size_hint=self.size_hint, size=self.size, radius=(dp(25), dp(25), dp(25), dp(25)))
-                    stencil_instructions.StencilUse()
                 with self.canvas.after:
-                    stencil_instructions.StencilUnUse()
-                    stencil_instructions.StencilPop()
+                    Color(rgb=get_color_from_hex('#150470'))
+                    self._rect = RoundedRectangle(pos=self.pos, size_hint=self.size_hint, size=self.size, radius=(dp(25), dp(25), dp(25), dp(25)))
 
             def pos_callback(self, instance, value):
                 self._rect.pos = value
@@ -32,10 +43,10 @@ class Home:
             anchor_layout = AnchorLayout(size_hint=(1, None), height=dp(50), anchor_x='right', anchor_y='center')
             header = Label(size_hint=(1, None), height=dp(50), halign='left', valign='center', font_size=sp(40), color=get_color_from_hex('#150470'), text='[font=assets/Inter-SemiBold.ttf]Home', markup=True)
             header.bind(size=header.setter('text_size'))
-            profile = self.Profile(size_hint=(None, None), size=(dp(50), dp(50)), source='images/me.jpg')
-            profile.bind(pos=profile.pos_callback)
+            border = self.Border(size_hint=(None, None), size=(dp(50), dp(50)))
+            border.bind(pos=border.pos_callback)
             anchor_layout.add_widget(header)
-            anchor_layout.add_widget(profile)
+            anchor_layout.add_widget(border)
             return anchor_layout
 
     class Person:
@@ -61,6 +72,10 @@ class Home:
         self._featured = featured
         self._recent = recent
 
+    def update_pos(self, instance, value, profile=None):
+        profile.pos = value
+        profile.rect.pos = value
+
     def create(self):
         box_layout = BoxLayout(orientation='vertical', spacing=dp(30), padding=(dp(35), dp(35), dp(35), dp(0)))
 
@@ -75,7 +90,12 @@ class Home:
         box_layout.add_widget(self.Person().create())
         box_layout.add_widget(scroll_view)
 
+        profile = self.Profile(size_hint=(None, None), size=(dp(50), dp(50)), source='images/me.jpg')
+        profile.create()
+        box_layout.children[2].children[0].fbind('pos', self.update_pos, profile=profile)
+
         home_screen = Screen(name='Home')
         home_screen.add_widget(box_layout)
+        home_screen.add_widget(profile)
 
         return home_screen
