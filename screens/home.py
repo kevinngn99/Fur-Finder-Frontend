@@ -1,0 +1,81 @@
+from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.graphics import Color, RoundedRectangle
+from kivy.utils import get_color_from_hex
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.image import Image
+from kivy.uix.label import Label
+from kivy.uix.screenmanager import Screen
+from kivy.uix.scrollview import ScrollView
+from kivy.graphics import stencil_instructions
+from kivy.metrics import dp, sp
+
+
+class Home:
+    class Header:
+        class Profile(Image):
+            def __init__(self, **kwargs):
+                super().__init__(**kwargs)
+                with self.canvas.before:
+                    stencil_instructions.StencilPush()
+                    self._rect = RoundedRectangle(pos=self.pos, size_hint=self.size_hint, size=self.size, radius=(dp(25), dp(25), dp(25), dp(25)))
+                    stencil_instructions.StencilUse()
+                with self.canvas.after:
+                    stencil_instructions.StencilUnUse()
+                    stencil_instructions.StencilPop()
+
+            def pos_callback(self, instance, value):
+                self._rect.pos = value
+
+        def create(self):
+            anchor_layout = AnchorLayout(size_hint=(1, None), height=dp(50), anchor_x='right', anchor_y='center')
+            header = Label(size_hint=(1, None), height=dp(50), halign='left', valign='center', font_size=sp(40), color=get_color_from_hex('#150470'), text='[font=assets/Inter-SemiBold.ttf]Home', markup=True)
+            header.bind(size=header.setter('text_size'))
+            profile = self.Profile(size_hint=(None, None), size=(dp(50), dp(50)), source='images/me.jpg')
+            profile.bind(pos=profile.pos_callback)
+            anchor_layout.add_widget(header)
+            anchor_layout.add_widget(profile)
+            return anchor_layout
+
+    class Person:
+        def create(self):
+            box_layout = BoxLayout(size_hint=(1, None), height=dp(60), orientation='vertical')
+            name = Label(size_hint=(1, None), height=dp(36), halign='left', valign='center', font_size=sp(30), color=get_color_from_hex('#150470'), text='[font=assets/Inter-SemiBold.ttf]Welcome, Kevin', markup=True)
+            name.bind(size=name.setter('text_size'))
+            location = Label(size_hint=(1, None), height=dp(24), halign='left', valign='center', color=get_color_from_hex('#150470'), text='[size=24][font=assets/Feather.ttf]'+'[size=18][font=assets/Inter-Medium.ttf] Gainesville, FL', markup=True)
+            location.bind(size=location.setter('text_size'))
+            box_layout.add_widget(name)
+            box_layout.add_widget(location)
+            return box_layout
+
+    class Featured:
+        def create(self):
+            anchor_layout = AnchorLayout(size_hint=(1, None), height=dp(200), anchor_x='center', anchor_y='center')
+            return anchor_layout
+
+    def __init__(self, header=None, person=None, search=None, featured=None, recent=None):
+        self._header = header
+        self._person = person
+        self._search = search
+        self._featured = featured
+        self._recent = recent
+
+    def create(self):
+        box_layout = BoxLayout(orientation='vertical', spacing=dp(30), padding=(dp(35), dp(35), dp(35), dp(0)))
+
+        scroll_view = ScrollView(size_hint=(1, 1))
+        grid_layout = GridLayout(cols=1, size_hint=(1, None))
+        grid_layout.bind(minimum_height=grid_layout.setter('height'))
+        for i in range(50):
+            grid_layout.add_widget(Button(text=str(i), size_hint_y=None, height=40))
+        scroll_view.add_widget(grid_layout)
+
+        box_layout.add_widget(self.Header().create())
+        box_layout.add_widget(self.Person().create())
+        box_layout.add_widget(scroll_view)
+
+        home_screen = Screen(name='Home')
+        home_screen.add_widget(box_layout)
+
+        return home_screen
