@@ -34,7 +34,7 @@ class Home:
                 super().__init__(**kwargs)
                 with self.canvas.after:
                     Color(rgb=get_color_from_hex('#150470'))
-                    self._rect = RoundedRectangle(pos=self.pos, size_hint=self.size_hint, size=self.size, radius=(dp(25), dp(25), dp(25), dp(25)))
+                    self._rect = RoundedRectangle(size_hint=self.size_hint, size=self.size, radius=(dp(25), dp(25), dp(25), dp(25)))
 
             def pos_callback(self, instance, value):
                 self._rect.pos = value
@@ -61,8 +61,52 @@ class Home:
             return box_layout
 
     class Featured:
+        class Card(Image):
+            def __init__(self, **kwargs):
+                super().__init__(**kwargs)
+                with self.canvas.before:
+                    Color(rgb=get_color_from_hex('#FFB2D1'))
+                    self._rect = RoundedRectangle(size_hint=self.size_hint, size=self.size, radius=(dp(15), dp(15), dp(15), dp(15)))
+
+            def pos_callback(self, instance, value):
+                self._rect.pos = value
+
+        class SmallButton(AnchorLayout):
+            def __init__(self, **kwargs):
+                super().__init__(**kwargs)
+                with self.canvas.before:
+                    Color(rgb=get_color_from_hex('#150470'))
+                    self._rect = RoundedRectangle(size_hint=self.size_hint, size=self.size, radius=(dp(10), dp(10), dp(10), dp(10)))
+
+            def pos_callback(self, instance, value):
+                self._rect.pos = value
+
         def create(self):
-            anchor_layout = AnchorLayout(size_hint=(1, None), height=dp(200), anchor_x='center', anchor_y='center')
+            anchor_layout = AnchorLayout(size_hint=(1, None), height=dp(275), anchor_x='center', anchor_y='center')
+
+            card = self.Card(source='images/hearts.png', allow_stretch=True, size_hint=(None, None), size=(dp(321), dp(200)))
+            card.bind(pos=card.pos_callback)
+
+            text_layout = AnchorLayout(size_hint=(None, None), size=(dp(321), dp(200)), anchor_x='center', anchor_y='center')
+            text = Label(padding=(dp(20), dp(20)), halign='left', valign='top', text='[color=150470][size='+str(int(dp(22)))+'][font=assets/Inter-SemiBold.ttf]Reunited Animals\n'+'[color=150470][size='+str(int(dp(16)))+'][font=assets/Inter-Regular.ttf]View animals that have been reunited with their owners', markup=True)
+            text.bind(size=text.setter('text_size'))
+            text_layout.add_widget(text)
+
+            button_layout = AnchorLayout(size_hint=(None, None), size=(dp(321), dp(200)), padding=dp(20), anchor_x='left', anchor_y='bottom')
+            button = self.SmallButton(size_hint=(None, None), size=(dp(140), dp(45)))
+            button.bind(pos=button.pos_callback)
+            view = Label(halign='center', valign='center', text='[color=FFFFFF][size='+str(int(dp(16)))+'][font=assets/Inter-SemiBold.ttf]View', markup=True)
+            view.bind(size=view.setter('text_size'))
+            button.add_widget(view)
+            button_layout.add_widget(button)
+
+            image = AnchorLayout(size_hint=(None, None), size=(dp(321), dp(275)), anchor_x='right', anchor_y='bottom')
+            image.add_widget(Image(source='images/featured.png', allow_stretch=True, size_hint=(None, None), size=(dp(151), dp(136))))
+
+            anchor_layout.add_widget(card)
+            anchor_layout.add_widget(text_layout)
+            anchor_layout.add_widget(button_layout)
+            anchor_layout.add_widget(image)
             return anchor_layout
 
     def __init__(self, header=None, person=None, search=None, featured=None, recent=None):
@@ -78,12 +122,13 @@ class Home:
         anchor.pos = value
 
     def create(self):
-        box_layout = BoxLayout(orientation='vertical', spacing=30)
+        box_layout = BoxLayout(orientation='vertical', spacing=dp(30))
 
         scroll_view = ScrollView(size_hint=(1, 1))
-        grid_layout = GridLayout(cols=1, size_hint=(1, None))
+        grid_layout = GridLayout(cols=1, size_hint=(1, None), spacing=dp(20))
         grid_layout.bind(minimum_height=grid_layout.setter('height'))
-        for i in range(50):
+        grid_layout.add_widget(self.Featured().create())
+        for i in range(10):
             grid_layout.add_widget(Button(text=str(i), size_hint_y=None, height=dp(40)))
         scroll_view.add_widget(grid_layout)
 
@@ -91,7 +136,7 @@ class Home:
         box_layout.add_widget(self.Person().create())
         box_layout.add_widget(scroll_view)
 
-        profile = self.Profile(source='images/corgi.jpg')
+        profile = self.Profile(source='images/me.jpg')
         if profile.image_ratio < 1:
             profile.size_hint = (profile.image_ratio + 1, profile.image_ratio + 1)
         else:
