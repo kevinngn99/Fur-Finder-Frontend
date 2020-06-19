@@ -10,6 +10,7 @@ from kivy.animation import Animation
 from kivy.uix.stencilview import StencilView
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.properties import BooleanProperty, OptionProperty, AliasProperty, NumericProperty, ListProperty, ObjectProperty, StringProperty
+from kivy.metrics import dp
 
 
 class CustomCarousel(StencilView):
@@ -121,7 +122,7 @@ class CustomCarousel(StencilView):
 
     def load_next(self, mode='next'):
         if self.index is not None:
-            w, h = (275, 200)
+            w, h = (dp(275), dp(200))
             _direction = {
                 'top': -h / 2,
                 'bottom': h / 2,
@@ -189,7 +190,7 @@ class CustomCarousel(StencilView):
         no_of_slides = len(slides) - 1
         if not slides:
             return
-        x, y, width, height = self.x, self.y, 275, self.height
+        x, y, width, height = self.x, self.y, dp(275), self.height
         _offset, direction = self._offset, self.direction
         _prev, _prev_prev, _next, _next_next, _current = self._prev, self._prev_prev, self._next, self._next_next, self._current
         get_slide_container = self.get_slide_container
@@ -199,7 +200,7 @@ class CustomCarousel(StencilView):
         _loop = self.loop
 
         if direction[0] in ['r', 'l']:
-            xoff = x + _offset + 62.5
+            xoff = x + _offset + dp(62.5)
             x_prev = {'l': xoff + width, 'r': xoff - width}
             x_next = {'l': xoff - width, 'r': xoff + width}
 
@@ -252,7 +253,7 @@ class CustomCarousel(StencilView):
                     first_slide.pos = (x, y_next[direction[0]])
 
     def on_size(self, *args):
-        size = (275, 200)
+        size = (dp(275), dp(200))
         for slide in self.slides_container:
             slide.size = size
         self._trigger_position_visible_slides()
@@ -276,7 +277,7 @@ class CustomCarousel(StencilView):
         # if reached full offset, switch index to next or prev
         direction = self.direction
         _offset = self._offset
-        width = 275
+        width = dp(275)
         height = self.height
         index = self.index
         if self._skip_slide is not None or index is None:
@@ -303,7 +304,7 @@ class CustomCarousel(StencilView):
         new_offset = 0
         direction = kwargs.get('direction', self.direction)
         is_horizontal = direction[0] in ['r', 'l']
-        extent = 275 if is_horizontal else self.height
+        extent = dp(275) if is_horizontal else self.height
         min_move = kwargs.get('min_move', self.min_move)
         _offset = kwargs.get('offset', self._offset)
 
@@ -454,7 +455,7 @@ class CustomCarousel(StencilView):
             return
 
     def add_widget(self, widget, index=0, canvas=None):
-        slide = RelativeLayout(size=(275, 200), x=self.x - 275, y=self.y)
+        slide = RelativeLayout(size=(dp(275), dp(200)), x=self.x - dp(275), y=self.y)
         slide.add_widget(widget)
         super(CustomCarousel, self).add_widget(slide, index, canvas)
         if index != 0:

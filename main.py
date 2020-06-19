@@ -13,32 +13,19 @@ from kivy.core.window import Window
 Window.clearcolor = (1, 1, 1, 1)
 
 from kivy.app import App
-from kivy.uix.label import Label
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.image import Image
 from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import ButtonBehavior, Button
-from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.graphics import Color, Rectangle, RoundedRectangle
+from kivy.graphics import Color, RoundedRectangle
 from kivy.utils import get_color_from_hex
-from kivy.uix.widget import Widget
 from kivy.uix.textinput import TextInput
 from kivy.animation import Animation
 from kivy.metrics import dp
-from custom_carousel import CustomCarousel
-from card_view import Card
 import requests
 import json
 from jnius import cast
 from jnius import autoclass
 from navigation import Navigation
 from screen_manager import Screens
-
-
-class ImageButton(ButtonBehavior, Image):
-    pass
 
 
 class SearchBox(AnchorLayout):

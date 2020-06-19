@@ -1,6 +1,8 @@
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from card_view import Card
+from custom_carousel import CustomCarousel
 from kivy.graphics import Color, RoundedRectangle
 from kivy.utils import get_color_from_hex
 from kivy.uix.gridlayout import GridLayout
@@ -82,7 +84,7 @@ class Home:
                 self._rect.pos = value
 
         def create(self):
-            anchor_layout = AnchorLayout(size_hint=(1, None), height=dp(275), anchor_x='center', anchor_y='center')
+            anchor_layout = AnchorLayout(size_hint=(1, None), height=dp(238), anchor_x='center', anchor_y='top')
 
             card = self.Card(source='images/hearts.png', allow_stretch=True, size_hint=(None, None), size=(dp(321), dp(200)))
             card.bind(pos=card.pos_callback)
@@ -100,7 +102,7 @@ class Home:
             button.add_widget(view)
             button_layout.add_widget(button)
 
-            image = AnchorLayout(size_hint=(None, None), size=(dp(321), dp(275)), anchor_x='right', anchor_y='bottom')
+            image = AnchorLayout(size_hint=(None, None), size=(dp(321), dp(238)), anchor_x='right', anchor_y='bottom')
             image.add_widget(Image(source='images/featured.png', allow_stretch=True, size_hint=(None, None), size=(dp(151), dp(136))))
 
             anchor_layout.add_widget(card)
@@ -125,11 +127,20 @@ class Home:
         box_layout = BoxLayout(orientation='vertical', spacing=dp(30))
 
         scroll_view = ScrollView(size_hint=(1, 1))
-        grid_layout = GridLayout(cols=1, size_hint=(1, None), spacing=dp(20))
+        grid_layout = GridLayout(cols=1, size_hint=(1, None), spacing=dp(0))
         grid_layout.bind(minimum_height=grid_layout.setter('height'))
+        grid_layout.add_widget(Button(text='Featured', size_hint=(1, None), height=dp(40)))
         grid_layout.add_widget(self.Featured().create())
+        carousel = CustomCarousel(direction='right', size_hint=(1, None), height=dp(200))
         for i in range(10):
-            grid_layout.add_widget(Button(text=str(i), size_hint_y=None, height=dp(40)))
+            card = Card('Waffles', 'Male', 'images/corgi.jpg', 'Corgi', 'Gold', 'Lost').build()
+            carousel.add_widget(card)
+        grid_layout.add_widget(Button(text='Recent', size_hint=(1, None), height=dp(40)))
+        anchor_layout = AnchorLayout(size_hint=(1, None), height=dp(200))
+        anchor_layout.add_widget(carousel)
+        grid_layout.add_widget(anchor_layout)
+        for i in range(10):
+            grid_layout.add_widget(Button(text='Button', size_hint=(1, None), height=dp(40)))
         scroll_view.add_widget(grid_layout)
 
         box_layout.add_widget(self.Header().create())
