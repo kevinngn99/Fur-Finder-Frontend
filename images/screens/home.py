@@ -1,6 +1,6 @@
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
+from kivy.uix.button import Button, ButtonBehavior
 from card_view import Card
 from custom_carousel import CustomCarousel
 from kivy.graphics import Color, RoundedRectangle
@@ -15,17 +15,8 @@ from kivy.metrics import dp, sp
 from kivy.uix.widget import Widget
 
 
-class CustomScrollView(ScrollView):
-    def on_touch_down(self, touch):
-        # get touch position in coordinates of the main_box (parent of inner_scroll)
-        x, y = self.children[0].to_widget(*self.to_window(*touch.pos))
-
-        # if converted position is within the inner_scroll, send touch to the inner_scroll
-        if self.children[0].children[len(self.children[0].children) - 4].collide_point(x, y):
-            touch.pos = (x, y)   # change touch position to coordinates in main_box
-            return self.children[0].children[len(self.children[0].children) - 4].on_touch_down(touch)   # call on_touch of inner_scroll
-        else:
-            return super(CustomScrollView, self).on_touch_down(touch)
+class Carousel(CustomCarousel, ButtonBehavior):
+    pass
 
 
 class Home:
@@ -136,30 +127,23 @@ class Home:
         profile.rect.pos = value
         anchor.pos = value
 
+    def press_callback(self):
+        print('carousel touched')
+
     def create(self):
         box_layout = BoxLayout(orientation='vertical', spacing=dp(30))
 
-        scroll_view = CustomScrollView(do_scroll_x=False, size_hint=(1, 1))
-        grid_layout = GridLayout(cols=1, size_hint=(1, None), spacing=dp(30))
+        scroll_view = ScrollView(do_scroll_x=False, size_hint=(1, 1))
+        grid_layout = GridLayout(cols=1, size_hint=(1, None), spacing=dp(0))
         grid_layout.bind(minimum_height=grid_layout.setter('height'))
-        featured_text_layout = AnchorLayout(size_hint=(1, None), height=dp(30), anchor_x='center', anchor_y='center')
-        featured_text = Label(padding=(dp(35), dp(0)), halign='left', valign='center', font_size=dp(30), text='[color=150470][font=assets/Inter-SemiBold.ttf]Featured', markup=True)
-        featured_text.bind(size=featured_text.setter('text_size'))
-        featured_text_layout.add_widget(featured_text)
-        grid_layout.add_widget(featured_text_layout)
+        grid_layout.add_widget(Button(text='Featured', size_hint=(1, None), height=dp(40)))
         grid_layout.add_widget(self.Featured().create())
-        carousel = CustomCarousel(ignore_perpendicular_swipes=True, direction='right', size_hint=(1, None), height=dp(200))
+        carousel = Carousel(direction='right', size_hint=(1, None), height=dp(200))
+        carousel.on_press = lambda: self.press_callback()
         for i in range(10):
             card = Card('Waffles', 'Male', 'images/corgi.jpg', 'Corgi', 'Gold', 'Lost').build()
             carousel.add_widget(card)
-        recent_text_layout = AnchorLayout(size_hint=(1, None), height=dp(30), anchor_x='center', anchor_y='center')
-        recent_text = Label(padding=(dp(35), dp(0)), halign='left', valign='center', font_size=dp(30), text='[color=150470][font=assets/Inter-SemiBold.ttf]Recent', markup=True)
-        recent_text.bind(size=recent_text.setter('text_size'))
-        see_all_text = Label(padding=(dp(35), dp(0)), halign='right', valign='center', font_size=dp(18), text='[color=B9B7C1][font=assets/Inter-SemiBold.ttf]See All', markup=True)
-        see_all_text.bind(size=see_all_text.setter('text_size'))
-        recent_text_layout.add_widget(recent_text)
-        recent_text_layout.add_widget(see_all_text)
-        grid_layout.add_widget(recent_text_layout)
+        grid_layout.add_widget(Button(text='Recent', size_hint=(1, None), height=dp(40)))
         carousel_layout = AnchorLayout(size_hint=(1, None), height=dp(200))
         carousel_layout.add_widget(carousel)
         grid_layout.add_widget(carousel_layout)

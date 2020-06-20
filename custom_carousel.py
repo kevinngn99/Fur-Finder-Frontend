@@ -16,12 +16,12 @@ from kivy.metrics import dp
 class CustomCarousel(StencilView):
     slides = ListProperty([])
     direction = OptionProperty('right', options=('right', 'left', 'top', 'bottom'))
-    min_move = NumericProperty(0.2)
+    min_move = NumericProperty(0.1)
     anim_move_duration = NumericProperty(0.5)
     anim_cancel_duration = NumericProperty(0.3)
     loop = BooleanProperty(False)
     scroll_timeout = NumericProperty(200)
-    scroll_distance = NumericProperty('20dp')
+    scroll_distance = NumericProperty('1dp')
     anim_type = StringProperty('out_quad')
     ignore_perpendicular_swipes = BooleanProperty(False)
 
@@ -200,7 +200,7 @@ class CustomCarousel(StencilView):
         _loop = self.loop
 
         if direction[0] in ['r', 'l']:
-            xoff = x + _offset + dp(62.5)
+            xoff = x + _offset + dp((self.width - dp(250)) / dp(2))
             x_prev = {'l': xoff + width, 'r': xoff - width}
             x_next = {'l': xoff - width, 'r': xoff + width}
 
