@@ -14,7 +14,7 @@ from kivymd.app import MDApp
 
 Builder.load_string("""
 #:include KivyFile/login.kv
-
+#:include KivyFile/report.kv
 """)
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
@@ -23,6 +23,9 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.button import ButtonBehavior, Button
 from kivy.uix.screenmanager import Screen, ScreenManager
 from custom_carousel import CustomCarousel
+from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.picker import MDDatePicker
+from kivy.properties import ObjectProperty
 from card_view import Card
 import requests
 import json
@@ -35,6 +38,21 @@ class BackgroundBox(BoxLayout):
 
 class LoginView(Screen):
     pass
+
+class ReportView(Screen):
+    gender = ObjectProperty(None)
+    gender_items = [{"text": "Female"},{"text": "Label2"}]
+
+    def gender_menu(self):
+        print("we are here")
+        self.gender_menu = MDDropdownMenu(caller = ReportView().ids.gender,
+                                          items=self.gender_items,
+                                          callback=self.set_item,
+                                          position="center",
+                                          width_mult=5)
+    def set_item(self,instance):
+        self.ids.gender.text = instance.text
+        print(instance.text)
 
 class MyApp(MDApp):
     def home_callback(self, screen_manager):
@@ -59,19 +77,19 @@ class MyApp(MDApp):
 
         screen_manager = ScreenManager()
         login_screen = LoginView(name='login')
-
+        report_screen = ReportView(name='Report')
         home_screen = Screen(name='Home')
         home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
 
         carousel = CustomCarousel(direction='right', pos=(0, 100), size=(375, 200), size_hint=(None, None))
-        data = json.loads(requests.get('http://10.0.0.30:8000/api/pets/').text)
-        for dict in data[:10]:
-            card = Card(dict['name'], dict['gender'], dict['image'], dict['breed'], dict['color'], dict['date']).build()
-            carousel.add_widget(card)
-        home_screen.add_widget(carousel)
+        #data = json.loads(requests.get('http://10.0.0.30:8000/api/pets/').text)
+        #for dict in data[:10]:
+        #    card = Card(dict['name'], dict['gender'], dict['image'], dict['breed'], dict['color'], dict['date']).build()
+        #    carousel.add_widget(card)
+        #home_screen.add_widget(carousel)
 
-        report_screen = Screen(name='Report')
-        report_screen.add_widget(Label(text='[color=150470]Report Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
+        #report_screen = Screen(name='Report')
+        #report_screen.add_widget(Label(text='[color=150470]Report Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
 
         message_screen = Screen(name='Message')
         message_screen.add_widget(Label(text='[color=150470]Message Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))

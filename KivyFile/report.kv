@@ -1,0 +1,115 @@
+#:import utils kivy.utils
+
+<ReportView>
+    name: "Report A Pet"
+    BoxLayout:
+        orientation: "vertical"
+        MDLabel:
+            text: "Report a Pet"
+            color: app.theme_cls.primary_color
+            bold: True
+            pos_hint: {"center_x": .25, "center_y": .85}
+            text_size: self.size
+            font_size: 25
+            halign: "center"
+            valign: "top"
+
+    MDTextField:
+        hint_text: "Pet Name"
+        mode: "rectangle"
+        pos_hint: {"center_x": .5, "center_y": .9}
+        size_hint_x: (None)
+        width: 180
+
+    MDRectangleFlatIconButton:
+        id: gender
+        icon: "chevron-down"
+        pos_hint: {'center_x': .2, 'center_y': .8}
+        size_hint_x: (None)
+        width: 100
+        text: "Gender"
+        on_release: root.gender_menu()
+
+    MDRectangleFlatIconButton:
+        id: age
+        icon: "chevron-down"
+        size_hint_x: (None)
+        width: 80
+        pos_hint: {'center_x': .33, 'center_y': .8}
+        text: 'Age'
+        on_release: app.age_menu.open()
+
+    MDRectangleFlatIconButton:
+        id: breed_item
+        icon: "chevron-down"
+        size_hint_x: (None)
+        width: 195
+        pos_hint: {'center_x': .26, 'center_y': .7}
+        text: 'Breed'
+        on_release: app.breed_menu.open()
+
+    MDRectangleFlatIconButton:
+        id: size_item
+        icon: "chevron-down"
+        size_hint_x: (None)
+        width: 80
+        pos_hint: {'center_x': .19, 'center_y': .6}
+        text: 'Size'
+        on_release: app.size_menu.open()
+
+    MDRectangleFlatIconButton:
+        icon: "calendar"
+        text: "Date"
+        pos_hint: {'center_x': .32, 'center_y': .6}
+        width: dp(40)
+        on_release: app.date_picker()
+
+    MDRectangleFlatIconButton:
+        id: state
+        icon: "chevron-down"
+        size_hint_x: (None)
+        width: 80
+        pos_hint: {'center_x': .19, 'center_y': .5}
+        text: 'State'
+        on_release: app.state_menu.open()
+
+    MDRectangleFlatIconButton:
+        id: zip
+        icon: "chevron-down"
+        size_hint_x: (None)
+        width: 80
+        pos_hint: {'center_x': .32, 'center_y': .5}
+        text: 'Zip'
+        on_release: app.zip_menu.open()
+
+    MDTextField:
+        hint_text: "Location"
+        mode: "rectangle"
+        icon_right: "map-marker"
+        icon_right_color: app.theme_cls.primary_color
+        pos_hint: {"center_x": .255, "center_y": .4}
+        size_hint_x: (None)
+        width: 170
+
+    MDGridLayout:
+        cols: 3
+        row_default_height: (self.width - self.cols*self.spacing[0]) / self.cols
+        row_force_default: True
+        size_hint: (None,None)
+        height: 160
+        width: 200
+        adaptive_height: True
+        padding: dp(4), dp(4)
+        spacing: dp(4)
+        pos_hint: {"center_x": .25, "center_y": .2}
+
+        SmartTileWithLabel:
+            text: "[size=12]Cat 1[/size]\n[size=10]cat-1.jpg[/size]"
+
+        SmartTileWithLabel:
+            text: "[size=12]Cat 1[/size]\n[size=10]cat-1.jpg[/size]"
+            tile_text_color: app.theme_cls.accent_color
+
+        SmartTileWithLabel:
+            text: "[size=12]Cat 1[/size]\n[size=10]cat-1.jpg[/size]"
+            tile_text_color: app.theme_cls.accent_color
