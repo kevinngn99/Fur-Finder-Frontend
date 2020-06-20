@@ -4,29 +4,33 @@
     name: "Report A Pet"
     BoxLayout:
         orientation: "vertical"
-        MDLabel:
-            text: "Report a Pet"
-            color: app.theme_cls.primary_color
-            bold: True
-            pos_hint: {"center_x": .25, "center_y": .85}
-            text_size: self.size
-            font_size: 25
-            halign: "center"
-            valign: "top"
-
+        AnchorLayout:
+            height: dp(85)
+            anchor_x: "left"
+            anchor_y: "center"
+            padding: dp(50), dp(35), dp(35), dp(0)
+            Label:
+                text: "Report a Pet"
+                color: app.theme_cls.primary_color
+                pos_hint: {"center_x": .4, "center_y": .60}
+                text_size: self.size
+                font_size: sp(40)
+                font_name: 'assets/Inter-SemiBold.ttf'
+                halign: "left"
+                valign: "top"
     MDTextField:
         hint_text: "Pet Name"
         mode: "rectangle"
-        pos_hint: {"center_x": .5, "center_y": .9}
+        pos_hint: {"center_x": .5, "center_y": .85}
         size_hint_x: (None)
-        width: 180
+        width: dp(250)
 
     MDRectangleFlatIconButton:
         id: gender
         icon: "chevron-down"
-        pos_hint: {'center_x': .2, 'center_y': .8}
+        pos_hint: {'center_x': .3, 'center_y': .75}
         size_hint_x: (None)
-        width: 100
+        width: dp(130)
         text: "Gender"
         on_release: root.gender_menu()
 
@@ -34,17 +38,18 @@
         id: age
         icon: "chevron-down"
         size_hint_x: (None)
-        width: 80
-        pos_hint: {'center_x': .33, 'center_y': .8}
+        width: dp(130)
+        pos_hint: {'center_x': .690, 'center_y': .75}
         text: 'Age'
         on_release: app.age_menu.open()
 
     MDRectangleFlatIconButton:
         id: breed_item
         icon: "chevron-down"
-        size_hint_x: (None)
-        width: 195
-        pos_hint: {'center_x': .26, 'center_y': .7}
+        size_hint: (None,None)
+        height: dp(40)
+        width: dp(277)
+        pos_hint: {'center_x': .5, 'center_y': .65}
         text: 'Breed'
         on_release: app.breed_menu.open()
 
@@ -52,24 +57,24 @@
         id: size_item
         icon: "chevron-down"
         size_hint_x: (None)
-        width: 80
-        pos_hint: {'center_x': .19, 'center_y': .6}
+        width: dp(135)
+        pos_hint: {'center_x': .3, 'center_y': .55}
         text: 'Size'
         on_release: app.size_menu.open()
 
     MDRectangleFlatIconButton:
         icon: "calendar"
-        text: "Date"
-        pos_hint: {'center_x': .32, 'center_y': .6}
-        width: dp(40)
+        text: "Date Missing"
+        pos_hint: {'center_x': .675, 'center_y': .55}
+        width: dp(135)
         on_release: app.date_picker()
 
     MDRectangleFlatIconButton:
         id: state
         icon: "chevron-down"
         size_hint_x: (None)
-        width: 80
-        pos_hint: {'center_x': .19, 'center_y': .5}
+        width: dp(135)
+        pos_hint: {'center_x': .3, 'center_y': .45}
         text: 'State'
         on_release: app.state_menu.open()
 
@@ -77,8 +82,8 @@
         id: zip
         icon: "chevron-down"
         size_hint_x: (None)
-        width: 80
-        pos_hint: {'center_x': .32, 'center_y': .5}
+        width: dp(135)
+        pos_hint: {'center_x': .675, 'center_y': .45}
         text: 'Zip'
         on_release: app.zip_menu.open()
 
@@ -87,29 +92,31 @@
         mode: "rectangle"
         icon_right: "map-marker"
         icon_right_color: app.theme_cls.primary_color
-        pos_hint: {"center_x": .255, "center_y": .4}
+        pos_hint: {"center_x": .5, "center_y": .35}
         size_hint_x: (None)
-        width: 170
+        width: dp(255)
 
     MDGridLayout:
         cols: 3
         row_default_height: (self.width - self.cols*self.spacing[0]) / self.cols
         row_force_default: True
         size_hint: (None,None)
-        height: 160
-        width: 200
+        height: 600
+        width: 380
         adaptive_height: True
         padding: dp(4), dp(4)
         spacing: dp(4)
-        pos_hint: {"center_x": .25, "center_y": .2}
+        pos_hint: {"center_x": .5, "center_y": .2}
 
         SmartTileWithLabel:
-            text: "[size=12]Cat 1[/size]\n[size=10]cat-1.jpg[/size]"
+            source: "images/aussie.jpg"
+            text: "[size=12]Aussie[/size]"
 
         SmartTileWithLabel:
-            text: "[size=12]Cat 1[/size]\n[size=10]cat-1.jpg[/size]"
+            source: "images/corgi.jpg"
+            text: "[size=12]Corgi[/size]\n[size=10]Add more info here[/size]"
             tile_text_color: app.theme_cls.accent_color
 
         SmartTileWithLabel:
-            text: "[size=12]Cat 1[/size]\n[size=10]cat-1.jpg[/size]"
+            text: "[size=12]Blank Tile[/size]\n[size=10]More black space[/size]"
             tile_text_color: app.theme_cls.accent_color

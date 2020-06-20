@@ -11,15 +11,17 @@
         BoxLayout:
             orientation:'vertical'
             MDLabel:
+                font_name: 'assets/Inter-SemiBold.ttf'
+                color: app.theme_cls.primary_color
                 text:"Login"
                 text_size: self.size
-                font_size: 20
+                font_size: 40
                 halign: "center"
                 valign: "middle"
             MDTextField:
-                text: "  Username"
+                hint_text: "  Username"
             MDTextField:
-                text: "  Password"
+                hint_text: "  Password"
             MDFillRoundFlatButton:
                 text: "Sign In"
                 pos_hint: {"center_x": .5, "center_y": .5}
