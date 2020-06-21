@@ -24,35 +24,45 @@ from kivy.uix.button import ButtonBehavior, Button
 from kivy.uix.screenmanager import Screen, ScreenManager
 from custom_carousel import CustomCarousel
 from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.floatlayout import FloatLayout
 from kivymd.uix.picker import MDDatePicker
 from kivy.properties import ObjectProperty
 from card_view import Card
 import requests
 import json
 
+
 class ImageButton(ButtonBehavior, Image):
     pass
+
 
 class BackgroundBox(BoxLayout):
     pass
 
+
 class LoginView(Screen):
     pass
 
+
 class ReportView(Screen):
-    gender = ObjectProperty(None)
-    gender_items = [{"text": "Female"},{"text": "Label2"}]
+    gender_button = ObjectProperty(None)
+
+    #def __init__(self, **kwargs):
+    #    super().__init__(**kwargs)
+     #   gender_items = [{'viewclass': 'MDMenuItem', 'text': 'key'}]
+    #    gender_menu = MDDropdownMenu(caller=self.gender_button, items=gender_items)
+
 
     def gender_menu(self):
         print("we are here")
-        self.gender_menu = MDDropdownMenu(caller = ReportView().ids.gender,
-                                          items=self.gender_items,
-                                          callback=self.set_item,
-                                          position="center",
-                                          width_mult=5)
-    def set_item(self,instance):
-        self.ids.gender.text = instance.text
-        print(instance.text)
+        gender_items = [{'viewclass': 'MDMenuItem', 'text': 'key'}]
+        print("we are further")
+        return MDDropdownMenu(caller=self.gender_button, items=gender_items)
+
+    def set_item(self, text):
+        print("set_item")
+        print(text)
+
 
 class MyApp(MDApp):
     def home_callback(self, screen_manager):
@@ -75,9 +85,19 @@ class MyApp(MDApp):
         self.theme_cls.primary_palette = "DeepPurple"
         anchor_layout = AnchorLayout(anchor_x='center', anchor_y='bottom')
 
+
         screen_manager = ScreenManager()
         login_screen = LoginView(name='login')
         report_screen = ReportView(name='Report')
+        #report page stuff
+        gender_items = [{'viewclass': 'MDMenuItem', 'text': 'Female'}, {'viewclass': 'MDMenuItem', 'text': 'Male'}]
+        self.gender_menu = MDDropdownMenu(caller=report_screen.gender_button, items=gender_items, width_mult=2,
+                                          use_icon_item=False)
+
+        size_items = [{'viewclass': 'MDMenuItem', 'text': 'Small'}, {'viewclass': 'MDMenuItem', 'text': 'Middle'}
+                        , {'viewclass': 'MDMenuItem', 'text': 'Large'}]
+        self.size_menu = MDDropdownMenu(caller=report_screen.size_button, items=size_items, width_mult=2,
+                                          use_icon_item=False)
         home_screen = Screen(name='Home')
         home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
 

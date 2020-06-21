@@ -1,7 +1,8 @@
 #:import utils kivy.utils
 
 <ReportView>
-    name: "Report A Pet"
+    gender_button: gender
+    size_button: size_item
     BoxLayout:
         orientation: "vertical"
         AnchorLayout:
@@ -18,6 +19,7 @@
                 font_name: 'assets/Inter-SemiBold.ttf'
                 halign: "left"
                 valign: "top"
+
     MDTextField:
         hint_text: "Pet Name"
         mode: "rectangle"
@@ -32,7 +34,10 @@
         size_hint_x: (None)
         width: dp(130)
         text: "Gender"
-        on_release: root.gender_menu()
+        #on_release: root.gender_menu.open()
+        on_release:
+            app.gender_menu.check_position_caller(None, None, None)
+            app.gender_menu.open()
 
     MDRectangleFlatIconButton:
         id: age
@@ -60,7 +65,9 @@
         width: dp(135)
         pos_hint: {'center_x': .3, 'center_y': .55}
         text: 'Size'
-        on_release: app.size_menu.open()
+        on_release:
+            app.size_menu.check_position_caller(None, None, None)
+            app.size_menu.open()
 
     MDRectangleFlatIconButton:
         icon: "calendar"
