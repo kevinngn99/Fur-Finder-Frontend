@@ -1,24 +1,22 @@
 #:import utils kivy.utils
+#:import MDDropdownMenu kivymd.uix.menu
+#:import ScreenManager kivy.uix.screenmanager
+#:import Screen kivy.uix.screenmanager
 
-<ReportView>
+<MDMenuItem>:
+    on_release:
+        print(self.text)
+        app.root.menu_button.text = self.text
+        #app.root.menu_button.text = self.text
+        #app.root.menu_button.text
+        #root.menu_button.text = self.text
+
+<ReportView>:
     gender_button: gender
     size_button: size_item
-    BoxLayout:
-        orientation: "vertical"
-        AnchorLayout:
-            height: dp(85)
-            anchor_x: "left"
-            anchor_y: "center"
-            padding: dp(50), dp(35), dp(35), dp(0)
-            Label:
-                text: "Report a Pet"
-                color: app.theme_cls.primary_color
-                pos_hint: {"center_x": .4, "center_y": .60}
-                text_size: self.size
-                font_size: sp(40)
-                font_name: 'assets/Inter-SemiBold.ttf'
-                halign: "left"
-                valign: "top"
+    age_button: age
+    state_button: state_item
+    TopPage:
 
     MDTextField:
         hint_text: "Pet Name"
@@ -26,7 +24,7 @@
         pos_hint: {"center_x": .5, "center_y": .85}
         size_hint_x: (None)
         width: dp(250)
-
+        #onrelease do something
     MDRectangleFlatIconButton:
         id: gender
         icon: "chevron-down"
@@ -34,10 +32,13 @@
         size_hint_x: (None)
         width: dp(130)
         text: "Gender"
-        #on_release: root.gender_menu.open()
         on_release:
-            app.gender_menu.check_position_caller(None, None, None)
-            app.gender_menu.open()
+            app.root.menu_button = gender
+            root.gender_menu.check_position_caller(None, None, None)
+            root.gender_menu.open()
+        #on_release:
+            #app.gender_menu.check_position_caller(None, None, None)
+            #app.gender_menu.open()
 
     MDRectangleFlatIconButton:
         id: age
@@ -46,7 +47,10 @@
         width: dp(130)
         pos_hint: {'center_x': .690, 'center_y': .75}
         text: 'Age'
-        on_release: app.age_menu.open()
+        on_release:
+            app.root.menu_button = age
+            root.age_menu.check_position_caller(None,None,None)
+            root.age_menu.open()
 
     MDRectangleFlatIconButton:
         id: breed_item
@@ -66,33 +70,38 @@
         pos_hint: {'center_x': .3, 'center_y': .55}
         text: 'Size'
         on_release:
-            app.size_menu.check_position_caller(None, None, None)
-            app.size_menu.open()
+            app.root.menu_button = size_item
+            root.size_menu.check_position_caller(None, None, None)
+            root.size_menu.open()
 
     MDRectangleFlatIconButton:
+        id: calendar
         icon: "calendar"
         text: "Date Missing"
         pos_hint: {'center_x': .675, 'center_y': .55}
         width: dp(135)
-        on_release: app.date_picker()
+        on_release:
+            root.date_picker()
 
     MDRectangleFlatIconButton:
-        id: state
+        id: state_item
         icon: "chevron-down"
         size_hint_x: (None)
         width: dp(135)
         pos_hint: {'center_x': .3, 'center_y': .45}
         text: 'State'
-        on_release: app.state_menu.open()
+        on_release:
+            app.root.menu_button = state_item
+            root.state_menu.check_position_caller(None,None,None)
+            root.state_menu.open()
 
-    MDRectangleFlatIconButton:
+    MDTextField:
         id: zip
-        icon: "chevron-down"
         size_hint_x: (None)
-        width: dp(135)
+        width: dp(90)
         pos_hint: {'center_x': .675, 'center_y': .45}
-        text: 'Zip'
-        on_release: app.zip_menu.open()
+        hint_text: 'Zip'
+        on_release:
 
     MDTextField:
         hint_text: "Location"
@@ -127,3 +136,22 @@
         SmartTileWithLabel:
             text: "[size=12]Blank Tile[/size]\n[size=10]More black space[/size]"
             tile_text_color: app.theme_cls.accent_color
+
+
+<TopPage>:
+    BoxLayout:
+        orientation: "vertical"
+        AnchorLayout:
+            height: dp(85)
+            anchor_x: "left"
+            anchor_y: "center"
+            padding: dp(50), dp(35), dp(35), dp(0)
+            Label:
+                text: "Report a Pet"
+                color: app.theme_cls.primary_color
+                pos_hint: {"center_x": .4, "center_y": .60}
+                text_size: self.size
+                font_size: sp(40)
+                font_name: 'assets/Inter-SemiBold.ttf'
+                halign: "left"
+                valign: "top"

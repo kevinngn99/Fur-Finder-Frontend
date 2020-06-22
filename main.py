@@ -27,6 +27,7 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.floatlayout import FloatLayout
 from kivymd.uix.picker import MDDatePicker
 from kivy.properties import ObjectProperty
+from kivymd.toast.kivytoast.kivytoast import toast
 from card_view import Card
 import requests
 import json
@@ -39,6 +40,9 @@ class ImageButton(ButtonBehavior, Image):
 class BackgroundBox(BoxLayout):
     pass
 
+class TopPage(BoxLayout):
+    pass
+
 
 class LoginView(Screen):
     pass
@@ -46,18 +50,103 @@ class LoginView(Screen):
 
 class ReportView(Screen):
     gender_button = ObjectProperty(None)
-
-    #def __init__(self, **kwargs):
-    #    super().__init__(**kwargs)
-     #   gender_items = [{'viewclass': 'MDMenuItem', 'text': 'key'}]
-    #    gender_menu = MDDropdownMenu(caller=self.gender_button, items=gender_items)
+    size_button = ObjectProperty(None)
+    age_button = ObjectProperty(None)
+    state_button = ObjectProperty(None)
 
 
-    def gender_menu(self):
-        print("we are here")
-        gender_items = [{'viewclass': 'MDMenuItem', 'text': 'key'}]
-        print("we are further")
-        return MDDropdownMenu(caller=self.gender_button, items=gender_items)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.menu_button = None
+        gender_items = [{'viewclass': 'MDMenuItem', 'text': 'Female'},
+                        {'viewclass': 'MDMenuItem', 'text': 'Male'}]
+        self.gender_menu = MDDropdownMenu(caller=self.gender_button, items=gender_items, width_mult=3,
+                                          use_icon_item=False)
+
+        age_items = [{'viewclass': 'MDMenuItem', 'text': f"{i+1}"} for i in range(20)]
+
+        self.age_menu = MDDropdownMenu(caller=self.age_button, items=age_items, width_mult=2,
+                                        use_icon_item=False)
+
+        size_items = [{'viewclass': 'MDMenuItem', 'text': 'Small'},
+                      {'viewclass': 'MDMenuItem', 'text': 'Middle'},
+                      {'viewclass': 'MDMenuItem', 'text': 'Large'}]
+
+        self.size_menu = MDDropdownMenu(caller=self.size_button, items=size_items, width_mult=2,
+                                        use_icon_item=False)
+
+        state_items = [
+            {'viewclass': 'MDMenuItem', 'text': 'AL'},
+            {'viewclass': 'MDMenuItem', 'text': 'AK'},
+            {'viewclass': 'MDMenuItem', 'text': 'AS'},
+            {'viewclass': 'MDMenuItem', 'text': 'AZ'},
+            {'viewclass': 'MDMenuItem', 'text': 'AR'},
+            {'viewclass': 'MDMenuItem', 'text': 'CA'},
+            {'viewclass': 'MDMenuItem', 'text': 'CO'},
+            {'viewclass': 'MDMenuItem', 'text': 'CT'},
+            {'viewclass': 'MDMenuItem', 'text': 'DE'},
+            {'viewclass': 'MDMenuItem', 'text': 'DC'},
+            {'viewclass': 'MDMenuItem', 'text': 'FL'},
+            {'viewclass': 'MDMenuItem', 'text': 'GA'},
+            {'viewclass': 'MDMenuItem', 'text': 'GU'},
+            {'viewclass': 'MDMenuItem', 'text': 'HI'},
+            {'viewclass': 'MDMenuItem', 'text': 'ID'},
+            {'viewclass': 'MDMenuItem', 'text': 'IL'},
+            {'viewclass': 'MDMenuItem', 'text': 'IN'},
+            {'viewclass': 'MDMenuItem', 'text': 'IA'},
+            {'viewclass': 'MDMenuItem', 'text': 'KS'},
+            {'viewclass': 'MDMenuItem', 'text': 'KY'},
+            {'viewclass': 'MDMenuItem', 'text': 'LA'},
+            {'viewclass': 'MDMenuItem', 'text': 'ME'},
+            {'viewclass': 'MDMenuItem', 'text': 'MD'},
+            {'viewclass': 'MDMenuItem', 'text': 'MA'},
+            {'viewclass': 'MDMenuItem', 'text': 'MI'},
+            {'viewclass': 'MDMenuItem', 'text': 'MN'},
+            {'viewclass': 'MDMenuItem', 'text': 'MS'},
+            {'viewclass': 'MDMenuItem', 'text': 'MO'},
+            {'viewclass': 'MDMenuItem', 'text': 'MT'},
+            {'viewclass': 'MDMenuItem', 'text': 'NE'},
+            {'viewclass': 'MDMenuItem', 'text': 'NV'},
+            {'viewclass': 'MDMenuItem', 'text': 'NH'},
+            {'viewclass': 'MDMenuItem', 'text': 'NJ'},
+            {'viewclass': 'MDMenuItem', 'text': 'NM'},
+            {'viewclass': 'MDMenuItem', 'text': 'NY'},
+            {'viewclass': 'MDMenuItem', 'text': 'NC'},
+            {'viewclass': 'MDMenuItem', 'text': 'ND'},
+            {'viewclass': 'MDMenuItem', 'text': 'MP'},
+            {'viewclass': 'MDMenuItem', 'text': 'OH'},
+            {'viewclass': 'MDMenuItem', 'text': 'OK'},
+            {'viewclass': 'MDMenuItem', 'text': 'OR'},
+            {'viewclass': 'MDMenuItem', 'text': 'PA'},
+            {'viewclass': 'MDMenuItem', 'text': 'PR'},
+            {'viewclass': 'MDMenuItem', 'text': 'RI'},
+            {'viewclass': 'MDMenuItem', 'text': 'SC'},
+            {'viewclass': 'MDMenuItem', 'text': 'SD'},
+            {'viewclass': 'MDMenuItem', 'text': 'TN'},
+            {'viewclass': 'MDMenuItem', 'text': 'TX'},
+            {'viewclass': 'MDMenuItem', 'text': 'UT'},
+            {'viewclass': 'MDMenuItem', 'text': 'VT'},
+            {'viewclass': 'MDMenuItem', 'text': 'VI'},
+            {'viewclass': 'MDMenuItem', 'text': 'VA'},
+            {'viewclass': 'MDMenuItem', 'text': 'WA'},
+            {'viewclass': 'MDMenuItem', 'text': 'WV'},
+            {'viewclass': 'MDMenuItem', 'text': 'WI'},
+            {'viewclass': 'MDMenuItem', 'text': 'WY'}
+        ]
+
+        self.state_menu = MDDropdownMenu(caller=self.state_button, items=state_items, width_mult=2,
+                                        use_icon_item=False)
+
+    def get_date(self, date):
+
+        strdate = str(date)
+        toast("Date Missing: " + strdate, duration=3)
+        print(date)
+
+    def date_picker(self):
+
+        date_dialog = MDDatePicker(callback=self.get_date)
+        date_dialog.open()
 
     def set_item(self, text):
         print("set_item")
@@ -81,23 +170,20 @@ class MyApp(MDApp):
         print('The pin button is being pressed')
         screen_manager.current = 'Pin'
 
+    def set_item(self, instance):
+        print("set item")
+
     def build(self):
         self.theme_cls.primary_palette = "DeepPurple"
+        screen_manager = ScreenManager()
         anchor_layout = AnchorLayout(anchor_x='center', anchor_y='bottom')
 
-
-        screen_manager = ScreenManager()
         login_screen = LoginView(name='login')
         report_screen = ReportView(name='Report')
         #report page stuff
-        gender_items = [{'viewclass': 'MDMenuItem', 'text': 'Female'}, {'viewclass': 'MDMenuItem', 'text': 'Male'}]
-        self.gender_menu = MDDropdownMenu(caller=report_screen.gender_button, items=gender_items, width_mult=2,
-                                          use_icon_item=False)
+        #self.gender_menu = MDDropdownMenu(caller=report_screen.gender_button, items=gender_items, width_mult=2,
+        #                                 use_icon_item=False)
 
-        size_items = [{'viewclass': 'MDMenuItem', 'text': 'Small'}, {'viewclass': 'MDMenuItem', 'text': 'Middle'}
-                        , {'viewclass': 'MDMenuItem', 'text': 'Large'}]
-        self.size_menu = MDDropdownMenu(caller=report_screen.size_button, items=size_items, width_mult=2,
-                                          use_icon_item=False)
         home_screen = Screen(name='Home')
         home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
 
