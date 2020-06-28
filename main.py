@@ -47,6 +47,7 @@ class LoginView(Screen):
 
 
 class ReportView(Screen):
+    name_button = ObjectProperty(None)
     gender_button = ObjectProperty(None)
     size_button = ObjectProperty(None)
     age_button = ObjectProperty(None)
@@ -54,7 +55,7 @@ class ReportView(Screen):
     zip_button = ObjectProperty(None)
     breed_button = ObjectProperty(None)
     calendar_button = ObjectProperty(None)
-
+    postlist = []
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.menu_button = None
@@ -152,6 +153,7 @@ class ReportView(Screen):
 
     def post_report(self):
         print("post report")
+        print(self.name_button.text)
         print(self.gender_button.text)
         print(self.size_button.text)
         print(self.datestr)
@@ -160,12 +162,28 @@ class ReportView(Screen):
         print(self.zip_button.text)
         print(self.location_button.text)
         print(self.breed_button.text)
+        self.postlist.append(self.name_button.text)
+        self.postlist.append(self.gender_button.text)
+        self.postlist.append(self.size_button.text)
+        self.postlist.append(self.datestr)
+        self.postlist.append(self.age_button.text)
+        self.postlist.append(self.state_button.text)
+        self.postlist.append(self.zip_button.text)
+        self.postlist.append(self.location_button.text)
+        self.postlist.append(self.breed_button.text)
         #TO DO
         #number authentication
         #blank authentication
         #default authentication
-        #data = {}
-        #requests.post(url=, data)
+        post_data = {
+            'name': 'self.postlist[0]',
+            'gender': 'self.postlist[1]',
+            'image': 'blank',
+           'breed': 'self.postlist[8]',
+            'color': 'blank',
+            'date': 'self.postlist[3]'
+        }
+        requests.post(url='https://fur-finder.herokuapp.com/api/pets/', data=post_data)
 
 class MyApp(MDApp):
     def home_callback(self, screen_manager):
