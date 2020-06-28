@@ -53,6 +53,7 @@ class ReportView(Screen):
     size_button = ObjectProperty(None)
     age_button = ObjectProperty(None)
     state_button = ObjectProperty(None)
+    zip_button = ObjectProperty(None)
 
 
     def __init__(self, **kwargs):
@@ -137,21 +138,34 @@ class ReportView(Screen):
         self.state_menu = MDDropdownMenu(caller=self.state_button, items=state_items, width_mult=2,
                                         use_icon_item=False)
 
+    datestr = "date"
     def get_date(self, date):
-
-        strdate = str(date)
-        toast("Date Missing: " + strdate, duration=3)
-        print(date)
+        self.datestr = str(date)
+        toast("Date Missing: " + self.datestr, duration=3)
+        #print(date)
 
     def date_picker(self):
-
         date_dialog = MDDatePicker(callback=self.get_date)
         date_dialog.open()
 
-    def set_item(self, text):
+    def set_item(self):
         print("set_item")
-        print(text)
 
+    def post_report(self):
+        print("post report")
+        print(self.gender_button.text)
+        print(self.size_button.text)
+        print(self.datestr)
+        print(self.age_button.text)
+        print(self.state_button.text)
+        print(self.zip_button.text)
+        print(self.location_button.text)
+        #TO DO
+        #number authentication
+        #blank authentication
+        #default authentication
+        #data = {}
+        #requests.post(url=, data)
 
 class MyApp(MDApp):
     def home_callback(self, screen_manager):
@@ -180,9 +194,6 @@ class MyApp(MDApp):
 
         login_screen = LoginView(name='login')
         report_screen = ReportView(name='Report')
-        #report page stuff
-        #self.gender_menu = MDDropdownMenu(caller=report_screen.gender_button, items=gender_items, width_mult=2,
-        #                                 use_icon_item=False)
 
         home_screen = Screen(name='Home')
         home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))

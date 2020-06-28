@@ -20,10 +20,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02c45309-d660-43e1-86d7-24d06636ccd7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Ashley.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Kivy.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Kivy.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Ashley.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Ashley.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KivyFile/login.kv" beforeDir="false" afterPath="$PROJECT_DIR$/KivyFile/login.kv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KivyFile/report.kv" beforeDir="false" afterPath="$PROJECT_DIR$/KivyFile/report.kv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,9 +48,8 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../PycharmProjects/FurFinder" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -119,15 +123,11 @@
       <workItem from="1591832841887" duration="31081000" />
       <workItem from="1591901321418" duration="31632000" />
       <workItem from="1591945990688" duration="708000" />
-<<<<<<< Updated upstream
-      <workItem from="1591947399117" duration="14000" />
-      <workItem from="1591983203287" duration="1138000" />
-      <workItem from="1591984392136" duration="90000" />
-      <workItem from="1591985239418" duration="7298000" />
-=======
-      <workItem from="1591987880929" duration="3744000" />
-      <workItem from="1591995222327" duration="4940000" />
->>>>>>> Stashed changes
+      <workItem from="1593052103360" duration="224000" />
+      <workItem from="1593052361200" duration="82000" />
+      <workItem from="1593052445143" duration="76000" />
+      <workItem from="1593052532083" duration="848000" />
+      <workItem from="1593307542917" duration="3738000" />
     </task>
     <servers />
   </component>
@@ -151,114 +151,84 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="845" y="383" key="#Notifications/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591919038877" />
-    <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591988836886">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state x="-1506" y="272" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593052224296">
+      <screen x="-1920" y="77" width="1920" height="1160" />
     </state>
     <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591715013762" />
-    <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1591988836886" />
-    <state x="687" y="359" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1591989396800">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state x="-1506" y="272" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1593052224296" />
+    <state x="687" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1591744971743">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="687" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591744971743" />
-    <state x="687" y="359" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1591989396800" />
-    <state x="-1180" y="384" key="FileChooserDialogImpl" timestamp="1592008781878">
-      <screen x="-1920" y="77" width="1920" height="1160" />
+    <state x="740" y="307" key="FileChooserDialogImpl" timestamp="1593309867095">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591714977493" />
-<<<<<<< Updated upstream
-    <state width="1877" height="430" key="GridCell.Tab.0.bottom" timestamp="1591996429325">
-      <screen x="0" y="0" width="1920" height="1040" />
-=======
-    <state x="-1180" y="384" key="FileChooserDialogImpl/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1592008781878" />
-    <state x="740" y="307" key="FileChooserDialogImpl/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1591988834144" />
-    <state width="1877" height="55" key="GridCell.Tab.0.bottom" timestamp="1592013278314">
-      <screen x="-1920" y="77" width="1920" height="1160" />
->>>>>>> Stashed changes
+    <state x="-1180" y="384" key="FileChooserDialogImpl/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1593052441914" />
+    <state x="740" y="307" key="FileChooserDialogImpl/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1593309867095" />
+    <state width="1877" height="304" key="GridCell.Tab.0.bottom" timestamp="1593310853837">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state width="1557" height="345" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1591989688823" />
-    <state width="1877" height="430" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591996429325" />
+    <state width="1877" height="356" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591937907438" />
     <state width="1877" height="432" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1591946704050" />
-<<<<<<< Updated upstream
-    <state width="1877" height="430" key="GridCell.Tab.0.center" timestamp="1591996429325">
-      <screen x="0" y="0" width="1920" height="1040" />
-=======
-    <state width="1877" height="55" key="GridCell.Tab.0.bottom/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1592013278314" />
-    <state width="1877" height="81" key="GridCell.Tab.0.bottom/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1591991853616" />
-    <state width="1877" height="55" key="GridCell.Tab.0.center" timestamp="1592013278314">
-      <screen x="-1920" y="77" width="1920" height="1160" />
->>>>>>> Stashed changes
+    <state width="1877" height="304" key="GridCell.Tab.0.bottom/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1593052326456" />
+    <state width="1877" height="304" key="GridCell.Tab.0.bottom/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1593310853837" />
+    <state width="1877" height="304" key="GridCell.Tab.0.center" timestamp="1593310853837">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state width="1557" height="345" key="GridCell.Tab.0.center/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1591989688823" />
-    <state width="1877" height="430" key="GridCell.Tab.0.center/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591996429325" />
+    <state width="1877" height="356" key="GridCell.Tab.0.center/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591937907438" />
     <state width="1877" height="432" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1591946704050" />
-<<<<<<< Updated upstream
-    <state width="1877" height="430" key="GridCell.Tab.0.left" timestamp="1591996429324">
-      <screen x="0" y="0" width="1920" height="1040" />
-=======
-    <state width="1877" height="55" key="GridCell.Tab.0.center/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1592013278314" />
-    <state width="1877" height="81" key="GridCell.Tab.0.center/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1591991853616" />
-    <state width="1877" height="55" key="GridCell.Tab.0.left" timestamp="1592013278314">
-      <screen x="-1920" y="77" width="1920" height="1160" />
->>>>>>> Stashed changes
+    <state width="1877" height="304" key="GridCell.Tab.0.center/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1593052326456" />
+    <state width="1877" height="304" key="GridCell.Tab.0.center/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1593310853837" />
+    <state width="1877" height="304" key="GridCell.Tab.0.left" timestamp="1593310853836">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state width="1557" height="345" key="GridCell.Tab.0.left/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1591989688823" />
-    <state width="1877" height="430" key="GridCell.Tab.0.left/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591996429324" />
+    <state width="1877" height="356" key="GridCell.Tab.0.left/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591937907437" />
     <state width="1877" height="432" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1591946704049" />
-<<<<<<< Updated upstream
-    <state width="1877" height="430" key="GridCell.Tab.0.right" timestamp="1591996429325">
-      <screen x="0" y="0" width="1920" height="1040" />
-=======
-    <state width="1877" height="55" key="GridCell.Tab.0.left/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1592013278314" />
-    <state width="1877" height="81" key="GridCell.Tab.0.left/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1591991853616" />
-    <state width="1877" height="55" key="GridCell.Tab.0.right" timestamp="1592013278314">
-      <screen x="-1920" y="77" width="1920" height="1160" />
->>>>>>> Stashed changes
+    <state width="1877" height="304" key="GridCell.Tab.0.left/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1593052326456" />
+    <state width="1877" height="304" key="GridCell.Tab.0.left/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1593310853836" />
+    <state width="1877" height="304" key="GridCell.Tab.0.right" timestamp="1593310853837">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state width="1557" height="345" key="GridCell.Tab.0.right/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1591989688823" />
-    <state width="1877" height="430" key="GridCell.Tab.0.right/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591996429325" />
+    <state width="1877" height="356" key="GridCell.Tab.0.right/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591937907438" />
     <state width="1877" height="432" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1591946704050" />
-    <state width="1877" height="55" key="GridCell.Tab.0.right/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1592013278314" />
-    <state width="1877" height="81" key="GridCell.Tab.0.right/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1591991853616" />
-    <state width="1877" height="82" key="GridCell.Tab.1.bottom" timestamp="1592009893454">
-      <screen x="-1920" y="77" width="1920" height="1160" />
+    <state width="1877" height="304" key="GridCell.Tab.0.right/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1593052326456" />
+    <state width="1877" height="304" key="GridCell.Tab.0.right/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1593310853837" />
+    <state width="1877" height="82" key="GridCell.Tab.1.bottom" timestamp="1593309327826">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="356" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591937907438" />
     <state width="1877" height="356" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1591865273336" />
-    <state width="1877" height="82" key="GridCell.Tab.1.bottom/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1592009893454" />
-    <state width="1877" height="82" key="GridCell.Tab.1.center" timestamp="1592009893453">
-      <screen x="-1920" y="77" width="1920" height="1160" />
+    <state width="1877" height="82" key="GridCell.Tab.1.bottom/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1593309327826" />
+    <state width="1877" height="82" key="GridCell.Tab.1.center" timestamp="1593309327826">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="356" key="GridCell.Tab.1.center/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591937907438" />
     <state width="1877" height="356" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1591865273336" />
-    <state width="1877" height="82" key="GridCell.Tab.1.center/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1592009893453" />
-    <state width="1877" height="82" key="GridCell.Tab.1.left" timestamp="1592009893453">
-      <screen x="-1920" y="77" width="1920" height="1160" />
+    <state width="1877" height="82" key="GridCell.Tab.1.center/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1593309327826" />
+    <state width="1877" height="82" key="GridCell.Tab.1.left" timestamp="1593309327826">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="356" key="GridCell.Tab.1.left/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591937907438" />
     <state width="1877" height="356" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1591865273336" />
-    <state width="1877" height="82" key="GridCell.Tab.1.left/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1592009893453" />
-    <state width="1877" height="82" key="GridCell.Tab.1.right" timestamp="1592009893454">
-      <screen x="-1920" y="77" width="1920" height="1160" />
+    <state width="1877" height="82" key="GridCell.Tab.1.left/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1593309327826" />
+    <state width="1877" height="82" key="GridCell.Tab.1.right" timestamp="1593309327826">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="356" key="GridCell.Tab.1.right/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591937907438" />
     <state width="1877" height="356" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1591865273336" />
-    <state width="1877" height="82" key="GridCell.Tab.1.right/0.0.1920.1160/-1920.77.1920.1160@-1920.77.1920.1160" timestamp="1592009893454" />
-    <state x="354" y="173" key="SettingsEditor" timestamp="1591988062991">
+    <state width="1877" height="82" key="GridCell.Tab.1.right/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1593309327826" />
+    <state x="354" y="173" key="SettingsEditor" timestamp="1593309845871">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="354" y="155" key="SettingsEditor/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591744915476" />
-    <state x="354" y="173" key="SettingsEditor/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1591988062991" />
+    <state x="354" y="173" key="SettingsEditor/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1593309845871" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1591766463245">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591766463245" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-<<<<<<< Updated upstream
-    <SUITE FILE_PATH="coverage/Kivy$main.coverage" NAME="main Coverage Results" MODIFIED="1591996429310" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-=======
-    <SUITE FILE_PATH="coverage/Fur_Finder_Frontend$main.coverage" NAME="main Coverage Results" MODIFIED="1592013278305" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Kivy$main.coverage" NAME="main Coverage Results" MODIFIED="1591946678930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
->>>>>>> Stashed changes
+    <SUITE FILE_PATH="coverage/Fur_Finder_Frontend$main.coverage" NAME="main Coverage Results" MODIFIED="1593310853823" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
