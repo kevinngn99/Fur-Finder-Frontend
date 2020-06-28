@@ -18,6 +18,9 @@
     state_button: state_item
     zip_button: zip
     location_button: location
+    breed_button: breed
+    calendar_button: calendar
+
     TopPage:
 
     MDTextField:
@@ -55,15 +58,14 @@
             root.age_menu.check_position_caller(None,None,None)
             root.age_menu.open()
 
-    MDRectangleFlatIconButton:
-        id: breed_item
+    MDTextField:
+        id: breed
         icon: "chevron-down"
         size_hint: (None,None)
         height: dp(40)
         width: dp(277)
         pos_hint: {'center_x': .5, 'center_y': .65}
-        text: 'Breed'
-        on_release: app.breed_menu.open()
+        hint_text: 'Breed'
 
     MDRectangleFlatIconButton:
         id: size_item

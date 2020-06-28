@@ -2,8 +2,6 @@ import kivy
 
 kivy.require('1.11.1')# replace with your current kivy version !
 
-
-
 from kivy.lang import Builder
 
 from kivy.config import Config
@@ -54,7 +52,8 @@ class ReportView(Screen):
     age_button = ObjectProperty(None)
     state_button = ObjectProperty(None)
     zip_button = ObjectProperty(None)
-
+    breed_button = ObjectProperty(None)
+    calendar_button = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -160,6 +159,7 @@ class ReportView(Screen):
         print(self.state_button.text)
         print(self.zip_button.text)
         print(self.location_button.text)
+        print(self.breed_button.text)
         #TO DO
         #number authentication
         #blank authentication
