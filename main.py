@@ -13,7 +13,9 @@ from kivymd.app import MDApp
 Builder.load_string("""
 #:include KivyFile/login.kv
 #:include KivyFile/report.kv
+#:include KivyFile/scroll.kv
 """)
+
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
@@ -26,9 +28,16 @@ from kivymd.uix.floatlayout import FloatLayout
 from kivymd.uix.picker import MDDatePicker
 from kivy.properties import ObjectProperty
 from kivymd.toast.kivytoast.kivytoast import toast
+from kivy.uix.recycleview import RecycleView
 from card_view import Card
 import requests
 import json
+
+
+class RecyView(RecycleView):
+    def __init__(self, **kwargs):
+        super(RecyView, self).__init__(**kwargs)
+        self.data = [{'text': str(x)} for x in range(100)]
 
 
 class ImageButton(ButtonBehavior, Image):
@@ -233,7 +242,8 @@ class MyApp(MDApp):
         message_screen.add_widget(Label(text='[color=150470]Message Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
 
         pin_screen = Screen(name='Pin')
-        pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
+        #pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
+        pin_screen.add_widget(RecyView())
 
         screen_manager.add_widget(login_screen)
         screen_manager.add_widget(home_screen)
