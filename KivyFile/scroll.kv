@@ -1,5 +1,22 @@
 #:import utils kivy.utils
 
+<TopPageReported>:
+    BoxLayout:
+        orientation: "vertical"
+        AnchorLayout:
+            height: dp(85)
+            anchor_x: "left"
+            anchor_y: "center"
+            padding: dp(50), dp(35), dp(35), dp(0)
+            Label:
+                text: "Reported Pets"
+                color: app.theme_cls.primary_color
+                pos_hint: {"center_x": .4, "center_y": .60}
+                text_size: self.size
+                font_size: sp(40)
+                font_name: 'assets/Inter-SemiBold.ttf'
+                halign: "left"
+                valign: "top"
 
 
 <SelectableLabel>:
@@ -56,7 +73,7 @@
         default_size_hint: 1, None
         padding:[10,10, 10, 90]
         spacing: 10
-        size_hint_y: None
+        size_hint_y: 0.55
         height: self.minimum_height
         orientation: 'vertical'
         multiselect: False

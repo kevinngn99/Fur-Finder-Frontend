@@ -41,6 +41,9 @@ import json
 resp = requests.get(url='http://10.253.253.111:8000/api/pets/')
 data = resp.json()
 
+class TopPageReported(BoxLayout):
+    pass
+
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
                                  RecycleBoxLayout):
     ''' Adds selection and focus behaviour to the view. '''
@@ -77,6 +80,7 @@ class ImageButton(ButtonBehavior, Image):
 
 class BackgroundBox(BoxLayout):
     pass
+
 
 class TopPage(BoxLayout):
     pass
@@ -274,6 +278,7 @@ class MyApp(MDApp):
 
         pin_screen = Screen(name='Pin')
         #pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
+        pin_screen.add_widget(TopPageReported())
         pin_screen.add_widget(RecyView())
 
 
