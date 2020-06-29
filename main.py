@@ -39,9 +39,11 @@ from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from card_view import Card
 import requests
 import json
+import base64
 
-resp = requests.get(url='http://10.253.253.111:8000/api/pets/')
+resp = requests.get(url='http://192.168.0.137:8000/api/pets/')
 data = resp.json()
+imgPath=''
 
 class TopPageReported(BoxLayout):
     pass
@@ -201,7 +203,7 @@ class ReportView(Screen):
     def exit_manager(self, path):
         '''Called when the user reaches the root of the directory tree.'''
         print(path)
-
+        self.imgPath=path
         self.manager_open = False
         self.file_manager.close()
         return Image(source=path)
@@ -243,7 +245,13 @@ class ReportView(Screen):
         #number authentication
         #blank authentication
         #default authentication
+
+
+
+        with open(self.imgPath, mode='rb') as file:
+            img = file.read()
         post_data = {
+
             'name': self.postlist[0],
             'gender': self.postlist[1],
             'size': self.postlist[2],
@@ -252,9 +260,14 @@ class ReportView(Screen):
             'state': self.postlist[5],
             'zip': self.postlist[6],
             'location': self.postlist[7],
-            'breed': self.postlist[8]
+            'breed': self.postlist[8],
+            'imageData':base64.encodebytes(img).decode("utf-8")
+
         }
-        requests.post(url='http://10.253.253.111:8000/api/pets/', data=post_data)
+
+
+
+        requests.post(url='http://192.168.0.137:8000/api/pets/', data=post_data)
 
 
 
