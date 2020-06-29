@@ -176,14 +176,17 @@ class ReportView(Screen):
         #blank authentication
         #default authentication
         post_data = {
-            'name': 'self.postlist[0]',
-            'gender': 'self.postlist[1]',
-            'image': 'blank',
-           'breed': 'self.postlist[8]',
-            'color': 'blank',
-            'date': 'self.postlist[3]'
+            'name': self.postlist[0],
+            'gender': self.postlist[1],
+            'size': self.postlist[2],
+            'date': self.postlist[3],
+            'age': self.postlist[4],
+            'state': self.postlist[5],
+            'zip': self.postlist[6],
+            'location': self.postlist[7],
+            'breed': self.postlist[8]
         }
-        requests.post(url='https://fur-finder.herokuapp.com/api/pets/', data=post_data)
+        requests.post(url='http://10.253.253.111:8000/api/pets/', data=post_data)
 
 class MyApp(MDApp):
     def home_callback(self, screen_manager):
