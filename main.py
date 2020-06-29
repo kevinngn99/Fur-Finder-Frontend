@@ -29,15 +29,46 @@ from kivymd.uix.picker import MDDatePicker
 from kivy.properties import ObjectProperty
 from kivymd.toast.kivytoast.kivytoast import toast
 from kivy.uix.recycleview import RecycleView
+from kivy.properties import BooleanProperty
+from kivy.uix.recycleboxlayout import RecycleBoxLayout
+from kivy.uix.behaviors import FocusBehavior
+from kivy.uix.recycleview.layout import LayoutSelectionBehavior
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from card_view import Card
 import requests
 import json
+
+resp = requests.get(url='http://10.253.253.111:8000/api/pets/')
+data = resp.json()
+
+class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
+                                 RecycleBoxLayout):
+    ''' Adds selection and focus behaviour to the view. '''
+
+
+class SelectableLabel(RecycleDataViewBehavior, BoxLayout):
+    index = None
+    selected = BooleanProperty(False)
+    selectable = BooleanProperty(True)
+
+    def on_touch_down(self, touch):
+        ''' Add selection on touch down '''
+        if super(SelectableLabel, self).on_touch_down(touch):
+            return True
+        if self.collide_point(*touch.pos) and self.selectable:
+            return self.parent.select_with_touch(self.index, touch)
 
 
 class RecyView(RecycleView):
     def __init__(self, **kwargs):
         super(RecyView, self).__init__(**kwargs)
-        self.data = [{'text': str(x)} for x in range(100)]
+        self.data = [{'text': str(x)} for x in range(50)]
+
+        self.data = [{'name_item': str(x['name']), 'gender_item': str(x['gender']), 'size_item': str(x['size']),
+                       'date_item': str(x['date']), 'age_item': str(x['age']), 'state_item': str(x['state']),
+                       'zip_item': str(x['zip']), 'location_item': str(x['location']), 'breed_item': str(x['breed'])} for x in
+                    data]
+        #self.data = [{'text': val} for row in items for val in row.values()]
 
 
 class ImageButton(ButtonBehavior, Image):
@@ -79,7 +110,7 @@ class ReportView(Screen):
                                         use_icon_item=False)
 
         size_items = [{'viewclass': 'MDMenuItem', 'text': 'Small'},
-                      {'viewclass': 'MDMenuItem', 'text': 'Middle'},
+                      {'viewclass': 'MDMenuItem', 'text': 'Medium'},
                       {'viewclass': 'MDMenuItem', 'text': 'Large'}]
 
         self.size_menu = MDDropdownMenu(caller=self.size_button, items=size_items, width_mult=2,
@@ -244,6 +275,7 @@ class MyApp(MDApp):
         pin_screen = Screen(name='Pin')
         #pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
         pin_screen.add_widget(RecyView())
+
 
         screen_manager.add_widget(login_screen)
         screen_manager.add_widget(home_screen)
