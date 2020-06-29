@@ -2,7 +2,7 @@
 #:import MDDropdownMenu kivymd.uix.menu
 #:import ScreenManager kivy.uix.screenmanager
 #:import Screen kivy.uix.screenmanager
-
+#import MDFileManager from kivymd.uix.filemanager
 <MDMenuItem>:
     on_release:
         print(self.text)
@@ -149,10 +149,10 @@
             text: "[size=12]Corgi[/size]\n[size=10]Add more info here[/size]"
             tile_text_color: app.theme_cls.accent_color
 
-        SmartTileWithLabel:
+        Button:
             text: "[size=12]Blank Tile[/size]\n[size=10]More black space[/size]"
-            tile_text_color: app.theme_cls.accent_color
-
+            on_release:
+                root.file_manager_open()
 
 <TopPage>:
     BoxLayout:

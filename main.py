@@ -30,10 +30,12 @@ from kivy.properties import ObjectProperty
 from kivymd.toast.kivytoast.kivytoast import toast
 from kivy.uix.recycleview import RecycleView
 from kivy.properties import BooleanProperty
+from kivymd.uix.filemanager import MDFileManager
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
+
 from card_view import Card
 import requests
 import json
@@ -182,6 +184,28 @@ class ReportView(Screen):
         self.state_menu = MDDropdownMenu(caller=self.state_button, items=state_items, width_mult=2,
                                         use_icon_item=False)
 
+        self.manager_open = False
+        self.file_manager = MDFileManager(
+            exit_manager=self.exit_manager,
+            select_path=self.select_path,
+        )
+
+    def file_manager_open(self):
+        self.file_manager.show('/')  # output manager to the screen
+        self.manager_open = True
+
+    def select_path(self, path):
+        self.exit_manager(path)
+        toast(path)
+
+    def exit_manager(self, path):
+        '''Called when the user reaches the root of the directory tree.'''
+        print(path)
+
+        self.manager_open = False
+        self.file_manager.close()
+        return Image(source=path)
+
     datestr = "date"
     def get_date(self, date):
         self.datestr = str(date)
@@ -231,6 +255,10 @@ class ReportView(Screen):
             'breed': self.postlist[8]
         }
         requests.post(url='http://10.253.253.111:8000/api/pets/', data=post_data)
+
+
+
+
 
 class MyApp(MDApp):
     def home_callback(self, screen_manager):
