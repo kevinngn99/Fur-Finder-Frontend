@@ -35,7 +35,7 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
-from kivy.uix.scrollview import ScrollView
+from kivy.clock import Clock
 from card_view import Card
 import requests
 import json
@@ -44,7 +44,8 @@ import base64
 
 def getRequest():
     resp = requests.get(url='http://10.253.253.111:8000/api/pets/')
-    print(resp.status_code)
+    #print(resp.status_code)
+    print("updating scroll page")
     data = resp.json()
     return data
 
@@ -75,11 +76,20 @@ class RecyView(RecycleView):
     def __init__(self, **kwargs):
         super(RecyView, self).__init__(**kwargs)
         #self.data = [{'text': str(x)} for x in range(50)]
+        Clock.schedule_interval(self.update_data, 0.1)
+
         data = getRequest()
         self.data = [{'name_item': str(x['name']), 'gender_item': str(x['gender']), 'size_item': str(x['size']),
                        'date_item': str(x['date']), 'age_item': str(x['age']), 'state_item': str(x['state']),
                        'zip_item': str(x['zip']), 'location_item': str(x['location']), 'breed_item': str(x['breed'])} for x in
                     data]
+    def update_data(self, *args):
+        data = getRequest()
+        self.data = [{'name_item': str(x['name']), 'gender_item': str(x['gender']), 'size_item': str(x['size']),
+                      'date_item': str(x['date']), 'age_item': str(x['age']), 'state_item': str(x['state']),
+                      'zip_item': str(x['zip']), 'location_item': str(x['location']), 'breed_item': str(x['breed'])}
+                     for x in
+                     data]
         #self.data = [{'text': val} for row in items for val in row.values()]
 
 
@@ -290,6 +300,7 @@ class MyApp(MDApp):
         if getRequest():
             print("there is data when pressed")
         screen_manager.current = 'Pin'
+
 
     def set_item(self, instance):
         print("set item")
