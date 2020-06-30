@@ -295,11 +295,11 @@ class MyApp(MDApp):
         print('The message button is being pressed')
         screen_manager.current = 'Message'
 
-    def pin_callback(self, screen_manager):
-        print('The pin button is being pressed')
+    def scroll_callback(self, screen_manager):
+        print('The scroll page button is being pressed')
         if getRequest():
             print("there is data when pressed")
-        screen_manager.current = 'Pin'
+        screen_manager.current = 'Scroll'
 
 
     def set_item(self, instance):
@@ -323,15 +323,12 @@ class MyApp(MDApp):
         #    carousel.add_widget(card)
         #home_screen.add_widget(carousel)
 
-        #report_screen = Screen(name='Report')
-        #report_screen.add_widget(Label(text='[color=150470]Report Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
-
         message_screen = Screen(name='Message')
         message_screen.add_widget(Label(text='[color=150470]Message Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
 
-        pin_screen = Screen(name='Pin')
-        #pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
-        pin_screen.add_widget(TopPageReported())
+        scoll_screen = Screen(name='Scroll')
+
+        scroll_screen.add_widget(TopPageReported())
         if getRequest():
             print("there is data")
         else:
@@ -341,12 +338,12 @@ class MyApp(MDApp):
         screen_manager.add_widget(home_screen)
         screen_manager.add_widget(report_screen)
         screen_manager.add_widget(message_screen)
-        screen_manager.add_widget(pin_screen)
+        screen_manager.add_widget(scoll_screen)
 
         home_button = ImageButton(source='images/home.png', on_press=lambda b: self.home_callback(screen_manager))
         report_button = ImageButton(source='images/report.png', on_press=lambda b: self.report_callback(screen_manager))
         message_button = ImageButton(source='images/message.png', on_press=lambda b: self.message_callback(screen_manager))
-        pin_button = ImageButton(source='images/heart.png', on_press=lambda b: self.pin_callback(screen_manager))
+        pin_button = ImageButton(source='images/heart.png', on_press=lambda b: self.scroll_callback(screen_manager))
 
         box_layout = BoxLayout(orientation='horizontal', size_hint=(None, None), size=('375dp', '50dp'))
         box_layout.add_widget(home_button)
