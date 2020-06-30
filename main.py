@@ -241,6 +241,7 @@ class ReportView(Screen):
         self.postlist.append(self.zip_button.text)
         self.postlist.append(self.location_button.text)
         self.postlist.append(self.breed_button.text)
+        s
         #TO DO
         #number authentication
         #blank authentication
@@ -354,3 +355,4 @@ if __name__ == '__main__':
     MyApp().run()
 
 #return Label(text='[color=150470]Fur Finder', font_name='DM-Serif-Display-Regular.ttf', font_size='50', markup=True)
+

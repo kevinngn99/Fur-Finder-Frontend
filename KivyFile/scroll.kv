@@ -30,6 +30,7 @@
     zip_item: 'size_item1'
     location_item: 'size_item1'
     breed_item: 'size_item1'
+    image_item: 'size_item1'
     canvas.before:
         Color:
             rgba: utils.get_color_from_hex('#D6B3F8')
@@ -66,6 +67,9 @@
         Label:
             id:breed
             text: root.breed_item
+        Label:
+            id:image
+            text: root.image_item
 
 <RecyView>:
     viewclass: 'SelectableLabel'
