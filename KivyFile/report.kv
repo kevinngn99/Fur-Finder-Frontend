@@ -149,8 +149,10 @@
             text: "[size=12]Corgi[/size]\n[size=10]Add more info here[/size]"
             tile_text_color: app.theme_cls.accent_color
 
-        Button:
-            text: "[size=12]Blank Tile[/size]\n[size=10]More black space[/size]"
+        MDRaisedButton:
+            text: "Upload an Image"
+            size: dp(75), dp(121)
+            size_hint:None,None
             on_release:
                 root.file_manager_open()
 

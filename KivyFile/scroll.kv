@@ -1,9 +1,8 @@
 #:import utils kivy.utils
 
 <TopPageReported>:
-
     GridLayout:
-        rows:2
+        rows:3
         Label:
             text: "Reported Pets"
             color: app.theme_cls.primary_color
@@ -11,6 +10,8 @@
             font_name: 'assets/Inter-SemiBold.ttf'
             size_hint_y: None
         RecyView:
+        Label:
+            size_hint_y: None
 
 <SelectableLabel>:
     orientation: 'vertical'

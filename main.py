@@ -42,10 +42,11 @@ import json
 import base64
 
 
-
-resp = requests.get(url='http://10.253.253.111:8000/api/pets/')
-print(resp.status_code)
-data = resp.json()
+def getRequest():
+    resp = requests.get(url='http://10.253.253.111:8000/api/pets/')
+    print(resp.status_code)
+    data = resp.json()
+    return data
 
 
 class TopPageReported(BoxLayout):
@@ -74,16 +75,11 @@ class RecyView(RecycleView):
     def __init__(self, **kwargs):
         super(RecyView, self).__init__(**kwargs)
         #self.data = [{'text': str(x)} for x in range(50)]
+        data = getRequest()
         self.data = [{'name_item': str(x['name']), 'gender_item': str(x['gender']), 'size_item': str(x['size']),
                        'date_item': str(x['date']), 'age_item': str(x['age']), 'state_item': str(x['state']),
                        'zip_item': str(x['zip']), 'location_item': str(x['location']), 'breed_item': str(x['breed'])} for x in
                     data]
-    def update_data(self):
-        self.data = [{'name_item': str(x['name']), 'gender_item': str(x['gender']), 'size_item': str(x['size']),
-                      'date_item': str(x['date']), 'age_item': str(x['age']), 'state_item': str(x['state']),
-                      'zip_item': str(x['zip']), 'location_item': str(x['location']), 'breed_item': str(x['breed'])}
-                     for x in
-                     data]
         #self.data = [{'text': val} for row in items for val in row.values()]
 
 
@@ -291,8 +287,8 @@ class MyApp(MDApp):
 
     def pin_callback(self, screen_manager):
         print('The pin button is being pressed')
-        if data:
-            print("there is data")
+        if getRequest():
+            print("there is data when pressed")
         screen_manager.current = 'Pin'
 
     def set_item(self, instance):
@@ -325,9 +321,8 @@ class MyApp(MDApp):
         pin_screen = Screen(name='Pin')
         #pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
         pin_screen.add_widget(TopPageReported())
-        if data:
+        if getRequest():
             print("there is data")
-            #pin_screen.add_widget(RecyView())
         else:
             print("no data")
 
