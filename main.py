@@ -326,7 +326,7 @@ class MyApp(MDApp):
         message_screen = Screen(name='Message')
         message_screen.add_widget(Label(text='[color=150470]Message Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
 
-        scoll_screen = Screen(name='Scroll')
+        scroll_screen = Screen(name='Scroll')
 
         scroll_screen.add_widget(TopPageReported())
         if getRequest():
