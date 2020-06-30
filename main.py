@@ -41,9 +41,12 @@ import requests
 import json
 import base64
 
-resp = requests.get(url='http://192.168.0.137:8000/api/pets/')
+
+
+resp = requests.get(url='http://10.253.253.111:8000/api/pets/')
+print(resp.status_code)
 data = resp.json()
-imgPath=''
+
 
 class TopPageReported(BoxLayout):
     pass
@@ -69,12 +72,17 @@ class SelectableLabel(RecycleDataViewBehavior, BoxLayout):
 class RecyView(RecycleView):
     def __init__(self, **kwargs):
         super(RecyView, self).__init__(**kwargs)
-        self.data = [{'text': str(x)} for x in range(50)]
-
+        #self.data = [{'text': str(x)} for x in range(50)]
         self.data = [{'name_item': str(x['name']), 'gender_item': str(x['gender']), 'size_item': str(x['size']),
                        'date_item': str(x['date']), 'age_item': str(x['age']), 'state_item': str(x['state']),
                        'zip_item': str(x['zip']), 'location_item': str(x['location']), 'breed_item': str(x['breed'])} for x in
                     data]
+    def update_data(self):
+        self.data = [{'name_item': str(x['name']), 'gender_item': str(x['gender']), 'size_item': str(x['size']),
+                      'date_item': str(x['date']), 'age_item': str(x['age']), 'state_item': str(x['state']),
+                      'zip_item': str(x['zip']), 'location_item': str(x['location']), 'breed_item': str(x['breed'])}
+                     for x in
+                     data]
         #self.data = [{'text': val} for row in items for val in row.values()]
 
 
@@ -203,7 +211,7 @@ class ReportView(Screen):
     def exit_manager(self, path):
         '''Called when the user reaches the root of the directory tree.'''
         print(path)
-        self.imgPath=path
+        #self.imgPath=path
         self.manager_open = False
         self.file_manager.close()
         return Image(source=path)
@@ -241,7 +249,6 @@ class ReportView(Screen):
         self.postlist.append(self.zip_button.text)
         self.postlist.append(self.location_button.text)
         self.postlist.append(self.breed_button.text)
-        s
         #TO DO
         #number authentication
         #blank authentication
@@ -249,8 +256,8 @@ class ReportView(Screen):
 
 
 
-        with open(self.imgPath, mode='rb') as file:
-            img = file.read()
+        #with open(self.imgPath, mode='rb') as file:
+        #    img = file.read()
         post_data = {
 
             'name': self.postlist[0],
@@ -262,16 +269,10 @@ class ReportView(Screen):
             'zip': self.postlist[6],
             'location': self.postlist[7],
             'breed': self.postlist[8],
-            'imageData':base64.encodebytes(img).decode("utf-8")
 
         }
 
-
-
-        requests.post(url='http://192.168.0.137:8000/api/pets/', data=post_data)
-
-
-
+        requests.post(url='http://10.253.253.111:8000/api/pets/', data=post_data)
 
 
 class MyApp(MDApp):
@@ -289,6 +290,9 @@ class MyApp(MDApp):
 
     def pin_callback(self, screen_manager):
         print('The pin button is being pressed')
+        if data:
+            print("there is data")
+            #MDApp.get_running_app().RecyView.update_data(self)
         screen_manager.current = 'Pin'
 
     def set_item(self, instance):
@@ -321,8 +325,11 @@ class MyApp(MDApp):
         pin_screen = Screen(name='Pin')
         #pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40sp', markup=True))
         pin_screen.add_widget(TopPageReported())
-        pin_screen.add_widget(RecyView())
-
+        if data:
+            print("there is data")
+            pin_screen.add_widget(RecyView())
+        else:
+            print("no data")
 
         screen_manager.add_widget(login_screen)
         screen_manager.add_widget(home_screen)
