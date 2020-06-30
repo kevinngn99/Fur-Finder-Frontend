@@ -35,7 +35,7 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
-
+from kivy.uix.scrollview import ScrollView
 from card_view import Card
 import requests
 import json
@@ -50,6 +50,7 @@ data = resp.json()
 
 class TopPageReported(BoxLayout):
     pass
+
 
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
                                  RecycleBoxLayout):
@@ -292,7 +293,6 @@ class MyApp(MDApp):
         print('The pin button is being pressed')
         if data:
             print("there is data")
-            #MDApp.get_running_app().RecyView.update_data(self)
         screen_manager.current = 'Pin'
 
     def set_item(self, instance):
@@ -327,7 +327,7 @@ class MyApp(MDApp):
         pin_screen.add_widget(TopPageReported())
         if data:
             print("there is data")
-            pin_screen.add_widget(RecyView())
+            #pin_screen.add_widget(RecyView())
         else:
             print("no data")
 
