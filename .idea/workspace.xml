@@ -38,7 +38,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Fur-Finder-Backend" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -127,6 +127,7 @@
       <workItem from="1593488649078" duration="10303000" />
       <workItem from="1593532002106" duration="14372000" />
       <workItem from="1593551953947" duration="1000" />
+      <workItem from="1593552013444" duration="315000" />
     </task>
     <servers />
   </component>

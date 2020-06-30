@@ -338,7 +338,7 @@ class MyApp(MDApp):
         screen_manager.add_widget(home_screen)
         screen_manager.add_widget(report_screen)
         screen_manager.add_widget(message_screen)
-        screen_manager.add_widget(scoll_screen)
+        screen_manager.add_widget(scroll_screen)
 
         home_button = ImageButton(source='images/home.png', on_press=lambda b: self.home_callback(screen_manager))
         report_button = ImageButton(source='images/report.png', on_press=lambda b: self.report_callback(screen_manager))
