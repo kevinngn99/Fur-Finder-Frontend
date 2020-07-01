@@ -1,0 +1,82 @@
+#:import utils kivy.utils
+
+<TopPageReported>:
+    id:scrollpage
+    GridLayout:
+        rows:3
+        Label:
+            text: "Reported Pets"
+            color: app.theme_cls.primary_color
+            font_size: sp(40)
+            font_name: 'assets/Inter-SemiBold.ttf'
+            size_hint_y: None
+        RecyView:
+        Label:
+            size_hint_y: None
+
+<SelectableLabel>:
+    orientation: 'vertical'
+    name_item: 'name1'
+    gender_item: 'gender1'
+    size_item: 'size_item1'
+    date_item: 'size_item1'
+    age_item: 'size_item1'
+    state_item: 'size_item1'
+    zip_item: 'size_item1'
+    location_item: 'size_item1'
+    breed_item: 'size_item1'
+    #image_item: 'size_item1'
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex('#D6B3F8')
+        RoundedRectangle:
+            pos:self.pos
+            size: self.size
+
+    GridLayout:
+        rows:3
+        cols:3
+        Label:
+            id:name
+            text: root.name_item
+        Label:
+            id:gender
+            text: root.gender_item
+        Label:
+            id:size
+            text: root.size_item
+        Label:
+            id:date
+            text: root.date_item
+        Label:
+            id:age
+            text: root.age_item
+        Label:
+            id:state
+            text: root.state_item
+        Label:
+            id:zip
+            text: root.zip_item
+        Label:
+            id:location
+            text: root.location_item
+        Label:
+            id:breed
+            text: root.breed_item
+        #Label:
+        #    id:image
+        #    text: root.image_item
+
+
+<RecyView>:
+    viewclass: 'SelectableLabel'
+    SelectableRecycleBoxLayout:
+        default_size: None, dp(56)
+        default_size_hint: 1, None
+        padding:[10,10, 10, 90]
+        spacing: 10
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+        multiselect: False
+        touch_multiselect: False
