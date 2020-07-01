@@ -16,9 +16,9 @@ from kivy.metrics import dp
 class CustomCarousel(StencilView):
     slides = ListProperty([])
     direction = OptionProperty('right', options=('right', 'left', 'top', 'bottom'))
-    min_move = NumericProperty(0.1)
-    anim_move_duration = NumericProperty(0.5)
-    anim_cancel_duration = NumericProperty(0.3)
+    min_move = NumericProperty(0.05)
+    anim_move_duration = NumericProperty(0.2)
+    anim_cancel_duration = NumericProperty(0.2)
     loop = BooleanProperty(False)
     scroll_timeout = NumericProperty(200)
     scroll_distance = NumericProperty('1dp')

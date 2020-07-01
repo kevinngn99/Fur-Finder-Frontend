@@ -13,79 +13,19 @@ from kivy.core.window import Window
 Window.clearcolor = (1, 1, 1, 1)
 
 from kivy.app import App
-from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
-from kivy.graphics import Color, RoundedRectangle
-from kivy.utils import get_color_from_hex
-from kivy.uix.textinput import TextInput
-from kivy.animation import Animation
 from kivy.metrics import dp
-import requests
-import json
 from jnius import cast
 from jnius import autoclass
 from navigation import Navigation
 from screen_manager import Screens
-
-
-class SearchBox(AnchorLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.rect = None
-        self._scale = None
-
-    @property
-    def scale(self):
-        return self._scale
-
-    @scale.setter
-    def scale(self, scale):
-        self._scale = scale
-
-    def prepare(self):
-        with self.canvas.before:
-            Color(rgb=get_color_from_hex('#F2F3FB'))
-            self.rect = RoundedRectangle(pos=self.pos, size=self.size, radius=[15*self._scale])
-
-
-class Search(TextInput):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._scale = None
-
-    @property
-    def scale(self):
-        return self._scale
-
-    @scale.setter
-    def scale(self, scale):
-        self._scale = scale
-
-    def on_focus(self, instance, value):
-        if value:
-            anim = Animation(x=self.parent.x, y=self.parent.y - (100*self._scale), duration=0.1)
-            anim.start(self.parent)
-        else:
-            anim = Animation(x=self.parent.x, y=self.parent.y + (100*self._scale), duration=0.1)
-            anim.start(self.parent)
+import requests
+import json
 
 
 class MyApp(App):
     def callback_pos(self, instance, value):
         instance.rect.pos = value
-
-    #def tab(self):
-        #anchor_layout = AnchorLayout(anchor_x='center', anchor_y='bottom')
-        #carousel = CustomCarousel(direction='right', pos=(0, 100), size=(375, 200), size_hint=(None, None))
-        #data = json.loads(requests.get('https://fur-finder.herokuapp.com/api/pets/').text)
-        #for dict in data[:10]:
-            #card = Card(dict['name'], dict['gender'], dict['image'], dict['breed'], dict['color'], dict['date']).build()
-            #carousel.add_widget(card)
-        #for i in range(10):
-            #card = Card('Waffles', 'Male', 'images/corgi.jpg', 'Corgi', 'Gold', 'Lost').build()
-            #carousel.add_widget(card)
-        #home_screen.add_widget(carousel)
-        #return anchor_layout
 
     def scale(self):
         try:
@@ -109,7 +49,84 @@ class MyApp(App):
             print('Not an android device')
             return 375, 812, 1, 1
 
+    def fidoFinder(self):
+        data = json.loads(requests.get('https://fur-finder.herokuapp.com/api/fidofinder/33990/').text)
+        for dict in data:
+            print('------------------------------------------')
+            print('Name: ', dict['name'])
+            print('City: ', dict['city'])
+            print('Date: ', dict['date'])
+            print('Breed: ', dict['breed'])
+            print('Status: ', dict['status'])
+            print('Image: ', dict['image'])
+            print('PetID: ', dict['petid'])
+
+    def helpingLostPets(self):
+        data = json.loads(requests.get('https://fur-finder.herokuapp.com/api/helpinglostpets/33990/').text)
+        for dict in data:
+            print('------------------------------------------')
+            print('Status: ', dict['status'])
+            print('Date: ', dict['date'])
+            print('Location: ', dict['location'])
+            print('Image: ', dict['image'])
+            print('Name: ', dict['name'])
+            print('Breed: ', dict['breed'])
+            print('Gender: ', dict['gender'])
+            print('Age: ', dict['age'])
+            print('Size: ', dict['size'])
+            print('Color: ', dict['color'])
+
+    def lostMyDoggie(self):
+        data = json.loads(requests.get('https://fur-finder.herokuapp.com/api/lostmydoggie/33990/').text)
+        for dict in data:
+            print('------------------------------------------')
+            print('Image: ', dict['image'])
+            print('Name: ', dict['name'])
+            print('Status: ', dict['status'])
+            print('Gender: ', dict['gender'])
+            print('Location: ', dict['location'])
+            print('Zip: ', dict['zip'])
+            print('Breed: ', dict['breed'])
+            print('Color: ', dict['color'])
+            print('Date: ', dict['date'])
+
+    def pawBoost(self):
+        data = json.loads(requests.get('https://fur-finder.herokuapp.com/api/pawboost/33990/').text)
+        for dict in data:
+            print('------------------------------------------')
+            print('Name: ', dict['name'])
+            print('Breed: ', dict['breed'])
+            print('Location: ', dict['location'])
+            print('Date: ', dict['date'])
+            print('PetID: ', dict['petid'])
+            print('Image: ', dict['image'])
+
+    def petKey(self):
+        data = json.loads(requests.get('https://fur-finder.herokuapp.com/api/petkey/33990/').text)
+        for dict in data:
+            print('------------------------------------------')
+            print('Name: ', dict['name'])
+            print('Breed: ', dict['breed'])
+            print('Age: ', dict['age'])
+            print('Gender: ', dict['gender'])
+            print('Color: ', dict['color'])
+            print('Image: ', dict['image'])
+
+    def tabbyTracker(self):
+        data = json.loads(requests.get('https://fur-finder.herokuapp.com/api/tabbytracker/33990/').text)
+        for dict in data:
+            print('------------------------------------------')
+            print('Name: ', dict['name'])
+            print('Location: ', dict['location'])
+            print('Date: ', dict['date'])
+            print('Breed: ', dict['breed'])
+            print('Status: ', dict['status'])
+            print('Image: ', dict['image'])
+            print('PetID: ', dict['petid'])
+
     def build(self):
+        self.tabbyTracker()
+
         box_layout = BoxLayout(orientation='vertical')
         screens = Screens().create()
         navigation = Navigation(screens).create()

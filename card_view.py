@@ -21,7 +21,7 @@ class Card:
                 Color(rgb=get_color_from_hex('#150470'))
                 RoundedRectangle(pos=self.pos, size=self.size, radius=(dp(55), dp(55), dp(55), dp(55)))
 
-    class Circle(Image):
+    class Circle(AsyncImage):
         def prepare(self):
             with self.canvas.before:
                 stencil_instructions.StencilPush()
@@ -31,7 +31,7 @@ class Card:
                 stencil_instructions.StencilUnUse()
                 stencil_instructions.StencilPop()
 
-    def __init__(self, name, gender, image, breed, color, date):
+    def __init__(self, name='', gender='', image='', breed='', color='', date=''):
         self._name = name,
         self._gender = gender,
         self._image = image,
@@ -69,7 +69,7 @@ class Card:
                       text='[color=150470][size='+str(int(dp(20)))+'][font=assets/Inter-SemiBold.ttf]'+self._name[0]+'\n[size='+str(int(dp(18)))+'][font=assets/Inter-Medium.ttf]'+self._gender[0]+'\n[size='+str(int(dp(16)))+'][font=assets/Inter-Regular.ttf]'+self._date.split(':')[0])
         pet.bind(size=pet.setter('text_size'))
         time = Label(padding=(dp(15), dp(15)), halign='right', valign='bottom', markup=True,
-                     text='[color=150470][size='+str(int(dp(18)))+'][font=assets/Feather.ttf] [font=assets/Inter-Medium.ttf]5 Hours Ago')
+                     text='[color=150470][size='+str(int(dp(18)))+'][font=assets/Feather.ttf][size='+str(int(dp(18)))+'][font=assets/Inter-Medium.ttf] 5 Hours Ago')
         time.bind(size=time.setter('text_size'))
         anchor_layout.add_widget(pet)
         anchor_layout.add_widget(time)
