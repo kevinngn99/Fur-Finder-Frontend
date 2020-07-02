@@ -1,0 +1,29 @@
+#:kivy 1.11.1
+
+<HomeScreen>:
+    id: home_screen
+    name: 'Home'
+    size_hint: 1, 1
+
+<VerticalScrollView>:
+    id: vertical_scroll_view
+    size_hint: 1, 1
+    do_scroll: False, True
+    GridLayout:
+        id: vertical_grid_layout
+        size_hint: 1, None
+        height: self.minimum_height
+        cols: 1
+        padding: dp(20), dp(20), dp(20), dp(20)
+        spacing: dp(20), dp(20)
+
+<HorizontalScrollView>:
+    id: horizontal_scroll_view
+    size_hint: 1, None
+    height: dp(50)
+    do_scroll: True, False
+    GridLayout:
+        id: horizontal_grid_layout
+        size_hint: None, 1
+        width: self.minimum_width
+        rows: 1

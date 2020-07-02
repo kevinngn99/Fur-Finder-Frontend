@@ -1,91 +1,228 @@
 import kivy
-kivy.require('1.11.1') # replace with your current kivy version !
+kivy.require('1.11.1')
 
 from kivy.config import Config
 Config.set('graphics', 'width', '375')
 Config.set('graphics', 'height', '812')
-Config.set('graphics', 'resizable', False)
+Config.set('graphics', 'resizable', True)
 Config.set('graphics', 'multisamples', '5')
 
 from kivy.core.window import Window
 Window.clearcolor = (1, 1, 1, 1)
 
 from kivy.app import App
-from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.image import Image
-from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.button import ButtonBehavior, Button
-from kivy.uix.screenmanager import Screen, ScreenManager
-from custom_carousel import CustomCarousel
-from card_view import Card
+from navigation import Navigation
+from screen_manager import Screens
+from jnius import cast
+from jnius import autoclass
 
-
-class ImageButton(ButtonBehavior, Image):
-    pass
+import requests
+import json
 
 
 class MyApp(App):
-    def home_callback(self, screen_manager):
-        print('The home button is being pressed')
-        screen_manager.current = 'Home'
 
-    def report_callback(self, screen_manager):
-        print('The report button is being pressed')
-        screen_manager.current = 'Report'
+    def fidoFinder(self, zipCode):
+        ArrayListHorizontalData = autoclass('org.recyclerview.ArrayListHorizontalData')
+        HorizontalData = autoclass('org.recyclerview.HorizontalData')
+        String = autoclass('java.lang.String')
+        array_list_horizontal_data = ArrayListHorizontalData()
+        url = 'https://fur-finder.herokuapp.com/api/fidofinder/' + str(zipCode) + '/'
 
-    def message_callback(self, screen_manager):
-        print('The message button is being pressed')
-        screen_manager.current = 'Message'
+        data = json.loads(requests.get(url).text)
+        for dict in data:
+            # print('------------------------------------------')
+            # print('Name: ', dict['name'])
+            # print('City: ', dict['city'])
+            # print('Date: ', dict['date'])
+            # print('Breed: ', dict['breed'])
+            # print('Status: ', dict['status'])
+            # print('Image: ', dict['image'])
+            # print('PetID: ', dict['petid'])
 
-    def pin_callback(self, screen_manager):
-        print('The pin button is being pressed')
-        screen_manager.current = 'Pin'
+            name = cast('java.lang.String', String(dict['name']))
+            gender = cast('java.lang.String', String('Unknown'))
+            status = cast('java.lang.String', String(dict['status']))
+            image = cast('java.lang.String', String(dict['image']))
+
+            horizontal_data = HorizontalData(name, gender, status, image)
+            array_list_horizontal_data.addHorizontalData(horizontal_data)
+
+        return array_list_horizontal_data
+
+    def helpingLostPets(self, zipCode):
+        ArrayListHorizontalData = autoclass('org.recyclerview.ArrayListHorizontalData')
+        HorizontalData = autoclass('org.recyclerview.HorizontalData')
+        String = autoclass('java.lang.String')
+        array_list_horizontal_data = ArrayListHorizontalData()
+        url = 'https://fur-finder.herokuapp.com/api/helpinglostpets/' + str(zipCode) + '/'
+
+        data = json.loads(requests.get(url).text)
+        for dict in data:
+            # print('------------------------------------------')
+            # print('Status: ', dict['status'])
+            # print('Date: ', dict['date'])
+            # print('Location: ', dict['location'])
+            # print('Image: ', dict['image'])
+            # print('Name: ', dict['name'])
+            # print('Breed: ', dict['breed'])
+            # print('Gender: ', dict['gender'])
+            # print('Age: ', dict['age'])
+            # print('Size: ', dict['size'])
+            # print('Color: ', dict['color'])
+
+            name = cast('java.lang.String', String(dict['name']))
+            gender = cast('java.lang.String', String(dict['gender']))
+            status = cast('java.lang.String', String(dict['status']))
+            image = cast('java.lang.String', String(dict['image']))
+
+            horizontal_data = HorizontalData(name, gender, status, image)
+            array_list_horizontal_data.addHorizontalData(horizontal_data)
+
+        return array_list_horizontal_data
+
+    def lostMyDoggie(self, zipCode):
+        ArrayListHorizontalData = autoclass('org.recyclerview.ArrayListHorizontalData')
+        HorizontalData = autoclass('org.recyclerview.HorizontalData')
+        String = autoclass('java.lang.String')
+        array_list_horizontal_data = ArrayListHorizontalData()
+        url = 'https://fur-finder.herokuapp.com/api/lostmydoggie/' + str(zipCode) + '/'
+
+        data = json.loads(requests.get(url).text)
+        for dict in data:
+            # print('------------------------------------------')
+            # print('Image: ', dict['image'])
+            # print('Name: ', dict['name'])
+            # print('Status: ', dict['status'])
+            # print('Gender: ', dict['gender'])
+            # print('Location: ', dict['location'])
+            # print('Zip: ', dict['zip'])
+            # print('Breed: ', dict['breed'])
+            # print('Color: ', dict['color'])
+            # print('Date: ', dict['date'])
+
+            name = cast('java.lang.String', String(dict['name']))
+            gender = cast('java.lang.String', String(dict['gender']))
+            status = cast('java.lang.String', String(dict['status']))
+            image = cast('java.lang.String', String(dict['image']))
+
+            horizontal_data = HorizontalData(name, gender, status, image)
+            array_list_horizontal_data.addHorizontalData(horizontal_data)
+
+        return array_list_horizontal_data
+
+    def pawBoost(self, zipCode):
+        ArrayListHorizontalData = autoclass('org.recyclerview.ArrayListHorizontalData')
+        HorizontalData = autoclass('org.recyclerview.HorizontalData')
+        String = autoclass('java.lang.String')
+        array_list_horizontal_data = ArrayListHorizontalData()
+        url = 'https://fur-finder.herokuapp.com/api/pawboost/' + str(zipCode) + '/'
+
+        data = json.loads(requests.get(url).text)
+        for dict in data:
+            # print('------------------------------------------')
+            # print('Name: ', dict['name'])
+            # print('Breed: ', dict['breed'])
+            # print('Location: ', dict['location'])
+            # print('Date: ', dict['date'])
+            # print('PetID: ', dict['petid'])
+            # print('Image: ', dict['image'])
+
+            name = cast('java.lang.String', String(dict['name']))
+            gender = cast('java.lang.String', String('Unknown'))
+            status = cast('java.lang.String', String('Lost'))
+            image = cast('java.lang.String', String(dict['image']))
+
+            horizontal_data = HorizontalData(name, gender, status, image)
+            array_list_horizontal_data.addHorizontalData(horizontal_data)
+
+        return array_list_horizontal_data
+
+    def petKey(self, zipCode):
+        ArrayListHorizontalData = autoclass('org.recyclerview.ArrayListHorizontalData')
+        HorizontalData = autoclass('org.recyclerview.HorizontalData')
+        String = autoclass('java.lang.String')
+        array_list_horizontal_data = ArrayListHorizontalData()
+        url = 'https://fur-finder.herokuapp.com/api/petkey/' + str(zipCode) + '/'
+
+        data = json.loads(requests.get(url).text)
+        for dict in data:
+            # print('------------------------------------------')
+            # print('Name: ', dict['name'])
+            # print('Breed: ', dict['breed'])
+            # print('Age: ', dict['age'])
+            # print('Gender: ', dict['gender'])
+            # print('Color: ', dict['color'])
+            # print('Image: ', dict['image'])
+
+            name = cast('java.lang.String', String(dict['name']))
+            gender = cast('java.lang.String', String(dict['gender']))
+            status = cast('java.lang.String', String('Lost'))
+            image = cast('java.lang.String', String(dict['image']))
+
+            horizontal_data = HorizontalData(name, gender, status, image)
+            array_list_horizontal_data.addHorizontalData(horizontal_data)
+
+        return array_list_horizontal_data
+
+    def tabbyTracker(self, zipCode):
+        ArrayListHorizontalData = autoclass('org.recyclerview.ArrayListHorizontalData')
+        HorizontalData = autoclass('org.recyclerview.HorizontalData')
+        String = autoclass('java.lang.String')
+        array_list_horizontal_data = ArrayListHorizontalData()
+        url = 'https://fur-finder.herokuapp.com/api/tabbytracker/' + str(zipCode) + '/'
+
+        data = json.loads(requests.get(url).text)
+        for dict in data:
+            # print('------------------------------------------')
+            # print('Name: ', dict['name'])
+            # print('Location: ', dict['location'])
+            # print('Date: ', dict['date'])
+            # print('Breed: ', dict['breed'])
+            # print('Status: ', dict['status'])
+            # print('Image: ', dict['image'])
+            # print('PetID: ', dict['petid'])
+
+            name = cast('java.lang.String', String(dict['name']))
+            gender = cast('java.lang.String', String('Unknown'))
+            status = cast('java.lang.String', String(dict['status']))
+            image = cast('java.lang.String', String(dict['image']))
+
+            horizontal_data = HorizontalData(name, gender, status, image)
+            array_list_horizontal_data.addHorizontalData(horizontal_data)
+
+        return array_list_horizontal_data
 
     def build(self):
-        anchor_layout = AnchorLayout(anchor_x='center', anchor_y='bottom')
-        screen_manager = ScreenManager()
+        try:
+            # REQUEST ANDROID LOCATION PERMISSIONS AND PERFORM DATA SCRAP BASED ON ZIP CODE #
+            PythonActivity = autoclass('org.kivy.android.PythonActivity')
+            SDLActivity = autoclass('org.libsdl.app.SDLActivity')
+            Scrapers = autoclass('org.recyclerview.Scrapers')
 
-        home_screen = Screen(name='Home')
-        home_screen.add_widget(Label(text='[color=150470]Home Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40', markup=True))
+            scrapers_list = Scrapers()
+            scrapers_list.addScraper(self.fidoFinder(PythonActivity.zipCode))
+            scrapers_list.addScraper(self.helpingLostPets(PythonActivity.zipCode))
+            scrapers_list.addScraper(self.lostMyDoggie(PythonActivity.zipCode))
+            scrapers_list.addScraper(self.pawBoost(PythonActivity.zipCode))
+            scrapers_list.addScraper(self.petKey(PythonActivity.zipCode))
+            scrapers_list.addScraper(self.tabbyTracker(PythonActivity.zipCode))
 
-        carousel = CustomCarousel(direction='right', pos=(0, 100), size=(375, 200), size_hint=(None, None))
-        for i in range(10):
-            card = Card().build((0, 0))
-            carousel.add_widget(card)
-        home_screen.add_widget(carousel)
+            SDLActivity.scrapersVariable.setScrapers(scrapers_list.getScrapers())
+            # REQUEST ANDROID LOCATION PERMISSIONS AND PERFORM DATA SCRAP BASED ON ZIP CODE #
+        except:
+            print('Not an Android')
 
-        report_screen = Screen(name='Report')
-        report_screen.add_widget(Label(text='[color=150470]Report Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40', markup=True))
+        box_layout = BoxLayout(orientation='vertical')
+        screens = Screens().create()
+        navigation = Navigation(screens).create()
 
-        message_screen = Screen(name='Message')
-        message_screen.add_widget(Label(text='[color=150470]Message Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40', markup=True))
+        box_layout.add_widget(screens)
+        box_layout.add_widget(navigation)
 
-        pin_screen = Screen(name='Pin')
-        pin_screen.add_widget(Label(text='[color=150470]Pin Screen', font_name='assets/Inter-SemiBold.ttf', font_size='40', markup=True))
+        return box_layout
 
-        screen_manager.add_widget(home_screen)
-        screen_manager.add_widget(report_screen)
-        screen_manager.add_widget(message_screen)
-        screen_manager.add_widget(pin_screen)
-
-        home_button = ImageButton(source='images/home.png', on_press=lambda b: self.home_callback(screen_manager))
-        report_button = ImageButton(source='images/report.png', on_press=lambda b: self.report_callback(screen_manager))
-        message_button = ImageButton(source='images/message.png', on_press=lambda b: self.message_callback(screen_manager))
-        pin_button = ImageButton(source='images/heart.png', on_press=lambda b: self.pin_callback(screen_manager))
-
-        box_layout = BoxLayout(orientation='horizontal', size_hint=(None, None), size=(375, 50))
-        box_layout.add_widget(home_button)
-        box_layout.add_widget(report_button)
-        box_layout.add_widget(message_button)
-        box_layout.add_widget(pin_button)
-
-        anchor_layout.add_widget(screen_manager)
-        anchor_layout.add_widget(box_layout)
-
-        return anchor_layout
 
 if __name__ == '__main__':
     MyApp().run()
-
-#return Label(text='[color=150470]Fur Finder', font_name='DM-Serif-Display-Regular.ttf', font_size='50', markup=True)

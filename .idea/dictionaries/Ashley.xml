@@ -2,6 +2,8 @@
   <dictionary name="Ashley">
     <words>
       <w>kivy</w>
+      <w>kivymd</w>
+      <w>viewclass</w>
     </words>
   </dictionary>
 </component>
