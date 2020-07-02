@@ -18,6 +18,7 @@
         orientation: 'vertical'
         AnchorLayout:
             size_hint: 1, 0.1
+            padding: dp(10), dp(0), dp(0), dp(0)
             Label:
                 text: "Report A Pet"
                 color: utils.get_color_from_hex('#150470')
@@ -25,7 +26,7 @@
                 font_size: sp(24)
                 font_name: 'assets/Manrope-Bold.ttf'
                 halign: "left"
-                valign: "top"
+                valign: "center"
         ScrollView:
             size_hint: 1, 0.9
             GridLayout:
@@ -152,8 +153,8 @@
                         height: dp(41)
                         md_bg_color: app.theme_cls.primary_color
                         text: 'Report Pet'
-                        font_size: sp(20)
-                        font_name: 'assets/Inter-Regular.ttf'
+                        font_size: sp(16)
+                        font_name: 'assets/Manrope-Bold.ttf'
                         on_release:
                             root.post_report()
                 BoxLayout:
@@ -178,6 +179,8 @@
 
                     MDRaisedButton:
                         text: "Upload an Image"
+                        font_name: 'assets/Manrope-Bold.ttf'
+                        font_size: sp(16)
                         size_hint: None, None
                         size: dp(90), dp(90)
                         on_release:

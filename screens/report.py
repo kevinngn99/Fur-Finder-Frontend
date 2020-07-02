@@ -7,10 +7,10 @@ from kivy.metrics import dp, sp
 from kivy.properties import ObjectProperty
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
-
+from screens.pin import RecyView
 from kivymd.app import MDApp
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.filemanager import MDFileManager
+#from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.picker import MDDatePicker
 from kivymd.toast.kivytoast.kivytoast import toast
 
@@ -132,7 +132,7 @@ class ReportView(Screen):
         self.state_menu = MDDropdownMenu(caller=self.state_button, callback=self.set_state, items=state_items, width_mult=2, use_icon_item=False)
 
         self.manager_open = False
-        self.file_manager = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path)
+        #self.file_manager = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path)
         self.datestr = "date"
 
     def file_manager_open(self):
@@ -199,7 +199,7 @@ class ReportView(Screen):
             'image': "Image Not Yet Working"
         }
         requests.post(url='https://fur-finder.herokuapp.com/api/pets//', data=post_data)
-
+        #RecyView().update_clock()
 
 class Report(MDApp):
     class Header:

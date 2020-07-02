@@ -260,7 +260,8 @@ class Home:
         box_layout.children[2].children[0].fbind('pos', self.update_pos, profile=profile, anchor=anchor_layout)
 
         home_screen = Screen(name='Home')
-        home_screen.add_widget(box_layout)
-        home_screen.add_widget(anchor_layout)
+        home_screen.add_widget(Label(text='[size=20][color=150470][font=assets/Inter-Bold.ttf]YOU CANNOT VIEW THIS SCREEN\nWITHOUT AN ANDROID DEVICE\n(LOCATION SERVICES ARE NEEDED)', markup=True))
+        #home_screen.add_widget(box_layout)
+        #home_screen.add_widget(anchor_layout)
 
         return home_screen
