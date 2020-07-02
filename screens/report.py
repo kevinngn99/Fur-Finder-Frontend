@@ -7,6 +7,7 @@ from kivy.metrics import dp, sp
 from kivy.properties import ObjectProperty
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
+import base64
 
 from kivymd.app import MDApp
 from kivymd.uix.menu import MDDropdownMenu
@@ -144,7 +145,7 @@ class ReportView(Screen):
         toast(path)
 
     def exit_manager(self, path):
-        #self.imgPath=path
+        self.imgPath=path
         self.manager_open = False
         self.file_manager.close()
         return Image(source=path)
@@ -184,8 +185,11 @@ class ReportView(Screen):
         #number authentication
         #blank authentication
         #default authentication
-        #with open(self.imgPath, mode='rb') as file:
-        #img = file.read()
+        with open(self.imgPath, mode='rb') as file:
+             img = file.read()
+        imageString=base64.encodebytes(img).decode("utf-8")
+        self.postlist.append(imageString)
+
         post_data = {
             'name': self.postlist[0],
             'gender': self.postlist[1],
@@ -196,7 +200,7 @@ class ReportView(Screen):
             'zip': self.postlist[6],
             'location': self.postlist[7],
             'breed': self.postlist[8],
-            'image': "Image Not Yet Working"
+            'image': self.postlist[9]
         }
         requests.post(url='https://fur-finder.herokuapp.com/api/pets//', data=post_data)
 
