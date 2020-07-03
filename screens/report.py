@@ -185,10 +185,15 @@ class ReportView(Screen):
         #number authentication
         #blank authentication
         #default authentication
-        with open(self.imgPath, mode='rb') as file:
-             img = file.read()
-        imageString=base64.encodebytes(img).decode("utf-8")
-        self.postlist.append(imageString)
+        try:
+            with open(self.imgPath, mode='rb') as file:
+                 img = file.read()
+            imageString=base64.encodebytes(img).decode("utf-8")
+            self.postlist.append(imageString)
+        except:
+            imageString="no image"
+            self.postlist.append(imageString)
+        
 
         post_data = {
             'name': self.postlist[0],
@@ -202,7 +207,7 @@ class ReportView(Screen):
             'breed': self.postlist[8],
             'image': self.postlist[9]
         }
-        requests.post(url='https://fur-finder.herokuapp.com/api/pets//', data=post_data)
+        requests.post(url='http://192.168.2.15:8000/api/pets//', data=post_data)
 
 
 class Report(MDApp):
