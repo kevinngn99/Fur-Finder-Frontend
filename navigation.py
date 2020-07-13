@@ -30,10 +30,10 @@ class Navigation:
         screen_manager.current = 'Message'
         dict[screen_manager.current].color = get_color_from_hex('#150470')
 
-    def pin_callback(self, screen_manager, dict):
-        print('The pin button is being pressed')
+    def reported_callback(self, screen_manager, dict):
+        print('The reported button is being pressed')
         dict[screen_manager.current].color = get_color_from_hex('#B8B3D4')
-        screen_manager.current = 'Pin'
+        screen_manager.current = 'Reported'
         dict[screen_manager.current].color = get_color_from_hex('#150470')
 
     def create(self):
@@ -42,18 +42,18 @@ class Navigation:
         home_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(24), color=get_color_from_hex('#150470'), text='[font=assets/Feather.ttf]', markup=True)
         report_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(24), color=get_color_from_hex('#B8B3D4'), text='[font=assets/Feather.ttf]', markup=True)
         message_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(24), color=get_color_from_hex('#B8B3D4'), text='[font=assets/Feather.ttf]', markup=True)
-        pin_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(24), color=get_color_from_hex('#B8B3D4'), text='[font=assets/Feather.ttf]', markup=True)
+        reported_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(24), color=get_color_from_hex('#B8B3D4'), text='[font=assets/Feather.ttf]', markup=True)
 
-        dict = {'Home': home_button, 'Report': report_button, 'Message': message_button, 'Pin': pin_button}
+        dict = {'Home': home_button, 'Report': report_button, 'Message': message_button, 'Reported': reported_button}
 
         home_button.on_release = lambda: self.home_callback(self._screen_manager, dict)
         report_button.on_release = lambda: self.report_callback(self._screen_manager, dict)
         message_button.on_release = lambda: self.message_callback(self._screen_manager, dict)
-        pin_button.on_release = lambda: self.pin_callback(self._screen_manager, dict)
+        reported_button.on_release = lambda: self.reported_callback(self._screen_manager, dict)
 
         box_layout.add_widget(home_button)
         box_layout.add_widget(report_button)
         box_layout.add_widget(message_button)
-        box_layout.add_widget(pin_button)
+        box_layout.add_widget(reported_button)
 
         return box_layout

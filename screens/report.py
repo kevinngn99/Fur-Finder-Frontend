@@ -213,6 +213,6 @@ class Report(MDApp):
 
     def create(self):
         self.theme_cls.primary_palette = "DeepPurple"
-        report_screen = ReportView(name='Report')
+        report_screen = Screen(name='Report')
 
         return report_screen
