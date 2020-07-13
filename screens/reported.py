@@ -1,22 +1,59 @@
 from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
 from kivy.utils import get_color_from_hex
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen
+from kivy.uix.scrollview import ScrollView
 from kivy.metrics import dp, sp
 
 
 class Reported:
+    class CustomScreen(Screen):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+
+        def listen(self, data):
+            print(data)
+
+            button = Button(size_hint=(1, None), height=dp(50), text=str(data))
+
+            self.add_widget(button)
+
     class Header:
         def create(self):
-            header = Label(size_hint=(1, 0.1), halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]Reported Pets', markup=True)
+            anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(0), dp(0)))
+
+            header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]Reported Pets', markup=True)
             header.bind(size=header.setter('text_size'))
-            return header
+
+            anchor_layout.add_widget(header)
+            return anchor_layout
+
+    class ScrollView:
+        def create(self):
+            grid_layout = GridLayout(cols=1, spacing=10, size_hint_y=None)
+            grid_layout.bind(minimum_height=grid_layout.setter('height'))
+
+            for i in range(100):
+                btn = Button(text=str(i), size_hint_y=None, height=40)
+                grid_layout.add_widget(btn)
+
+            scroll_view = ScrollView(size_hint=(1, 0.9))
+            scroll_view.add_widget(grid_layout)
+            return scroll_view
 
     def create(self):
-        anchor_layout = AnchorLayout(anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(0), dp(0)))
-        anchor_layout.add_widget(self.Header().create())
+        box_layout = BoxLayout(orientation='vertical')
 
-        reported_screen = Screen(name='Reported')
-        reported_screen.add_widget(anchor_layout)
+        header = self.Header().create()
+        scroll_view = self.ScrollView().create()
+
+        box_layout.add_widget(header)
+        box_layout.add_widget(scroll_view)
+
+        reported_screen = self.CustomScreen(name='Reported')
+        reported_screen.add_widget(box_layout)
 
         return reported_screen

@@ -10,9 +10,9 @@ class Screens:
         screen_manager = ScreenManager(size_hint=(1, 0.9))
 
         home_screen = Home().create()
-        report_screen = Report().create()
-        message_screen = Message().create()
         reported_screen = Reported().create()
+        report_screen = Report(reported_screen).create()
+        message_screen = Message().create()
 
         screen_manager.add_widget(home_screen)
         screen_manager.add_widget(report_screen)
