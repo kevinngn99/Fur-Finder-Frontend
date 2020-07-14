@@ -17,9 +17,8 @@ class Reported:
         def listen(self, data):
             print(data)
 
-            button = Button(size_hint=(1, None), height=dp(50), text=str(data))
-
-            self.add_widget(button)
+            btn = Button(text=str(data), size_hint=(1, None), height=dp(40))
+            self.children[0].children[0].children[0].add_widget(btn)
 
     class Header:
         def create(self):
@@ -35,10 +34,6 @@ class Reported:
         def create(self):
             grid_layout = GridLayout(cols=1, spacing=10, size_hint_y=None)
             grid_layout.bind(minimum_height=grid_layout.setter('height'))
-
-            for i in range(100):
-                btn = Button(text=str(i), size_hint_y=None, height=40)
-                grid_layout.add_widget(btn)
 
             scroll_view = ScrollView(size_hint=(1, 0.9))
             scroll_view.add_widget(grid_layout)
