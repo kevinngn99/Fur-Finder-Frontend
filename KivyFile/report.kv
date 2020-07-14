@@ -65,6 +65,43 @@
             shorten_from: 'right'
             max_lines: 1
 
+<FormImage>:
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#FFFFFF')
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(7), dp(7), dp(7), dp(7)
+    AnchorLayout:
+        size_hint: None, None
+        size: root.size
+        pos: root.pos
+        anchor_x: 'center'
+        anchor_y: 'center'
+        Label:
+            id: icon
+            size_hint: None, None
+            size: self.size
+            pos: self.pos
+            font_name: 'assets/Font-Awesome.ttf'
+            font_size: sp(20)
+            color: utils.get_color_from_hex('#023b80')
+    AnchorLayout:
+        size_hint: None, None
+        size: root.size
+        pos: root.pos
+        anchor_x: 'center'
+        anchor_y: 'center'
+        Label:
+            id: svg
+            size_hint: None, None
+            size: self.size
+            pos: self.pos
+            font_name: 'assets/Outline.ttf'
+            font_size: sp(135)
+            color: utils.get_color_from_hex('#023b80')
+
 <CustomButton>:
     canvas.before:
         Color:

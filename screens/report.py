@@ -6,9 +6,11 @@ from kivy.graphics import Color, RoundedRectangle
 from kivy.uix.dropdown import DropDown
 from kivy.utils import get_color_from_hex
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivymd.app import MDApp
 from kivymd.uix.picker import MDDatePicker
+from kivymd.uix.filemanager import MDFileManager
 from kivy.properties import StringProperty
 from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
@@ -30,6 +32,10 @@ class FormLabel(ButtonBehavior, Widget):
     icon = StringProperty('')
     chevron = StringProperty('')
     type = StringProperty('')
+
+
+class FormImage(ButtonBehavior, Widget):
+    pass
 
 
 class CustomButton(ButtonBehavior, Label):
@@ -74,6 +80,9 @@ class Report(MDApp):
             self._state = None
             self._zip = None
             self._city = None
+            self._image = None
+            self._images_grid_layout = None
+            self._files = None
 
         def get_states(self):
             list = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY',
@@ -90,6 +99,18 @@ class Report(MDApp):
             date_dialog = MDDatePicker(callback=self.get_date)
             date_dialog.open()
 
+        def load_files(self):
+            self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path)
+            self._files.show('/')
+
+        def select_path(self, path):
+            self.exit_manager(path)
+            self._image = Image(source=path)
+            self._images_grid_layout.add_widget(self._image)
+
+        def exit_manager(self, path):
+            self._files.close()
+
         def create_drop_down(self, button, list=None):
             drop_down = DropDown()
             drop_down.bind(on_select=lambda instance, x: (setattr(button.ids.category, 'text', x), setattr(button.ids.category, 'color', get_color_from_hex('#023b80')), setattr(button.ids.icon, 'color', get_color_from_hex('#023b80'))))
@@ -103,7 +124,7 @@ class Report(MDApp):
 
         def on_change_text(self, instance, value):
             print(value)
-            self._zip.fbind('on_release', self.create_drop_down, list=['Lost', 'Found'])
+            self._zip.fbind('on_release', self.create_drop_down, list=['To', 'Do'])
 
         def create(self):
             main_grid_layout = GridLayout(size_hint=(1, None), cols=1, spacing=dp(10))
@@ -157,6 +178,14 @@ class Report(MDApp):
             status_and_date_grid_layout.add_widget(self._status)
             status_and_date_grid_layout.add_widget(self._date)
 
+            image_upload = FormImage(size_hint=(1, None), height=dp(150))
+            image_upload.ids.svg.text = ''
+            image_upload.ids.icon.text = ''
+            image_upload.on_release = lambda: self.load_files()
+            self._images_grid_layout = GridLayout(size_hint=(1, None), cols=3, spacing=dp(10))
+            self._images_grid_layout.bind(minimum_height=self._images_grid_layout.setter('height'))
+            self._images_grid_layout.add_widget(image_upload)
+
             main_grid_layout.add_widget(self._name)
             main_grid_layout.add_widget(gender_and_age_grid_layout)
             main_grid_layout.add_widget(self._breed)
@@ -164,6 +193,7 @@ class Report(MDApp):
             main_grid_layout.add_widget(status_and_date_grid_layout)
             main_grid_layout.add_widget(state_and_zip_grid_layout)
             main_grid_layout.add_widget(self._city)
+            main_grid_layout.add_widget(self._images_grid_layout)
 
             scroll_view = ScrollView(size_hint=(1, 0.9))
             scroll_view.add_widget(main_grid_layout)
