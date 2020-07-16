@@ -75,16 +75,26 @@ class Pet:
             anchor_layout = AnchorLayout(size_hint=(1, 0.4), anchor_x='center', anchor_y='bottom')
 
             carousel = Carousel()
-            for i in range(10):
+            for i in range(4):
+                image = None
+                if i == 0:
+                    image = 'images/pup.jpg'
+                elif i == 1:
+                    image = 'images/more.jpg'
+                elif i == 2:
+                    image = 'images/doge.jpg'
+                elif i == 3:
+                    image = 'images/other.jpg'
+
                 layout = self.CustomStencilView()
-                layout.add_widget(self.CustomImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source='images/aussie.jpg'))
+                layout.add_widget(self.CustomImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=image))
                 carousel.add_widget(layout)
             carousel.fbind('index', self.index_callback)
 
             indicator_layout = AnchorLayout(size_hint=(1, None), height=dp(30), anchor_x='center', anchor_y='center', padding=(dp(0), dp(0), dp(0), dp(20)))
             self._box_layout = BoxLayout(orientation='horizontal', size_hint=(None, 1), spacing=dp(5))
             self._box_layout.bind(minimum_width=self._box_layout.setter('width'))
-            for i in range(10):
+            for i in range(4):
                 if i == 0:
                     indicator = self.Indicator(opacity=1, size_hint=(None, None), size=(dp(10), dp(10)))
                     indicator.bind(pos=indicator.pos_callback)
