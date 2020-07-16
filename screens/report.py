@@ -15,6 +15,7 @@ from kivymd.uix.filemanager import MDFileManager
 from kivy.properties import StringProperty
 from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
+from kivymd.uix.snackbar import Snackbar
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.stencilview import StencilView
 from kivy.metrics import sp, dp
@@ -106,6 +107,8 @@ class Report(MDApp):
             self._states = None
             self._zip_codes = None
             self._cities = None
+            self._selected_city = None
+            self._selected_zip_code = None
 
             self._name = None
             self._gender = None
@@ -183,6 +186,7 @@ class Report(MDApp):
                     for item in list:
                         self._zip_codes.append(item['zip'])
                         self._cities.append(item['city'])
+                        self._cities.sort()
 
         def on_focus(self, instance, value, icon=None):
             if instance.text == '':
@@ -190,6 +194,36 @@ class Report(MDApp):
                     icon.color = get_color_from_hex('#023b80')
                 else:
                     icon.color = get_color_from_hex('#c9d0dc')
+            else:
+                instance.text = instance.text.title()
+
+        def on_focus_city(self, instance, value, icon=None):
+            if self._state.ids.category.text == 'State':
+                instance.is_focusable = False
+                Snackbar(text='Please select a state first!').show()
+                instance.is_focusable = True
+            else:
+                if instance.text == '':
+                    if value:
+                        icon.color = get_color_from_hex('#023b80')
+                    else:
+                        icon.color = get_color_from_hex('#c9d0dc')
+                else:
+                    instance.text = self._selected_city
+
+        def on_focus_zip(self, instance, value, icon=None):
+            if self._state.ids.category.text == 'State':
+                instance.is_focusable = False
+                Snackbar(text='Please select a state first!').show()
+                instance.is_focusable = True
+            else:
+                if instance.text == '':
+                    if value:
+                        icon.color = get_color_from_hex('#023b80')
+                    else:
+                        icon.color = get_color_from_hex('#c9d0dc')
+                else:
+                    instance.text = self._selected_zip_code
 
         def on_cities(self, instance, value):
             try:
@@ -198,6 +232,7 @@ class Report(MDApp):
                         diff = re.split(value, city, flags=re.IGNORECASE)[1]
                         if diff != '':
                             self._city.ids.category.suggestion_text = diff
+                            self._selected_city = city
                         break
             except:
                 pass
@@ -209,6 +244,7 @@ class Report(MDApp):
                         diff = re.split(value, zip)[1]
                         if diff != '':
                             self._zip.ids.category.suggestion_text = diff
+                            self._selected_zip_code = zip
                         break
             except:
                 pass
@@ -227,33 +263,20 @@ class Report(MDApp):
             city = self._city.ids.category.text.replace('City', '')
             image = self._image
 
-            #print('Name: ', name)
-            #print('Gender: ', gender)
-            #print('Age: ', age)
-            #print('Breed: ', breed)
-            #print('Color: ', color)
-            #print('Size: ', size)
-            #print('Status: ', status)
-            #print('Date: ', date)
-            #print('State: ', state)
-            #print('Zip: ', zip)
-            #print('City: ', city)
-            #print('Image: ', image)
-
             dict = {
+                'name': name.strip(),
+                'gender': gender.strip(),
                 'age': age.strip(),
                 'breed': breed.strip(),
-                'city': city.strip(),
                 'color': color.strip(),
-                'date': date.strip(),
-                'gender': gender.strip(),
-                'image': image.strip(),
-                'name': name.strip(),
-                'petid': 'N/A',
                 'size': size.strip(),
-                'state': state.strip(),
                 'status': status.strip(),
-                'zip': zip.strip()
+                'date': date.strip(),
+                'state': state.strip(),
+                'zip': zip.strip(),
+                'city': city.strip(),
+                'image': image.strip(),
+                'petid': 'N/A'
             }
 
             successful = True
@@ -261,16 +284,33 @@ class Report(MDApp):
             for key, value in dict.items():
                 if value == '':
                     successful = False
-                    print(key + ' is missing.')
+                    Snackbar(text=key.title() + ' is missing.').show()
                     break
 
             if successful:
+                Snackbar(text='Attempting to send requested pet...').show()
                 print('All fields satisfied.')
                 with open(image, 'rb') as img:
+                    #print('Name: ', name)
+                    #print('Gender: ', gender)
+                    #print('Age: ', age)
+                    #print('Breed: ', breed)
+                    #print('Color: ', color)
+                    #print('Size: ', size)
+                    #print('Status: ', status)
+                    #print('Date: ', date)
+                    #print('State: ', state)
+                    #print('Zip: ', zip)
+                    #print('City: ', city)
+                    #print('Image: ', image)
                     del dict['image']
-                    print(dict)
-                    result = requests.post(url='http://127.0.0.1:8000/api/pets//', data=dict, files={'image': img})
-                    print(result.text)
+                    result = requests.post(url='https://fur-finder.herokuapp.com/api/pets//', data=dict, files={'image': img})
+                    if result.ok:
+                        Snackbar(text='Successfully reported pet.').show()
+                        print('POST successful.')
+                    else:
+                        Snackbar(text='Could not report pet. Try again.').show()
+                        print('POST failed.')
 
         def create(self):
             with open(os.path.join(os.path.dirname(__file__), '../states.json')) as file:
@@ -286,11 +326,11 @@ class Report(MDApp):
             self._breed.ids.category.fbind('focus', self.on_focus, icon=self._breed.ids.icon)
 
             self._city = FormInput(size_hint=(1, None), height=dp(45), icon='', type='City')
-            self._city.ids.category.fbind('focus', self.on_focus, icon=self._city.ids.icon)
+            self._city.ids.category.fbind('focus', self.on_focus_city, icon=self._city.ids.icon)
             self._city.ids.category.fbind('text', self.on_cities)
 
             self._zip = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Zip', input_type='number')
-            self._zip.ids.category.fbind('focus', self.on_focus, icon=self._zip.ids.icon)
+            self._zip.ids.category.fbind('focus', self.on_focus_zip, icon=self._zip.ids.icon)
             self._zip.ids.category.fbind('text', self.on_zip_codes)
 
             self._date = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Date', chevron='')
