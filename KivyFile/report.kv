@@ -4,6 +4,55 @@
 #:import Screen kivy.uix.screenmanager
 #import MDFileManager from kivymd.uix.filemanager
 
+<FormInput>:
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#FFFFFF')
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(7), dp(7), dp(7), dp(7)
+    AnchorLayout:
+        size_hint: None, None
+        size: root.size
+        pos: root.pos
+        anchor_x: 'left'
+        anchor_y: 'center'
+        Label:
+            id: icon
+            size_hint: None, None
+            size: dp(45), dp(45)
+            pos: self.pos
+            text: root.icon
+            font_name: 'assets/Font-Awesome.ttf'
+            font_size: sp(20)
+            color: utils.get_color_from_hex('#c9d0dc')
+    AnchorLayout:
+        size_hint: None, None
+        size: root.size
+        pos: root.pos
+        anchor_x: 'center'
+        anchor_y: 'center'
+        padding: dp(45), dp(0), dp(45), dp(0)
+        TextInput:
+            id: category
+            size_hint: 1, None
+            height: dp(45)
+            pos: self.pos
+            hint_text: root.type
+            hint_text_color: utils.get_color_from_hex('#c9d0dc')
+            background_active: ''
+            background_normal: ''
+            multiline: False
+            font_name: 'assets/Inter-Regular.ttf'
+            font_size: sp(13)
+            foreground_color: utils.get_color_from_hex('#023b80')
+            cursor_color: utils.get_color_from_hex('#023b80')
+            selection_color: 201/255, 208/255, 220/255, 0.5
+            cursor_width: sp(1)
+            padding: dp(0), dp(self.height / dp(2) - (self.line_height / dp(2)))
+            input_type: root.input_type
+
 <FormLabel>:
     canvas.before:
         Color:
@@ -55,8 +104,8 @@
             height: dp(45)
             pos: self.pos
             text: root.type
-            font_name: 'assets/Inter-SemiBold.ttf'
-            font_size: sp(14)
+            font_name: 'assets/Inter-Regular.ttf'
+            font_size: sp(13)
             color: utils.get_color_from_hex('#c9d0dc')
             halign: 'left'
             valign: 'center'
@@ -86,7 +135,7 @@
             pos: self.pos
             font_name: 'assets/Font-Awesome.ttf'
             font_size: sp(20)
-            color: utils.get_color_from_hex('#023b80')
+            color: utils.get_color_from_hex('#c9d0dc')
     AnchorLayout:
         size_hint: None, None
         size: root.size
@@ -99,8 +148,20 @@
             size: self.size
             pos: self.pos
             font_name: 'assets/Outline.ttf'
-            font_size: sp(135)
-            color: utils.get_color_from_hex('#023b80')
+            font_size: sp(85)
+            color: utils.get_color_from_hex('#c9d0dc')
+
+<CustomAnchorLayout>:
+    canvas.before:
+        StencilPush
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(7), dp(7), dp(7), dp(7)
+        StencilUse
+    canvas.after:
+        StencilUnUse
+        StencilPop
 
 <CustomButton>:
     canvas.before:
@@ -111,72 +172,29 @@
             size: self.size
             radius: dp(7), dp(7), dp(7), dp(7)
 
-<ReportView>:
-    GridLayout:
-        size_hint: 1, None
-        height: self.minimum_height
-        cols: 1
-        spacing: 10
-        Button:
-            size_hint: 1, None
-            height: dp(50)
-            text: 'Name'
-        GridLayout:
-            size_hint: 1, None
-            height: self.minimum_height
-            cols: 2
-            spacing: 10
-            Button:
-                size_hint: 1, None
-                height: dp(50)
-                text: 'Gender'
-            Button:
-                size_hint: 1, None
-                height: dp(50)
-                text: 'Age'
-        Button:
-            size_hint: 1, None
-            height: dp(50)
-            text: 'Breed'
-        GridLayout:
-            size_hint: 1, None
-            height: self.minimum_height
-            cols: 2
-            spacing: 10
-            Button:
-                size_hint: 1, None
-                height: dp(50)
-                text: 'Color'
-            Button:
-                size_hint: 1, None
-                height: dp(50)
-                text: 'Size'
-        Button:
-            size_hint: 1, None
-            height: dp(50)
-            text: 'Date'
-        GridLayout:
-            size_hint: 1, None
-            height: self.minimum_height
-            cols: 2
-            spacing: 10
-            Button:
-                size_hint: 1, None
-                height: dp(50)
-                text: 'State'
-            Button:
-                size_hint: 1, None
-                height: dp(50)
-                text: 'Zip'
-        Button:
-            size_hint: 1, None
-            height: dp(50)
-            text: 'City'
-        Button:
-            size_hint: 1, None
-            height: dp(50)
-            text: 'Status'
-        MDTextField:
-            size_hint: 1, None
-            height: dp(50)
-            hint_text: 'Other'
+<CustomMenu>:
+    size_hint: 1, None
+    height: dp(45)
+    pos: self.pos
+    font_name: 'assets/Inter-Regular.ttf'
+    font_size: sp(13)
+    color: utils.get_color_from_hex('#023b80')
+    halign: 'left'
+    valign: 'center'
+    text_size: self.size
+    shorten: True
+    shorten_from: 'right'
+    max_lines: 1
+    padding: dp(45), dp(0)
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#FFFFFF')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    canvas.after:
+        Color:
+            rgb: utils.get_color_from_hex('#d9d9d9')
+        Line:
+            width: 1
+            rectangle: self.x, self.y, self.width, self.height
