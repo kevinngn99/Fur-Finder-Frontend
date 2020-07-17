@@ -163,6 +163,44 @@
         StencilUnUse
         StencilPop
 
+<CancelImage>:
+    pos: root.pos
+    size_hint: None, None
+    size: dp(24), dp(24)
+    anchor_x: 'center'
+    anchor_y: 'center'
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#023b80')
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(12), dp(12), dp(12), dp(12)
+    AnchorLayout:
+        pos: self.pos
+        size_hint: None, None
+        size: dp(22), dp(22)
+        anchor_x: 'center'
+        anchor_y: 'center'
+        padding: dp(1), dp(1), dp(1), dp(1)
+        canvas.before:
+            Color:
+                rgb: utils.get_color_from_hex('#FFFFFF')
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: dp(11), dp(11), dp(11), dp(11)
+        Label:
+            id: cancel
+            pos: self.pos
+            size: self.size
+            font_name: 'assets/Font-Awesome.ttf'
+            font_size: sp(16)
+            color: utils.get_color_from_hex('#023b80')
+            halign: 'center'
+            valign: 'center'
+            text_size: self.size
+
 <CustomButton>:
     canvas.before:
         Color:

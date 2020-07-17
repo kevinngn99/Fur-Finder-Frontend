@@ -34,6 +34,9 @@ class MyClass(App):
 
         return box_layout
 
+    def on_start(self):
+        print('APP LOADED')
+
 
 if __name__ == '__main__':
     MyClass().run()

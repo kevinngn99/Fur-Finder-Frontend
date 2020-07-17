@@ -14,35 +14,35 @@ class Navigation:
 
     def home_callback(self, screen_manager, dict):
         print('The home button is being pressed')
-        dict[screen_manager.current].color = get_color_from_hex('#B8B3D4')
+        dict[screen_manager.current].color = get_color_from_hex('#c9d0dc')
         screen_manager.current = 'Home'
-        dict[screen_manager.current].color = get_color_from_hex('#150470')
+        dict[screen_manager.current].color = get_color_from_hex('#023b80')
 
     def report_callback(self, screen_manager, dict):
         print('The report button is being pressed')
-        dict[screen_manager.current].color = get_color_from_hex('#B8B3D4')
+        dict[screen_manager.current].color = get_color_from_hex('#c9d0dc')
         screen_manager.current = 'Report'
-        dict[screen_manager.current].color = get_color_from_hex('#150470')
+        dict[screen_manager.current].color = get_color_from_hex('#023b80')
 
     def message_callback(self, screen_manager, dict):
         print('The message button is being pressed')
-        dict[screen_manager.current].color = get_color_from_hex('#B8B3D4')
+        dict[screen_manager.current].color = get_color_from_hex('#c9d0dc')
         screen_manager.current = 'Message'
-        dict[screen_manager.current].color = get_color_from_hex('#150470')
+        dict[screen_manager.current].color = get_color_from_hex('#023b80')
 
     def reported_callback(self, screen_manager, dict):
         print('The reported button is being pressed')
-        dict[screen_manager.current].color = get_color_from_hex('#B8B3D4')
+        dict[screen_manager.current].color = get_color_from_hex('#c9d0dc')
         screen_manager.current = 'Reported'
-        dict[screen_manager.current].color = get_color_from_hex('#150470')
+        dict[screen_manager.current].color = get_color_from_hex('#023b80')
 
     def create(self):
         box_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
 
-        home_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(24), color=get_color_from_hex('#150470'), text='[font=assets/Feather.ttf]', markup=True)
-        report_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(24), color=get_color_from_hex('#B8B3D4'), text='[font=assets/Feather.ttf]', markup=True)
-        message_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(24), color=get_color_from_hex('#B8B3D4'), text='[font=assets/Feather.ttf]', markup=True)
-        reported_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(24), color=get_color_from_hex('#B8B3D4'), text='[font=assets/Feather.ttf]', markup=True)
+        home_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Font-Awesome.ttf]', markup=True)
+        report_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(20), color=get_color_from_hex('#c9d0dc'), text='[font=assets/Font-Awesome.ttf]', markup=True)
+        message_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(20), color=get_color_from_hex('#c9d0dc'), text='[font=assets/Font-Awesome.ttf]', markup=True)
+        reported_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(20), color=get_color_from_hex('#c9d0dc'), text='[font=assets/Font-Awesome.ttf]', markup=True)
 
         dict = {'Home': home_button, 'Report': report_button, 'Message': message_button, 'Reported': reported_button}
 

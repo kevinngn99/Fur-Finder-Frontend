@@ -38,7 +38,7 @@ class CustomStencilView(FloatLayout, StencilView):
         self.children[0].adjust_image_size(self)
 
 
-class CustomImage(Image):
+class CustomImageUpload(Image):
     def adjust_image_size(self, stencil):
         stencil_ratio = stencil.width / float(stencil.height)
         if self.image_ratio > stencil_ratio:
@@ -47,6 +47,10 @@ class CustomImage(Image):
         else:
             self.width = stencil.width
             self.height = stencil.width / self.image_ratio
+
+
+class CancelImage(ButtonBehavior, AnchorLayout):
+    pass
 
 
 class FormInput(Widget):
@@ -152,6 +156,9 @@ class Report(MDApp):
                 self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path, ext=['png', 'jpg', 'jpeg'])
                 self._files.show('/')
 
+        def remove_image(self, instance):
+            self._images_grid_layout.remove_widget(instance.parent.parent)
+
         def select_path(self, path):
             self._image_upload.ids.svg.color = get_color_from_hex('#023b80')
             self._image_upload.ids.icon.color = get_color_from_hex('#023b80')
@@ -159,9 +166,22 @@ class Report(MDApp):
             self._image = path
             anchor_layout = CustomAnchorLayout(size_hint=(None, None), size=(dp(95), dp(85)))
             layout = CustomStencilView()
-            layout.add_widget(CustomImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=path))
+            layout.add_widget(CustomImageUpload(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=path))
             anchor_layout.add_widget(layout)
-            self._images_grid_layout.add_widget(anchor_layout)
+            cancel_layout = AnchorLayout(anchor_x='right', anchor_y='top', padding=(dp(-5), dp(-5)))
+            cancel_image = CancelImage()
+            cancel_image.ids.cancel.text = ''
+            cancel_layout.add_widget(cancel_image)
+            anchor_layout.add_widget(cancel_layout)
+            holder = AnchorLayout(size_hint=(None, None), size=(dp(95), dp(85)))
+            holder.add_widget(anchor_layout)
+            copy_cancel_layout = AnchorLayout(anchor_x='right', anchor_y='top', padding=(dp(-5), dp(-5)))
+            copy_cancel_image = CancelImage()
+            copy_cancel_image.ids.cancel.text = ''
+            copy_cancel_image.fbind('on_release', self.remove_image)
+            copy_cancel_layout.add_widget(copy_cancel_image)
+            holder.add_widget(copy_cancel_layout)
+            self._images_grid_layout.add_widget(holder)
 
         def exit_manager(self, path):
             self._files.close()
@@ -291,18 +311,6 @@ class Report(MDApp):
                 Snackbar(text='Attempting to send requested pet...').show()
                 print('All fields satisfied.')
                 with open(image, 'rb') as img:
-                    #print('Name: ', name)
-                    #print('Gender: ', gender)
-                    #print('Age: ', age)
-                    #print('Breed: ', breed)
-                    #print('Color: ', color)
-                    #print('Size: ', size)
-                    #print('Status: ', status)
-                    #print('Date: ', date)
-                    #print('State: ', state)
-                    #print('Zip: ', zip)
-                    #print('City: ', city)
-                    #print('Image: ', image)
                     del dict['image']
                     result = requests.post(url='https://fur-finder.herokuapp.com/api/pets//', data=dict, files={'image': img})
                     if result.ok:
