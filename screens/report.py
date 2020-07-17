@@ -125,7 +125,7 @@ class Report(MDApp):
             self._state = None
             self._zip = None
             self._city = None
-            self._image = ''
+            self._images = []
             self._image_upload = None
             self._images_grid_layout = None
             self._files = None
@@ -156,14 +156,15 @@ class Report(MDApp):
                 self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path, ext=['png', 'jpg', 'jpeg'])
                 self._files.show('/')
 
-        def remove_image(self, instance):
+        def remove_image(self, instance, path=None):
             self._images_grid_layout.remove_widget(instance.parent.parent)
+            self._images.remove(path)
 
         def select_path(self, path):
             self._image_upload.ids.svg.color = get_color_from_hex('#023b80')
             self._image_upload.ids.icon.color = get_color_from_hex('#023b80')
             self.exit_manager(path)
-            self._image = path
+            self._images.append(path)
             anchor_layout = CustomAnchorLayout(size_hint=(None, None), size=(dp(95), dp(85)))
             layout = CustomStencilView()
             layout.add_widget(CustomImageUpload(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=path))
@@ -178,7 +179,7 @@ class Report(MDApp):
             copy_cancel_layout = AnchorLayout(anchor_x='right', anchor_y='top', padding=(dp(-5), dp(-5)))
             copy_cancel_image = CancelImage()
             copy_cancel_image.ids.cancel.text = ''
-            copy_cancel_image.fbind('on_release', self.remove_image)
+            copy_cancel_image.fbind('on_release', self.remove_image, path=path)
             copy_cancel_layout.add_widget(copy_cancel_image)
             holder.add_widget(copy_cancel_layout)
             self._images_grid_layout.add_widget(holder)
@@ -281,7 +282,7 @@ class Report(MDApp):
             state = self._state.ids.category.text.replace('State', '')
             zip = self._zip.ids.category.text.replace('Zip', '')
             city = self._city.ids.category.text.replace('City', '')
-            image = self._image
+            images = self._images
 
             dict = {
                 'name': name.strip(),
@@ -295,7 +296,6 @@ class Report(MDApp):
                 'state': state.strip(),
                 'zip': zip.strip(),
                 'city': city.strip(),
-                'image': image.strip(),
                 'petid': 'N/A'
             }
 
@@ -305,20 +305,37 @@ class Report(MDApp):
                 if value == '':
                     successful = False
                     Snackbar(text=key.title() + ' is missing.').show()
-                    break
+                    return
+
+            if not images:
+                successful = False
+                Snackbar(text='Image is missing.').show()
+                return
 
             if successful:
                 Snackbar(text='Attempting to send requested pet...').show()
                 print('All fields satisfied.')
-                with open(image, 'rb') as img:
-                    del dict['image']
-                    result = requests.post(url='https://fur-finder.herokuapp.com/api/pets//', data=dict, files={'image': img})
-                    if result.ok:
-                        Snackbar(text='Successfully reported pet.').show()
-                        print('POST successful.')
-                    else:
-                        Snackbar(text='Could not report pet. Try again.').show()
-                        print('POST failed.')
+
+                raw_images = []
+
+                for image in images:
+                    tuple = (image, open(image, 'rb'))
+                    raw_images.append(tuple)
+
+                print(raw_images)
+
+                result = requests.post(url='http://127.0.0.1:8000/api/pets//', data=dict, files=raw_images)
+                if result.ok:
+                    print(result.text)
+                    Snackbar(text='Successfully reported pet.').show()
+                    print('POST successful.')
+                else:
+                    print(result.text)
+                    Snackbar(text='Could not report pet. Try again.').show()
+                    print('POST failed.')
+
+                for raw_image in raw_images:
+                    raw_image[1].close()
 
         def create(self):
             with open(os.path.join(os.path.dirname(__file__), '../states.json')) as file:
