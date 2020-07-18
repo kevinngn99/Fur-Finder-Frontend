@@ -26,6 +26,7 @@ from datetime import datetime
 Window.softinput_mode = "below_target"
 
 import requests
+from multiprocessing.dummy import Pool
 import json
 import os
 import re
@@ -150,10 +151,10 @@ class Report(MDApp):
             try:
                 from jnius import autoclass
                 PythonActivity = autoclass('org.kivy.android.PythonActivity')
-                self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path, ext=['png', 'jpg', 'jpeg'])
+                self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path, previous=True, ext=['png', 'jpg', 'jpeg'])
                 self._files.show(PythonActivity.storagePath)
             except:
-                self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path, ext=['png', 'jpg', 'jpeg'])
+                self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path, previous=True, ext=['png', 'jpg', 'jpeg'])
                 self._files.show('/')
 
         def remove_image(self, instance, path=None):
@@ -299,43 +300,44 @@ class Report(MDApp):
                 'petid': 'N/A'
             }
 
-            successful = True
-
             for key, value in dict.items():
                 if value == '':
-                    successful = False
                     Snackbar(text=key.title() + ' is missing.').show()
                     return
 
             if not images:
-                successful = False
                 Snackbar(text='Image is missing.').show()
                 return
 
-            if successful:
-                Snackbar(text='Attempting to send requested pet...').show()
-                print('All fields satisfied.')
+            pool = Pool(1)
+            pool.apply_async(self.post(images, dict))
 
-                raw_images = []
+            Snackbar(text='Attempting to send requested pet...').show()
+            print('All fields satisfied.')
+            self._button_submit.disabled = True
 
-                for image in images:
-                    tuple = (image, open(image, 'rb'))
-                    raw_images.append(tuple)
+        def post(self, images, dict):
+            raw_images = []
 
-                print(raw_images)
+            for image in images:
+                tuple = (image, open(image, 'rb'))
+                raw_images.append(tuple)
 
-                result = requests.post(url='http://127.0.0.1:8000/api/pets//', data=dict, files=raw_images)
-                if result.ok:
-                    print(result.text)
-                    Snackbar(text='Successfully reported pet.').show()
-                    print('POST successful.')
-                else:
-                    print(result.text)
-                    Snackbar(text='Could not report pet. Try again.').show()
-                    print('POST failed.')
+            result = requests.post(url='https://fur-finder.herokuapp.com/api/pets//', data=dict, files=raw_images)
 
-                for raw_image in raw_images:
-                    raw_image[1].close()
+            for raw_image in raw_images:
+                raw_image[1].close()
+
+            if result.ok:
+                Snackbar(text='Successfully reported pet.').show()
+                print(result.text)
+                print('POST successful.')
+            else:
+                Snackbar(text='Could not report pet. Try again.').show()
+                print(result.text)
+                print('POST failed.')
+
+            self._button_submit.disabled = False
 
         def create(self):
             with open(os.path.join(os.path.dirname(__file__), '../states.json')) as file:
@@ -432,19 +434,6 @@ class Report(MDApp):
         self.theme_cls.primary_palette = 'BlueGray'
 
     def create(self):
-        data = {
-            'name': 'This',
-            'gender': 'is',
-            'size': 'a',
-            'date': 'test',
-            'age': 'from',
-            'state': 'the',
-            'zip': 'frontend',
-            'location': 'k',
-            'breed': 'bye',
-            'image': ':D'
-        }
-
         box_layout = BoxLayout(orientation='vertical', padding=(dp(20), dp(20), dp(20), dp(20)))
         header = self.Header().create()
         scroll_view = self.Form().create()
