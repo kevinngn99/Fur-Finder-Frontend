@@ -3,13 +3,6 @@
 #:import ScreenManager kivy.uix.screenmanager
 #:import Screen kivy.uix.screenmanager
 #import MDFileManager from kivymd.uix.filemanager
-<MDMenuItem>:
-    on_release:
-        print(self.text)
-        app.root.menu_button.text = self.text
-        #app.root.menu_button.text = self.text
-        #app.root.menu_button.text
-        #root.menu_button.text = self.text
 
 <ReportView>:
     name_button: name
@@ -21,155 +14,171 @@
     location_button: location
     breed_button: breed
     calendar_button: calendar
-
-    TopPage:
-
-    MDTextField:
-        id: name
-        hint_text: "Pet Name"
-        mode: "rectangle"
-        pos_hint: {"center_x": .5, "center_y": .85}
-        size_hint_x: (None)
-        width: dp(250)
-        #onrelease do something
-
-    MDRectangleFlatIconButton:
-        id: gender
-        icon: "chevron-down"
-        pos_hint: {'center_x': .3, 'center_y': .75}
-        size_hint_x: (None)
-        width: dp(130)
-        text: "Gender"
-        on_release:
-            app.root.menu_button = gender
-            root.gender_menu.check_position_caller(None, None, None)
-            root.gender_menu.open()
-        #on_release:
-            #app.gender_menu.check_position_caller(None, None, None)
-            #app.gender_menu.open()
-
-    MDRectangleFlatIconButton:
-        id: age
-        icon: "chevron-down"
-        size_hint_x: (None)
-        width: dp(130)
-        pos_hint: {'center_x': .690, 'center_y': .75}
-        text: 'Age'
-        on_release:
-            app.root.menu_button = age
-            root.age_menu.check_position_caller(None,None,None)
-            root.age_menu.open()
-
-    MDTextField:
-        id: breed
-        icon: "chevron-down"
-        size_hint: (None,None)
-        height: dp(40)
-        width: dp(277)
-        pos_hint: {'center_x': .5, 'center_y': .68}
-        hint_text: 'Breed'
-
-    MDRectangleFlatIconButton:
-        id: size_item
-        icon: "chevron-down"
-        size_hint_x: (None)
-        width: dp(135)
-        pos_hint: {'center_x': .3, 'center_y': .60}
-        text: 'Size'
-        on_release:
-            app.root.menu_button = size_item
-            root.size_menu.check_position_caller(None, None, None)
-            root.size_menu.open()
-
-    MDRectangleFlatIconButton:
-        id: calendar
-        icon: "calendar"
-        text: "Date Missing"
-        pos_hint: {'center_x': .675, 'center_y': .60}
-        width: dp(135)
-        on_release:
-            root.date_picker()
-
-    MDRectangleFlatIconButton:
-        id: state_item
-        icon: "chevron-down"
-        size_hint_x: (None)
-        width: dp(135)
-        pos_hint: {'center_x': .3, 'center_y': .50}
-        text: 'State'
-        on_release:
-            app.root.menu_button = state_item
-            root.state_menu.check_position_caller(None,None,None)
-            root.state_menu.open()
-
-    MDTextField:
-        id: zip
-        size_hint_x: (None)
-        width: dp(90)
-        pos_hint: {'center_x': .675, 'center_y': .50}
-        hint_text: 'Zip'
-
-    MDTextField:
-        id: location
-        hint_text: "Location"
-        mode: "rectangle"
-        icon_right: "map-marker"
-        icon_right_color: app.theme_cls.primary_color
-        pos_hint: {"center_x": .5, "center_y": .41}
-        size_hint_x: (None)
-        width: dp(255)
-
-    MDRaisedButton:
-        pos_hint: {"center_x": .5, "center_y": .30}
-        md_bg_color: app.theme_cls.primary_color
-        text: 'Report Pet'
-        font_size: sp(20)
-        font_name: 'assets/Inter-Regular.ttf'
-        on_release:
-            root.post_report()
-
-    MDGridLayout:
-        cols: 3
-        row_default_height: (self.width - self.cols*self.spacing[0]) / self.cols
-        row_force_default: True
-        size_hint: (None,None)
-        height: 600
-        width: 380
-        adaptive_height: True
-        padding: dp(4), dp(4)
-        spacing: dp(4)
-        pos_hint: {"center_x": .5, "center_y": .15}
-
-        SmartTileWithLabel:
-            source: "images/aussie.jpg"
-            text: "[size=12]Aussie[/size]"
-
-        SmartTileWithLabel:
-            source: "images/corgi.jpg"
-            text: "[size=12]Corgi[/size]\n[size=10]Add more info here[/size]"
-            tile_text_color: app.theme_cls.accent_color
-
-        MDRaisedButton:
-            text: "Upload an Image"
-            size: dp(75), dp(121)
-            size_hint:None,None
-            on_release:
-                root.file_manager_open()
-
-<TopPage>:
     BoxLayout:
-        orientation: "vertical"
+        orientation: 'vertical'
         AnchorLayout:
-            height: dp(85)
-            anchor_x: "left"
-            anchor_y: "center"
-            padding: dp(50), dp(35), dp(35), dp(0)
+            size_hint: 1, 0.1
             Label:
-                text: "Report a Pet"
-                color: app.theme_cls.primary_color
-                pos_hint: {"center_x": .4, "center_y": .60}
+                text: "Report A Pet"
+                color: utils.get_color_from_hex('#150470')
                 text_size: self.size
-                font_size: sp(40)
-                font_name: 'assets/Inter-SemiBold.ttf'
+                font_size: sp(24)
+                font_name: 'assets/Manrope-Bold.ttf'
                 halign: "left"
                 valign: "top"
+        ScrollView:
+            size_hint: 1, 0.9
+            GridLayout:
+                cols: 1
+                size_hint: 1, None
+                height: self.minimum_height
+                spacing: dp(15)
+                padding: dp(15), dp(15), dp(15), dp(15)
+                BoxLayout:
+                    size_hint: 1, None,
+                    height: self.minimum_height
+                    orientation: 'horizontal'
+                    cols: 2
+                    spacing: dp(10)
+                    AnchorLayout:
+                        size_hint: 0.5, None
+                        height: dp(50)
+                        padding: dp(10), dp(0), dp(10), dp(0)
+                        MDTextField:
+                            id: name
+                            hint_text: "Pet Name"
+                            mode: "rectangle"
+                            size_hint: 1, 1
+                    MDRectangleFlatIconButton:
+                        id: gender
+                        icon: "chevron-down"
+                        size_hint: 0.5, None
+                        height: dp(41)
+                        text: "Gender"
+                        on_release:
+                            root.gender_menu.check_position_caller(None, None, None)
+                            root.gender_menu.open()
+                BoxLayout:
+                    size_hint: 1, None,
+                    height: self.minimum_height
+                    orientation: 'horizontal'
+                    cols: 2
+                    spacing: dp(10)
+                    MDRectangleFlatIconButton:
+                        id: age
+                        icon: "chevron-down"
+                        size_hint: 0.5, None
+                        height: dp(41)
+                        text: 'Age'
+                        on_release:
+                            root.age_menu.check_position_caller(None,None,None)
+                            root.age_menu.open()
+                    AnchorLayout:
+                        size_hint: 0.5, None
+                        height: dp(50)
+                        padding: dp(10), dp(0), dp(10), dp(0)
+                        MDTextField:
+                            id: breed
+                            icon: "chevron-down"
+                            size_hint: 1, 1
+                            hint_text: 'Breed'
+                            mode: "rectangle"
+                BoxLayout:
+                    size_hint: 1, None,
+                    height: self.minimum_height
+                    orientation: 'horizontal'
+                    cols: 2
+                    spacing: dp(10)
+                    MDRectangleFlatIconButton:
+                        id: size_item
+                        icon: "chevron-down"
+                        size_hint: 0.5, None
+                        height: dp(41)
+                        text: 'Size'
+                        on_release:
+                            root.size_menu.check_position_caller(None, None, None)
+                            root.size_menu.open()
+                    MDRectangleFlatIconButton:
+                        id: calendar
+                        icon: "calendar"
+                        text: "Date Missing"
+                        size_hint: 0.5, None
+                        height: dp(41)
+                        on_release:
+                            root.date_picker()
+                BoxLayout:
+                    size_hint: 1, None,
+                    height: self.minimum_height
+                    orientation: 'horizontal'
+                    cols: 2
+                    spacing: dp(10)
+                    MDRectangleFlatIconButton:
+                        id: state_item
+                        icon: "chevron-down"
+                        size_hint: 0.5, None
+                        height: dp(41)
+                        text: 'State'
+                        on_release:
+                            root.state_menu.check_position_caller(None,None,None)
+                            root.state_menu.open()
+                    AnchorLayout:
+                        size_hint: 0.5, None
+                        height: dp(50)
+                        padding: dp(10), dp(0), dp(10), dp(0)
+                        MDTextField:
+                            id: zip
+                            size_hint: 1, 1
+                            hint_text: 'Zip'
+                            mode: "rectangle"
+                BoxLayout:
+                    size_hint: 1, None,
+                    height: self.minimum_height
+                    orientation: 'horizontal'
+                    cols: 2
+                    spacing: dp(10)
+                    AnchorLayout:
+                        size_hint: 0.5, None
+                        height: dp(50)
+                        padding: dp(10), dp(0), dp(10), dp(0)
+                        MDTextField:
+                            id: location
+                            hint_text: "Location"
+                            mode: "rectangle"
+                            icon_right: "map-marker"
+                            icon_right_color: app.theme_cls.primary_color
+                            size_hint: 1, 1
+                    MDRaisedButton:
+                        size_hint: 0.5, None
+                        height: dp(41)
+                        md_bg_color: app.theme_cls.primary_color
+                        text: 'Report Pet'
+                        font_size: sp(20)
+                        font_name: 'assets/Inter-Regular.ttf'
+                        on_release:
+                            root.post_report()
+                BoxLayout:
+                    size_hint: 1, None,
+                    height: self.minimum_height
+                    orientation: 'horizontal'
+                    cols: 3
+                    spacing: dp(10)
+
+                    SmartTileWithLabel:
+                        size_hint: None, None
+                        size: dp(90), dp(90)
+                        source: "images/aussie.jpg"
+                        text: "[size=12]Aussie[/size]"
+
+                    SmartTileWithLabel:
+                        size_hint: None, None
+                        size: dp(90), dp(90)
+                        source: "images/corgi.jpg"
+                        text: "[size=12]Corgi[/size]\n[size=10]Add more info here[/size]"
+                        tile_text_color: app.theme_cls.accent_color
+
+                    MDRaisedButton:
+                        text: "Upload an Image"
+                        size_hint: None, None
+                        size: dp(90), dp(90)
+                        on_release:
+                            root.file_manager_open()
