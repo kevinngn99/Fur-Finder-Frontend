@@ -16,6 +16,7 @@ Builder.load_string("""
 #:include KivyFile/scroll.kv
 """)
 
+<<<<<<< Updated upstream
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
@@ -197,15 +198,33 @@ class ReportView(Screen):
             {'viewclass': 'MDMenuItem', 'text': 'WI'},
             {'viewclass': 'MDMenuItem', 'text': 'WY'}
         ]
+=======
+from kivymd.app import MDApp
+from kivy.uix.boxlayout import BoxLayout
+from kivy.graphics import Color, Rectangle
+from kivy.utils import get_color_from_hex
+from navigation import Navigation
+from screen_manager import Screens, ScreenManager
+>>>>>>> Stashed changes
 
         self.state_menu = MDDropdownMenu(caller=self.state_button, items=state_items, width_mult=2,
                                         use_icon_item=False)
 
+<<<<<<< Updated upstream
         self.manager_open = False
         self.file_manager = MDFileManager(
             exit_manager=self.exit_manager,
             select_path=self.select_path,
         )
+=======
+class MyClass(MDApp):
+    class CustomBoxLayout(BoxLayout):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            with self.canvas:
+                Color(rgb=get_color_from_hex('#f6f7fb'))
+                self._rect = Rectangle(size_hint=(None, None))
+>>>>>>> Stashed changes
 
     def file_manager_open(self):
         self.file_manager.show('/')  # output manager to the screen
