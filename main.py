@@ -1,7 +1,7 @@
 from kivy.config import Config
 
-Config.set('graphics', 'width', '375')
-Config.set('graphics', 'height', '812')
+Config.set('graphics', 'width', '432')
+Config.set('graphics', 'height', '768')
 Config.set('graphics', 'resizable', True)
 Config.set('graphics', 'multisamples', '5')
 

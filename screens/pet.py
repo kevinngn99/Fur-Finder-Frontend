@@ -17,12 +17,31 @@ from kivy.uix.widget import Widget
 from kivy.metrics import dp, sp
 import os
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), '../screens/my.kv'))
+Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/pet.kv'))
+
+
+class CustomFloatLayout(FloatLayout):
+    age = StringProperty('N/A')
+    breed = StringProperty('N/A')
+    color = StringProperty('N/A')
+    date = StringProperty('N/A')
+    gender = StringProperty('N/A')
+    images = []
+    location = StringProperty('N/A')
+    name = StringProperty('N/A')
+    petid = StringProperty('N/A')
+    pet_size = StringProperty('N/A')
+    status = StringProperty('N/A')
+    zip = StringProperty('N/A')
 
 
 class CustomLabel(Label):
     type = StringProperty()
     txt = StringProperty()
+
+
+class CustomName(Label):
+    name = StringProperty()
 
 
 class SummaryLabel(Label):
@@ -109,63 +128,81 @@ class Pet:
             anchor_layout.add_widget(indicator_layout)
             return anchor_layout
 
-    class Bottom:
-        class Background(AnchorLayout):
-            def __init__(self, **kwargs):
-                super().__init__(**kwargs)
-                with self.canvas.before:
-                    Color(rgb=get_color_from_hex('#FFFFFF'))
-                    self._rect = RoundedRectangle(radius=(dp(30), dp(30), dp(0), dp(0)))
-
-            def size_callback(self, instance, value):
-                self._rect.size = value
-
-        def create(self):
-            background = self.Background(size_hint=(1, 0.6), anchor_x='center', anchor_y='center')
-            background.bind(size=background.size_callback)
-
-            vertical_scroll_view = ScrollView(do_scroll=(False, True), size_hint=(1, 1), bar_inactive_color=(0, 0, 0, 0))
-            vertical_grid_layout = GridLayout(cols=1, size_hint=(1, None), padding=(dp(20), dp(20), dp(20), dp(20)))
-            vertical_grid_layout.bind(minimum_height=vertical_grid_layout.setter('height'))
-            details_layout = StackLayout(size_hint=(1, None), spacing=dp(20), padding=(dp(0), dp(20), dp(0), dp(0)))
-            details_layout.bind(minimum_height=details_layout.setter('height'))
-            details_layout.add_widget(CustomLabel(type='Status', txt='Lost'))
-            details_layout.add_widget(CustomLabel(type='Breed', txt='Australian Shepard'))
-            details_layout.add_widget(CustomLabel(type='Gender', txt='Female'))
-            details_layout.add_widget(CustomLabel(type='Color', txt='Brown'))
-            details_layout.add_widget(CustomLabel(type='Size', txt='Medium'))
-            details_layout.add_widget(CustomLabel(type='Location', txt='Gainesville, FL'))
-            details_layout.add_widget(CustomLabel(type='Zip', txt='32601'))
-            details_layout.add_widget(CustomLabel(type='Reported', txt='Dec 16, 2020'))
-
-            name_layout = AnchorLayout(size_hint=(1, None), height=dp(30), anchor_x='center', anchor_y='center')
-            pet_name = Label(halign='left', valign='center', text='[color=150470][size='+str(int(dp(25)))+'][font=assets/Inter-Bold.ttf]Daisy', markup=True)
-            pet_name.bind(size=pet_name.setter('text_size'))
-            name_layout.add_widget(pet_name)
-
-            summary_layout = AnchorLayout(size_hint=(1, None), height=dp(42), anchor_x='center', anchor_y='center', padding=(dp(0), dp(0), dp(0), dp(20)))
-            summary = Label(halign='left', valign='center', text='[color=150470][size='+str(int(dp(18)))+'][font=assets/Inter-Bold.ttf]Summary', markup=True)
-            summary.bind(size=summary.setter('text_size'))
-            summary_layout.add_widget(summary)
-
-            vertical_grid_layout.add_widget(name_layout)
-            vertical_grid_layout.add_widget(details_layout)
-            vertical_grid_layout.add_widget(summary_layout)
-            vertical_grid_layout.add_widget(SummaryLabel())
-
-            vertical_scroll_view.add_widget(vertical_grid_layout)
-            background.add_widget(vertical_scroll_view)
-
-            return background
-
     def create(self):
-        float_layout = FloatLayout()
+        float_layout = CustomFloatLayout()
 
         top_layout = AnchorLayout(anchor_x='center', anchor_y='top')
         top_layout.add_widget(self.Top().create())
 
+        background = AnchorLayout(size_hint=(1, 0.6), anchor_x='center', anchor_y='center')
+        vertical_scroll_view = ScrollView(do_scroll=(False, True), size_hint=(1, 1), bar_inactive_color=(0, 0, 0, 0))
+        vertical_grid_layout = GridLayout(cols=1, size_hint=(1, None), padding=(dp(20), dp(20), dp(20), dp(20)))
+        vertical_grid_layout.bind(minimum_height=vertical_grid_layout.setter('height'))
+        details_layout = StackLayout(size_hint=(1, None), spacing=dp(20), padding=(dp(0), dp(20), dp(0), dp(0)))
+        details_layout.bind(minimum_height=details_layout.setter('height'))
+
+        age = CustomLabel(type='Age', txt=str(float_layout.age))
+        float_layout.bind(age=lambda instance, value: setattr(age, 'txt', value))
+
+        breed = CustomLabel(type='Breed', txt=str(float_layout.breed))
+        float_layout.bind(breed=lambda instance, value: setattr(breed, 'txt', value))
+
+        location = CustomLabel(type='Location', txt=str(float_layout.location))
+        float_layout.bind(location=lambda instance, value: setattr(location, 'txt', value))
+
+        color = CustomLabel(type='Color', txt=str(float_layout.color))
+        float_layout.bind(color=lambda instance, value: setattr(color, 'txt', value))
+
+        date = CustomLabel(type='Date', txt=str(float_layout.date))
+        float_layout.bind(date=lambda instance, value: setattr(date, 'txt', value))
+
+        gender = CustomLabel(type='Gender', txt=str(float_layout.gender))
+        float_layout.bind(gender=lambda instance, value: setattr(gender, 'txt', value))
+
+        petid = CustomLabel(type='Pet ID', txt=str(float_layout.petid))
+        float_layout.bind(petid=lambda instance, value: setattr(petid, 'txt', value))
+
+        size = CustomLabel(type='Size', txt=str(float_layout.pet_size))
+        float_layout.bind(pet_size=lambda instance, value: setattr(size, 'txt', value))
+
+        status = CustomLabel(type='Status', txt=str(float_layout.status))
+        float_layout.bind(status=lambda instance, value: setattr(status, 'txt', value.title()))
+
+        zip = CustomLabel(type='Zip', txt=str(float_layout.zip))
+        float_layout.bind(zip=lambda instance, value: setattr(zip, 'txt', value))
+
+        details_layout.add_widget(age)
+        details_layout.add_widget(breed)
+        details_layout.add_widget(location)
+        details_layout.add_widget(color)
+        details_layout.add_widget(date)
+        details_layout.add_widget(gender)
+        details_layout.add_widget(petid)
+        details_layout.add_widget(size)
+        details_layout.add_widget(status)
+        details_layout.add_widget(zip)
+
+        name_layout = AnchorLayout(size_hint=(1, None), height=dp(30), anchor_x='center', anchor_y='center')
+        pet_name = CustomName(name=str(float_layout.name))
+        float_layout.bind(name=lambda instance, value: setattr(pet_name, 'name', value))
+        pet_name.bind(size=pet_name.setter('text_size'))
+        name_layout.add_widget(pet_name)
+
+        summary_layout = AnchorLayout(size_hint=(1, None), height=dp(42), anchor_x='center', anchor_y='center', padding=(dp(0), dp(0), dp(0), dp(20)))
+        summary = Label(halign='left', valign='center', text='[color=6e7c97][size=' + str(int(dp(16))) + '][font=assets/Inter-SemiBold.ttf]Summary',markup=True)
+        summary.bind(size=summary.setter('text_size'))
+        summary_layout.add_widget(summary)
+
+        vertical_grid_layout.add_widget(name_layout)
+        vertical_grid_layout.add_widget(details_layout)
+        vertical_grid_layout.add_widget(summary_layout)
+        vertical_grid_layout.add_widget(SummaryLabel())
+
+        vertical_scroll_view.add_widget(vertical_grid_layout)
+        background.add_widget(vertical_scroll_view)
+
         bottom_layout = AnchorLayout(anchor_x='center', anchor_y='bottom')
-        bottom_layout.add_widget(self.Bottom().create())
+        bottom_layout.add_widget(background)
 
         float_layout.add_widget(top_layout)
         float_layout.add_widget(bottom_layout)

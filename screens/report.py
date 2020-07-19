@@ -11,8 +11,9 @@ from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivymd.app import MDApp
 from kivymd.uix.picker import MDDatePicker
+from kivymd.uix.button import MDFlatButton
 from kivymd.uix.filemanager import MDFileManager
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, ColorProperty
 from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.snackbar import Snackbar
@@ -54,16 +55,18 @@ class CancelImage(ButtonBehavior, AnchorLayout):
     pass
 
 
-class FormInput(Widget):
+class FormInput(AnchorLayout):
     icon = StringProperty('')
     type = StringProperty('')
     input_type = StringProperty('text')
+    rgb = ColorProperty(get_color_from_hex('#c9d0dc'))
 
 
-class FormLabel(ButtonBehavior, Widget):
+class FormLabel(ButtonBehavior, AnchorLayout):
     icon = StringProperty('')
     chevron = StringProperty('')
     type = StringProperty('')
+    rgb = ColorProperty(get_color_from_hex('#c9d0dc'))
 
 
 class CustomMenu(ButtonBehavior, Label):
@@ -188,8 +191,18 @@ class Report(MDApp):
         def exit_manager(self, path):
             self._files.close()
 
-        def create_drop_down(self, button, list=None):
+        def on_deselect(self, instance, icon=None, border=None):
+            border.rgb = get_color_from_hex('#c9d0dc')
+
+            if border.ids.category.text == border.type:
+                icon.color = get_color_from_hex('#c9d0dc')
+
+        def create_drop_down(self, button, list=None, icon=None, border=None):
+            border.rgb = get_color_from_hex('#023b80')
+            icon.color = get_color_from_hex('#023b80')
+
             drop_down = DropDown()
+            drop_down.fbind('on_dismiss', self.on_deselect, icon=icon, border=border)
             drop_down.bind(on_select=lambda instance, x: (setattr(button.ids.category, 'text', x), setattr(button.ids.category, 'color', get_color_from_hex('#023b80')), setattr(button.ids.icon, 'color', get_color_from_hex('#023b80'))))
 
             for text in list:
@@ -210,7 +223,12 @@ class Report(MDApp):
                         self._cities.append(item['city'])
                         self._cities.sort()
 
-        def on_focus(self, instance, value, icon=None):
+        def on_focus(self, instance, value, icon=None, border=None):
+            if value:
+                border.rgb = get_color_from_hex('#023b80')
+            else:
+                border.rgb = get_color_from_hex('#c9d0dc')
+
             if instance.text == '':
                 if value:
                     icon.color = get_color_from_hex('#023b80')
@@ -219,12 +237,17 @@ class Report(MDApp):
             else:
                 instance.text = instance.text.title()
 
-        def on_focus_city(self, instance, value, icon=None):
+        def on_focus_city(self, instance, value, icon=None, border=None):
             if self._state.ids.category.text == 'State':
                 instance.is_focusable = False
                 Snackbar(text='Please select a state first!').show()
                 instance.is_focusable = True
             else:
+                if value:
+                    border.rgb = get_color_from_hex('#023b80')
+                else:
+                    border.rgb = get_color_from_hex('#c9d0dc')
+
                 if instance.text == '':
                     if value:
                         icon.color = get_color_from_hex('#023b80')
@@ -233,12 +256,17 @@ class Report(MDApp):
                 else:
                     instance.text = self._selected_city
 
-        def on_focus_zip(self, instance, value, icon=None):
+        def on_focus_zip(self, instance, value, icon=None, border=None):
             if self._state.ids.category.text == 'State':
                 instance.is_focusable = False
                 Snackbar(text='Please select a state first!').show()
                 instance.is_focusable = True
             else:
+                if value:
+                    border.rgb = get_color_from_hex('#023b80')
+                else:
+                    border.rgb = get_color_from_hex('#c9d0dc')
+
                 if instance.text == '':
                     if value:
                         icon.color = get_color_from_hex('#023b80')
@@ -309,11 +337,12 @@ class Report(MDApp):
                 Snackbar(text='Image is missing.').show()
                 return
 
+            Snackbar(text='Attempting to send requested pet...').show()
+            print('All fields satisfied.')
+
             pool = Pool(1)
             pool.apply_async(self.post(images, dict))
 
-            Snackbar(text='Attempting to send requested pet...').show()
-            print('All fields satisfied.')
             self._button_submit.disabled = True
 
         def post(self, images, dict):
@@ -347,42 +376,42 @@ class Report(MDApp):
             main_grid_layout.bind(minimum_height=main_grid_layout.setter('height'))
 
             self._name = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Name')
-            self._name.ids.category.fbind('focus', self.on_focus, icon=self._name.ids.icon)
+            self._name.ids.category.fbind('focus', self.on_focus, icon=self._name.ids.icon, border=self._name)
 
             self._breed = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Breed')
-            self._breed.ids.category.fbind('focus', self.on_focus, icon=self._breed.ids.icon)
+            self._breed.ids.category.fbind('focus', self.on_focus, icon=self._breed.ids.icon, border=self._breed)
 
             self._city = FormInput(size_hint=(1, None), height=dp(45), icon='', type='City')
-            self._city.ids.category.fbind('focus', self.on_focus_city, icon=self._city.ids.icon)
+            self._city.ids.category.fbind('focus', self.on_focus_city, icon=self._city.ids.icon, border=self._city)
             self._city.ids.category.fbind('text', self.on_cities)
 
             self._zip = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Zip', input_type='number')
-            self._zip.ids.category.fbind('focus', self.on_focus_zip, icon=self._zip.ids.icon)
+            self._zip.ids.category.fbind('focus', self.on_focus_zip, icon=self._zip.ids.icon, border=self._zip)
             self._zip.ids.category.fbind('text', self.on_zip_codes)
 
             self._date = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Date', chevron='')
             self._date.on_release = lambda: self.date_picker()
 
             self._gender = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Gender')
-            self._gender.fbind('on_release', self.create_drop_down, list=['Male', 'Female'])
+            self._gender.fbind('on_release', self.create_drop_down, list=['Male', 'Female'], icon=self._gender.ids.icon, border=self._gender)
 
             self._age = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Age')
-            self._age.fbind('on_release', self.create_drop_down, list=['Puppy', 'Adult', 'Senior'])
+            self._age.fbind('on_release', self.create_drop_down, list=['Puppy', 'Adult', 'Senior'], icon=self._age.ids.icon, border=self._age)
 
             self._color = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Color')
-            self._color.fbind('on_release', self.create_drop_down, list=['Black', 'Blue', 'Brown', 'Cream', 'Fawn', 'Gold', 'Grey', 'Orange', 'Red', 'Tan', 'White'])
+            self._color.fbind('on_release', self.create_drop_down, list=['Black', 'Blue', 'Brown', 'Cream', 'Fawn', 'Gold', 'Grey', 'Orange', 'Red', 'Tan', 'White'], icon=self._color.ids.icon, border=self._color)
 
             self._size = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Size')
-            self._size.fbind('on_release', self.create_drop_down, list=['Small', 'Medium', 'Large'])
+            self._size.fbind('on_release', self.create_drop_down, list=['Small', 'Medium', 'Large'], icon=self._size.ids.icon, border=self._size)
 
             self._status = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Status')
-            self._status.fbind('on_release', self.create_drop_down, list=['Lost', 'Found'])
+            self._status.fbind('on_release', self.create_drop_down, list=['Lost', 'Found'], icon=self._status.ids.icon, border=self._status)
 
             self._state = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='State')
-            self._state.fbind('on_release', self.create_drop_down, list=self.get_states())
+            self._state.fbind('on_release', self.create_drop_down, list=self.get_states(), icon=self._state.ids.icon, border=self._state)
             self._state.ids.category.fbind('text', self.on_change_text)
 
-            self._button_submit = Button(text='Submit', size_hint=(None, None), size=(dp(100), dp(50)))
+            self._button_submit = Button(text='SUBMIT', font_size=dp(16), font_name='assets/Inter-Medium.ttf', size_hint=(None, None), size=(dp(100), dp(50)))
             self._button_submit.on_release = lambda: self.submit_data()
 
             gender_and_age_grid_layout = GridLayout(size_hint=(1, None), cols=2, spacing=dp(20))
