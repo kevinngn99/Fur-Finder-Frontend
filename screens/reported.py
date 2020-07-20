@@ -56,11 +56,11 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
         if super(SelectableCard, self).on_touch_down(touch):
             return True
         if self.collide_point(*touch.pos) and self.selectable:
+            self.selected = True
             return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
-        self.selected = is_selected
-        if is_selected:
+        if rv.screen_manager.current == 'RV' and self.selected:
             rv.screen_manager.get_screen('Pet').children[0].age = rv.data[index]['age']
             rv.screen_manager.get_screen('Pet').children[0].breed = rv.data[index]['breed']
             rv.screen_manager.get_screen('Pet').children[0].color = rv.data[index]['color']
@@ -73,9 +73,6 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             rv.screen_manager.get_screen('Pet').children[0].status = rv.data[index]['status']
             rv.screen_manager.get_screen('Pet').children[0].zip = rv.data[index]['zip']
             rv.screen_manager.current = 'Pet'
-            print("selection changed to {0}".format(rv.data[index]))
-        else:
-            print("selection removed for {0}".format(rv.data[index]))
 
 
 class Reported(MDApp):
@@ -103,21 +100,40 @@ class Reported(MDApp):
         def __init__(self, screen_manager=None, **kwargs):
             super().__init__(**kwargs)
             self.data = []
-            self.data.append({
-                'age': 'Puppy',
-                'breed': 'Corgi',
-                'city': 'Gainesville',
-                'color': 'Black',
-                'date': 'Jul 20, 2020',
-                'gender': 'Male',
-                'images': [],
-                'name': 'Waffles',
-                'petid': 'N/A',
-                'pet_size': 'Small',
-                'state': 'FL',
-                'status': 'Found'.upper(),
-                'zip': '32601'
-            })
+            self.data.append(
+                {
+                    'age': 'Puppy',
+                    'breed': 'Corgi',
+                    'city': 'Gainesville',
+                    'color': 'Cream',
+                    'date': 'Jul 19, 2020',
+                    'gender': 'Male',
+                    'images': [],
+                    'name': 'Waffles',
+                    'petid': 'N/A',
+                    'pet_size': 'Small',
+                    'state': 'FL',
+                    'status': 'Found'.upper(),
+                    'zip': '32601'
+                }
+            )
+            self.data.append(
+                {
+                    'age': 'Adult',
+                    'breed': 'German Shepard',
+                    'city': 'Cape Coral',
+                    'color': 'Brown',
+                    'date': 'Jul 20, 2020',
+                    'gender': 'Male',
+                    'images': [],
+                    'name': 'Meatloaf',
+                    'petid': 'N/A',
+                    'pet_size': 'Large',
+                    'state': 'FL',
+                    'status': 'Lost'.upper(),
+                    'zip': '33990'
+                }
+            )
             self.screen_manager = screen_manager
 
     def create(self):
@@ -132,7 +148,7 @@ class Reported(MDApp):
         rv_screen.add_widget(box_layout)
 
         pet_screen = Screen(name='Pet')
-        pet_screen.add_widget(Pet().create())
+        pet_screen.add_widget(Pet().create(screen_manager))
 
         screen_manager.add_widget(rv_screen)
         screen_manager.add_widget(pet_screen)

@@ -21,12 +21,10 @@
   <component name="ChangeListManager">
     <list default="true" id="02c45309-d660-43e1-86d7-24d06636ccd7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KivyFile/report.kv" beforeDir="false" afterPath="$PROJECT_DIR$/KivyFile/report.kv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/navigation.py" beforeDir="false" afterPath="$PROJECT_DIR$/navigation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/my.kv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KivyFile/pet.kv" beforeDir="false" afterPath="$PROJECT_DIR$/KivyFile/pet.kv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KivyFile/reported.kv" beforeDir="false" afterPath="$PROJECT_DIR$/KivyFile/reported.kv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/screens/home.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/pet.py" beforeDir="false" afterPath="$PROJECT_DIR$/screens/pet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/report.py" beforeDir="false" afterPath="$PROJECT_DIR$/screens/report.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/reported.py" beforeDir="false" afterPath="$PROJECT_DIR$/screens/reported.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -190,6 +188,7 @@
       <workItem from="1595032805648" duration="8547000" />
       <workItem from="1595043721407" duration="13955000" />
       <workItem from="1595102642237" duration="19795000" />
+      <workItem from="1595188732719" duration="18629000" />
     </task>
     <servers />
   </component>
@@ -246,30 +245,30 @@
     </state>
     <state x="-983" y="227" key="FileChooserDialogImpl/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1592254937670" />
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591714977493" />
-    <state width="1877" height="820" key="GridCell.Tab.0.bottom" timestamp="1595154159073">
+    <state width="1877" height="820" key="GridCell.Tab.0.bottom" timestamp="1595216910926">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1557" height="302" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1595015851075" />
     <state width="1877" height="302" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1595044245585" />
-    <state width="1877" height="820" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595154159073" />
-    <state width="1877" height="820" key="GridCell.Tab.0.center" timestamp="1595154159073">
+    <state width="1877" height="820" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595216910926" />
+    <state width="1877" height="820" key="GridCell.Tab.0.center" timestamp="1595216910926">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1557" height="302" key="GridCell.Tab.0.center/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1595015851075" />
     <state width="1877" height="302" key="GridCell.Tab.0.center/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1595044245585" />
-    <state width="1877" height="820" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595154159073" />
-    <state width="1877" height="820" key="GridCell.Tab.0.left" timestamp="1595154159072">
+    <state width="1877" height="820" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595216910926" />
+    <state width="1877" height="820" key="GridCell.Tab.0.left" timestamp="1595216910926">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1557" height="302" key="GridCell.Tab.0.left/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1595015851075" />
     <state width="1877" height="302" key="GridCell.Tab.0.left/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1595044245584" />
-    <state width="1877" height="820" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595154159072" />
-    <state width="1877" height="820" key="GridCell.Tab.0.right" timestamp="1595154159073">
+    <state width="1877" height="820" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595216910926" />
+    <state width="1877" height="820" key="GridCell.Tab.0.right" timestamp="1595216910926">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1557" height="302" key="GridCell.Tab.0.right/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1595015851075" />
     <state width="1877" height="302" key="GridCell.Tab.0.right/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1595044245585" />
-    <state width="1877" height="820" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595154159073" />
+    <state width="1877" height="820" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595216910926" />
     <state width="1877" height="356" key="GridCell.Tab.1.bottom" timestamp="1594981323811">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -300,13 +299,13 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1592358897226" />
-    <state x="623" y="225" width="670" height="158" key="search.everywhere.popup" timestamp="1595140245478">
+    <state x="623" y="225" width="672" height="160" key="search.everywhere.popup" timestamp="1595210586266">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1593204359879" />
-    <state x="623" y="225" width="670" height="158" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1595140245478" />
+    <state x="623" y="225" width="672" height="160" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1595210586266" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Kivy$main.coverage" NAME="main Coverage Results" MODIFIED="1595154142984" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Kivy$main.coverage" NAME="main Coverage Results" MODIFIED="1595217089313" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

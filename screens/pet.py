@@ -1,10 +1,10 @@
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang.builder import Builder
-from kivy.uix.button import Button
+from kivy.uix.button import ButtonBehavior
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.carousel import Carousel
-from kivy.graphics import Color, RoundedRectangle, Rectangle
+from kivy.graphics import Color, RoundedRectangle
 from kivy.utils import get_color_from_hex
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image, AsyncImage
@@ -12,7 +12,7 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.stencilview import StencilView
-from kivy.properties import StringProperty
+from kivy.properties import ColorProperty, StringProperty
 from kivy.uix.widget import Widget
 from kivy.metrics import dp, sp
 import os
@@ -20,7 +20,23 @@ import os
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/pet.kv'))
 
 
-class CustomFloatLayout(FloatLayout):
+class PinButton(AnchorLayout):
+    text = StringProperty('')
+    icon = StringProperty('')
+    color = ColorProperty()
+
+
+class MessageButton(AnchorLayout):
+    text = StringProperty('')
+    icon = StringProperty('')
+    color = ColorProperty()
+
+
+class BackButton(ButtonBehavior, AnchorLayout):
+    icon = StringProperty('')
+
+
+class CustomFloatLayout(BoxLayout):
     age = StringProperty('N/A')
     breed = StringProperty('N/A')
     color = StringProperty('N/A')
@@ -91,7 +107,7 @@ class Pet:
                 self._box_layout.children[next].opacity = 0.5
 
         def create(self):
-            anchor_layout = AnchorLayout(size_hint=(1, 0.4), anchor_x='center', anchor_y='bottom')
+            anchor_layout = AnchorLayout(size_hint=(1, 1), anchor_x='center', anchor_y='bottom')
 
             carousel = Carousel()
             for i in range(4):
@@ -126,15 +142,22 @@ class Pet:
 
             anchor_layout.add_widget(carousel)
             anchor_layout.add_widget(indicator_layout)
+
             return anchor_layout
 
-    def create(self):
-        float_layout = CustomFloatLayout()
+    def create(self, screen_manager):
+        float_layout = CustomFloatLayout(orientation='vertical')
 
-        top_layout = AnchorLayout(anchor_x='center', anchor_y='top')
-        top_layout.add_widget(self.Top().create())
+        top_layout = AnchorLayout(size_hint=(1, 0.4), anchor_x='center', anchor_y='top')
+        top = self.Top().create()
+        button_layout = AnchorLayout(size_hint=(1, 1), padding=(dp(20), dp(20), dp(20), dp(20)), anchor_x='left', anchor_y='top', opacity=0.5)
+        back_button = BackButton()
+        back_button.bind(on_release=lambda instance: setattr(screen_manager, 'current', 'RV'))
+        button_layout.add_widget(back_button)
+        top.add_widget(button_layout)
+        top_layout.add_widget(top)
 
-        background = AnchorLayout(size_hint=(1, 0.6), anchor_x='center', anchor_y='center')
+        background = AnchorLayout(size_hint=(1, 1), anchor_x='center', anchor_y='center')
         vertical_scroll_view = ScrollView(do_scroll=(False, True), size_hint=(1, 1), bar_inactive_color=(0, 0, 0, 0))
         vertical_grid_layout = GridLayout(cols=1, size_hint=(1, None), padding=(dp(20), dp(20), dp(20), dp(20)))
         vertical_grid_layout.bind(minimum_height=vertical_grid_layout.setter('height'))
@@ -201,10 +224,15 @@ class Pet:
         vertical_scroll_view.add_widget(vertical_grid_layout)
         background.add_widget(vertical_scroll_view)
 
-        bottom_layout = AnchorLayout(anchor_x='center', anchor_y='bottom')
+        bottom_layout = AnchorLayout(size_hint=(1, 0.5), anchor_x='center', anchor_y='bottom')
         bottom_layout.add_widget(background)
+
+        pin_and_message_layout = BoxLayout(size_hint=(1, None), height=dp(45), orientation='horizontal')
+        pin_and_message_layout.add_widget(PinButton(icon='', text='Pin', color=get_color_from_hex('#e01646'), padding=(dp(20), dp(0), dp(7), dp(0))))
+        pin_and_message_layout.add_widget(MessageButton(icon='', text='Message', color=get_color_from_hex('#023b80'), padding=(dp(0), dp(0), dp(20), dp(0))))
 
         float_layout.add_widget(top_layout)
         float_layout.add_widget(bottom_layout)
+        float_layout.add_widget(pin_and_message_layout)
 
         return float_layout
