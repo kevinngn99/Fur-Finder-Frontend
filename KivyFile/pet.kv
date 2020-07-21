@@ -1,0 +1,138 @@
+<CustomLabel>:
+    text: '[color=6e7c97][size='+str(int(dp(13)))+'][font=assets/Inter-SemiBold.ttf]'+root.type+'\n'+'[size='+str(int(dp(13)))+'][color=023b80][font=assets/Inter-Bold.ttf]'+root.txt
+    line_height: 1.5
+    size_hint: None, None
+    size: self.texture_size
+    markup: True
+
+<CustomName>:
+    halign: 'left'
+    valign: 'center'
+    text: '[color=023b80][size=' + str(int(dp(20))) + '][font=assets/Inter-Bold.ttf]' + root.name
+    markup: True
+
+<BackButton>:
+    size_hint: None, None
+    size: dp(40), dp(40)
+    pos: self.pos
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#000000')
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(20), dp(20), dp(20), dp(20)
+    Label:
+        id: icon
+        size_hint: 1, 1
+        text: root.icon
+        font_name: 'assets/Font-Awesome.ttf'
+        font_size: sp(20)
+        color: utils.get_color_from_hex('#FFFFFF')
+        halign: 'center'
+        valign: 'center'
+        text_size: self.size
+
+<PinButton>:
+    size_hint: None, None
+    size: dp(125), dp(45)
+    padding: root.padding
+    AnchorLayout:
+        size: self.size
+        pos: self.pos
+        canvas.before:
+            Color:
+                rgb: root.color
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: dp(7), dp(7), dp(7), dp(7)
+        AnchorLayout:
+            size_hint: 1, 1
+            anchor_x: 'center'
+            anchor_y: 'center'
+            BoxLayout:
+                size_hint: None, 1
+                width: self.minimum_width
+                orientation: 'horizontal'
+                spacing: dp(7)
+                BoxLayout:
+                    size_hint: None, 1
+                    width: self.minimum_width
+                    orientation: 'horizontal'
+                    Label:
+                        size_hint: None, 1
+                        size: self.texture_size
+                        text: root.icon
+                        font_name: 'assets/Font-Awesome.ttf'
+                        font_size: sp(20)
+                        color: utils.get_color_from_hex('#FFFFFF')
+                        halign: 'center'
+                        valign: 'center'
+                        text_size: self.size
+                Label:
+                    size_hint: None, 1
+                    width: dp(30)
+                    text: root.text
+                    font_name: 'assets/Inter-SemiBold.ttf'
+                    font_size: sp(20)
+                    color: utils.get_color_from_hex('#FFFFFF')
+                    halign: 'center'
+                    valign: 'center'
+                    text_size: self.size
+
+<MessageButton>:
+    size: root.size
+    padding: root.padding
+    AnchorLayout:
+        size: self.size
+        pos: self.pos
+        canvas.before:
+            Color:
+                rgb: root.color
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: dp(7), dp(7), dp(7), dp(7)
+        AnchorLayout:
+            size_hint: 1, 1
+            anchor_x: 'center'
+            anchor_y: 'center'
+            BoxLayout:
+                size_hint: None, 1
+                width: self.minimum_width
+                orientation: 'horizontal'
+                spacing: dp(7)
+                BoxLayout:
+                    size_hint: None, 1
+                    width: self.minimum_width
+                    orientation: 'horizontal'
+                    Label:
+                        size_hint: None, 1
+                        size: self.texture_size
+                        text: root.icon
+                        font_name: 'assets/Font-Awesome.ttf'
+                        font_size: sp(20)
+                        color: utils.get_color_from_hex('#FFFFFF')
+                        halign: 'center'
+                        valign: 'center'
+                        text_size: self.size
+                Label:
+                    size_hint: None, 1
+                    width: dp(90)
+                    text: root.text
+                    font_name: 'assets/Inter-SemiBold.ttf'
+                    font_size: sp(20)
+                    color: utils.get_color_from_hex('#FFFFFF')
+                    halign: 'center'
+                    valign: 'center'
+                    text_size: self.size
+
+<SummaryLabel>:
+    text: '[color=6e7c97][size='+str(int(dp(13)))+'][font=assets/Inter-Regular.ttf]Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam consequat venenatis augue, gravida laoreet nulla convallis eu. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin at orci in tortor convallis pharetra. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
+    halign: 'justify'
+    size_hint: 1, None
+    text_size: root.width, None
+    size: self.texture_size
+    markup: True
+

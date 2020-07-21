@@ -11,10 +11,12 @@ from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivymd.app import MDApp
 from kivymd.uix.picker import MDDatePicker
+from kivymd.uix.button import MDFlatButton
 from kivymd.uix.filemanager import MDFileManager
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, ColorProperty
 from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
+from kivymd.uix.snackbar import Snackbar
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.stencilview import StencilView
 from kivy.metrics import sp, dp
@@ -25,6 +27,7 @@ from datetime import datetime
 Window.softinput_mode = "below_target"
 
 import requests
+from multiprocessing.dummy import Pool
 import json
 import os
 import re
@@ -37,7 +40,7 @@ class CustomStencilView(FloatLayout, StencilView):
         self.children[0].adjust_image_size(self)
 
 
-class CustomImage(Image):
+class CustomImageUpload(Image):
     def adjust_image_size(self, stencil):
         stencil_ratio = stencil.width / float(stencil.height)
         if self.image_ratio > stencil_ratio:
@@ -48,16 +51,22 @@ class CustomImage(Image):
             self.height = stencil.width / self.image_ratio
 
 
-class FormInput(Widget):
+class CancelImage(ButtonBehavior, AnchorLayout):
+    pass
+
+
+class FormInput(AnchorLayout):
     icon = StringProperty('')
     type = StringProperty('')
     input_type = StringProperty('text')
+    rgb = ColorProperty(get_color_from_hex('#c9d0dc'))
 
 
-class FormLabel(ButtonBehavior, Widget):
+class FormLabel(ButtonBehavior, AnchorLayout):
     icon = StringProperty('')
     chevron = StringProperty('')
     type = StringProperty('')
+    rgb = ColorProperty(get_color_from_hex('#c9d0dc'))
 
 
 class CustomMenu(ButtonBehavior, Label):
@@ -106,6 +115,8 @@ class Report(MDApp):
             self._states = None
             self._zip_codes = None
             self._cities = None
+            self._selected_city = None
+            self._selected_zip_code = None
 
             self._name = None
             self._gender = None
@@ -118,7 +129,7 @@ class Report(MDApp):
             self._state = None
             self._zip = None
             self._city = None
-            self._image = ''
+            self._images = []
             self._image_upload = None
             self._images_grid_layout = None
             self._files = None
@@ -143,28 +154,55 @@ class Report(MDApp):
             try:
                 from jnius import autoclass
                 PythonActivity = autoclass('org.kivy.android.PythonActivity')
-                self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path, ext=['png', 'jpg', 'jpeg'])
+                self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path, previous=True, ext=['png', 'jpg', 'jpeg'])
                 self._files.show(PythonActivity.storagePath)
             except:
-                self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path, ext=['png', 'jpg', 'jpeg'])
+                self._files = MDFileManager(exit_manager=self.exit_manager, select_path=self.select_path, previous=True, ext=['png', 'jpg', 'jpeg'])
                 self._files.show('/')
+
+        def remove_image(self, instance, path=None):
+            self._images_grid_layout.remove_widget(instance.parent.parent)
+            self._images.remove(path)
 
         def select_path(self, path):
             self._image_upload.ids.svg.color = get_color_from_hex('#023b80')
             self._image_upload.ids.icon.color = get_color_from_hex('#023b80')
             self.exit_manager(path)
-            self._image = path
+            self._images.append(path)
             anchor_layout = CustomAnchorLayout(size_hint=(None, None), size=(dp(95), dp(85)))
             layout = CustomStencilView()
-            layout.add_widget(CustomImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=path))
+            layout.add_widget(CustomImageUpload(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=path))
             anchor_layout.add_widget(layout)
-            self._images_grid_layout.add_widget(anchor_layout)
+            cancel_layout = AnchorLayout(anchor_x='right', anchor_y='top', padding=(dp(-5), dp(-5)))
+            cancel_image = CancelImage()
+            cancel_image.ids.cancel.text = ''
+            cancel_layout.add_widget(cancel_image)
+            anchor_layout.add_widget(cancel_layout)
+            holder = AnchorLayout(size_hint=(None, None), size=(dp(95), dp(85)))
+            holder.add_widget(anchor_layout)
+            copy_cancel_layout = AnchorLayout(anchor_x='right', anchor_y='top', padding=(dp(-5), dp(-5)))
+            copy_cancel_image = CancelImage()
+            copy_cancel_image.ids.cancel.text = ''
+            copy_cancel_image.fbind('on_release', self.remove_image, path=path)
+            copy_cancel_layout.add_widget(copy_cancel_image)
+            holder.add_widget(copy_cancel_layout)
+            self._images_grid_layout.add_widget(holder)
 
         def exit_manager(self, path):
             self._files.close()
 
-        def create_drop_down(self, button, list=None):
+        def on_deselect(self, instance, icon=None, border=None):
+            border.rgb = get_color_from_hex('#c9d0dc')
+
+            if border.ids.category.text == border.type:
+                icon.color = get_color_from_hex('#c9d0dc')
+
+        def create_drop_down(self, button, list=None, icon=None, border=None):
+            border.rgb = get_color_from_hex('#023b80')
+            icon.color = get_color_from_hex('#023b80')
+
             drop_down = DropDown()
+            drop_down.fbind('on_dismiss', self.on_deselect, icon=icon, border=border)
             drop_down.bind(on_select=lambda instance, x: (setattr(button.ids.category, 'text', x), setattr(button.ids.category, 'color', get_color_from_hex('#023b80')), setattr(button.ids.icon, 'color', get_color_from_hex('#023b80'))))
 
             for text in list:
@@ -183,13 +221,59 @@ class Report(MDApp):
                     for item in list:
                         self._zip_codes.append(item['zip'])
                         self._cities.append(item['city'])
+                        self._cities.sort()
 
-        def on_focus(self, instance, value, icon=None):
+        def on_focus(self, instance, value, icon=None, border=None):
+            if value:
+                border.rgb = get_color_from_hex('#023b80')
+            else:
+                border.rgb = get_color_from_hex('#c9d0dc')
+
             if instance.text == '':
                 if value:
                     icon.color = get_color_from_hex('#023b80')
                 else:
                     icon.color = get_color_from_hex('#c9d0dc')
+            else:
+                instance.text = instance.text.title()
+
+        def on_focus_city(self, instance, value, icon=None, border=None):
+            if self._state.ids.category.text == 'State':
+                instance.is_focusable = False
+                Snackbar(text='Please select a state first!').show()
+                instance.is_focusable = True
+            else:
+                if value:
+                    border.rgb = get_color_from_hex('#023b80')
+                else:
+                    border.rgb = get_color_from_hex('#c9d0dc')
+
+                if instance.text == '':
+                    if value:
+                        icon.color = get_color_from_hex('#023b80')
+                    else:
+                        icon.color = get_color_from_hex('#c9d0dc')
+                else:
+                    instance.text = self._selected_city
+
+        def on_focus_zip(self, instance, value, icon=None, border=None):
+            if self._state.ids.category.text == 'State':
+                instance.is_focusable = False
+                Snackbar(text='Please select a state first!').show()
+                instance.is_focusable = True
+            else:
+                if value:
+                    border.rgb = get_color_from_hex('#023b80')
+                else:
+                    border.rgb = get_color_from_hex('#c9d0dc')
+
+                if instance.text == '':
+                    if value:
+                        icon.color = get_color_from_hex('#023b80')
+                    else:
+                        icon.color = get_color_from_hex('#c9d0dc')
+                else:
+                    instance.text = self._selected_zip_code
 
         def on_cities(self, instance, value):
             try:
@@ -198,6 +282,7 @@ class Report(MDApp):
                         diff = re.split(value, city, flags=re.IGNORECASE)[1]
                         if diff != '':
                             self._city.ids.category.suggestion_text = diff
+                            self._selected_city = city
                         break
             except:
                 pass
@@ -209,6 +294,7 @@ class Report(MDApp):
                         diff = re.split(value, zip)[1]
                         if diff != '':
                             self._zip.ids.category.suggestion_text = diff
+                            self._selected_zip_code = zip
                         break
             except:
                 pass
@@ -225,52 +311,62 @@ class Report(MDApp):
             state = self._state.ids.category.text.replace('State', '')
             zip = self._zip.ids.category.text.replace('Zip', '')
             city = self._city.ids.category.text.replace('City', '')
-            image = self._image
-
-            #print('Name: ', name)
-            #print('Gender: ', gender)
-            #print('Age: ', age)
-            #print('Breed: ', breed)
-            #print('Color: ', color)
-            #print('Size: ', size)
-            #print('Status: ', status)
-            #print('Date: ', date)
-            #print('State: ', state)
-            #print('Zip: ', zip)
-            #print('City: ', city)
-            #print('Image: ', image)
+            images = self._images
 
             dict = {
+                'name': name.strip(),
+                'gender': gender.strip(),
                 'age': age.strip(),
                 'breed': breed.strip(),
-                'city': city.strip(),
                 'color': color.strip(),
-                'date': date.strip(),
-                'gender': gender.strip(),
-                'image': image.strip(),
-                'name': name.strip(),
-                'petid': 'N/A',
                 'size': size.strip(),
-                'state': state.strip(),
                 'status': status.strip(),
-                'zip': zip.strip()
+                'date': date.strip(),
+                'state': state.strip(),
+                'zip': zip.strip(),
+                'city': city.strip(),
+                'petid': 'N/A'
             }
-
-            successful = True
 
             for key, value in dict.items():
                 if value == '':
-                    successful = False
-                    print(key + ' is missing.')
-                    break
+                    Snackbar(text=key.title() + ' is missing.').show()
+                    return
 
-            if successful:
-                print('All fields satisfied.')
-                with open(image, 'rb') as img:
-                    del dict['image']
-                    print(dict)
-                    result = requests.post(url='http://127.0.0.1:8000/api/pets//', data=dict, files={'image': img})
-                    print(result.text)
+            if not images:
+                Snackbar(text='Image is missing.').show()
+                return
+
+            Snackbar(text='Attempting to send requested pet...').show()
+            print('All fields satisfied.')
+
+            pool = Pool(1)
+            pool.apply_async(self.post(images, dict))
+
+            self._button_submit.disabled = True
+
+        def post(self, images, dict):
+            raw_images = []
+
+            for image in images:
+                tuple = (image, open(image, 'rb'))
+                raw_images.append(tuple)
+
+            result = requests.post(url='https://fur-finder.herokuapp.com/api/pets//', data=dict, files=raw_images)
+
+            for raw_image in raw_images:
+                raw_image[1].close()
+
+            if result.ok:
+                Snackbar(text='Successfully reported pet.').show()
+                print(result.text)
+                print('POST successful.')
+            else:
+                Snackbar(text='Could not report pet. Try again.').show()
+                print(result.text)
+                print('POST failed.')
+
+            self._button_submit.disabled = False
 
         def create(self):
             with open(os.path.join(os.path.dirname(__file__), '../states.json')) as file:
@@ -280,42 +376,42 @@ class Report(MDApp):
             main_grid_layout.bind(minimum_height=main_grid_layout.setter('height'))
 
             self._name = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Name')
-            self._name.ids.category.fbind('focus', self.on_focus, icon=self._name.ids.icon)
+            self._name.ids.category.fbind('focus', self.on_focus, icon=self._name.ids.icon, border=self._name)
 
             self._breed = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Breed')
-            self._breed.ids.category.fbind('focus', self.on_focus, icon=self._breed.ids.icon)
+            self._breed.ids.category.fbind('focus', self.on_focus, icon=self._breed.ids.icon, border=self._breed)
 
             self._city = FormInput(size_hint=(1, None), height=dp(45), icon='', type='City')
-            self._city.ids.category.fbind('focus', self.on_focus, icon=self._city.ids.icon)
+            self._city.ids.category.fbind('focus', self.on_focus_city, icon=self._city.ids.icon, border=self._city)
             self._city.ids.category.fbind('text', self.on_cities)
 
             self._zip = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Zip', input_type='number')
-            self._zip.ids.category.fbind('focus', self.on_focus, icon=self._zip.ids.icon)
+            self._zip.ids.category.fbind('focus', self.on_focus_zip, icon=self._zip.ids.icon, border=self._zip)
             self._zip.ids.category.fbind('text', self.on_zip_codes)
 
             self._date = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Date', chevron='')
             self._date.on_release = lambda: self.date_picker()
 
             self._gender = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Gender')
-            self._gender.fbind('on_release', self.create_drop_down, list=['Male', 'Female'])
+            self._gender.fbind('on_release', self.create_drop_down, list=['Male', 'Female'], icon=self._gender.ids.icon, border=self._gender)
 
             self._age = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Age')
-            self._age.fbind('on_release', self.create_drop_down, list=['Puppy', 'Adult', 'Senior'])
+            self._age.fbind('on_release', self.create_drop_down, list=['Puppy', 'Adult', 'Senior'], icon=self._age.ids.icon, border=self._age)
 
             self._color = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Color')
-            self._color.fbind('on_release', self.create_drop_down, list=['Black', 'Blue', 'Brown', 'Cream', 'Fawn', 'Gold', 'Grey', 'Orange', 'Red', 'Tan', 'White'])
+            self._color.fbind('on_release', self.create_drop_down, list=['Black', 'Blue', 'Brown', 'Cream', 'Fawn', 'Gold', 'Grey', 'Orange', 'Red', 'Tan', 'White'], icon=self._color.ids.icon, border=self._color)
 
             self._size = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Size')
-            self._size.fbind('on_release', self.create_drop_down, list=['Small', 'Medium', 'Large'])
+            self._size.fbind('on_release', self.create_drop_down, list=['Small', 'Medium', 'Large'], icon=self._size.ids.icon, border=self._size)
 
             self._status = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Status')
-            self._status.fbind('on_release', self.create_drop_down, list=['Lost', 'Found'])
+            self._status.fbind('on_release', self.create_drop_down, list=['Lost', 'Found'], icon=self._status.ids.icon, border=self._status)
 
             self._state = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='State')
-            self._state.fbind('on_release', self.create_drop_down, list=self.get_states())
+            self._state.fbind('on_release', self.create_drop_down, list=self.get_states(), icon=self._state.ids.icon, border=self._state)
             self._state.ids.category.fbind('text', self.on_change_text)
 
-            self._button_submit = Button(text='Submit', size_hint=(None, None), size=(dp(100), dp(50)))
+            self._button_submit = Button(text='SUBMIT', font_size=dp(16), font_name='assets/Inter-Medium.ttf', size_hint=(None, None), size=(dp(100), dp(50)))
             self._button_submit.on_release = lambda: self.submit_data()
 
             gender_and_age_grid_layout = GridLayout(size_hint=(1, None), cols=2, spacing=dp(20))
@@ -367,19 +463,6 @@ class Report(MDApp):
         self.theme_cls.primary_palette = 'BlueGray'
 
     def create(self):
-        data = {
-            'name': 'This',
-            'gender': 'is',
-            'size': 'a',
-            'date': 'test',
-            'age': 'from',
-            'state': 'the',
-            'zip': 'frontend',
-            'location': 'k',
-            'breed': 'bye',
-            'image': ':D'
-        }
-
         box_layout = BoxLayout(orientation='vertical', padding=(dp(20), dp(20), dp(20), dp(20)))
         header = self.Header().create()
         scroll_view = self.Form().create()

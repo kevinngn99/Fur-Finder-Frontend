@@ -1,0 +1,170 @@
+#:import utils kivy.utils
+
+<SelectableCard>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<RV>:
+    viewclass: 'SelectableCard'
+    SelectableRecycleBoxLayout:
+        spacing: dp(20)
+        default_size: None, dp(150)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+        multiselect: True
+        touch_multiselect: True
+
+<CustomCard>:
+    size_hint: 1, None
+    height: dp(150)
+    padding: dp(1), dp(1)
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#c9d0dc')
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(7), dp(7), dp(7), dp(7)
+    AnchorLayout:
+        size_hint: 1, 1
+        padding: dp(7), dp(7)
+        anchor_x: 'left'
+        anchor_y: 'center'
+        canvas.before:
+            Color:
+                rgb: utils.get_color_from_hex('#FFFFFF')
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: dp(7), dp(7), dp(7), dp(7)
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: dp(7)
+            AnchorLayout:
+                size_hint: None, 1
+                width: dp(150)
+                canvas.before:
+                    Color:
+                        rgb: utils.get_color_from_hex('#150470')
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: dp(7), dp(7), dp(7), dp(7)
+            AnchorLayout:
+                size_hint: 1, 1
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(7)
+                    AnchorLayout:
+                        size_hint: 1, 0.20
+                        pos: self.pos
+                        Label:
+                            id: status
+                            size_hint: 1, 1
+                            text: root.status
+                            font_name: 'assets/Inter-Regular.ttf'
+                            font_size: sp(13)
+                            color: utils.get_color_from_hex('#6e7c97')
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.size
+                            shorten: True
+                            shorten_from: 'right'
+                            max_lines: 1
+                    AnchorLayout:
+                        size_hint: 1, 0.20
+                        pos: self.pos
+                        Label:
+                            id: name
+                            size_hint: 1, 1
+                            text: root.name
+                            font_name: 'assets/Inter-Bold.ttf'
+                            font_size: sp(13)
+                            color: utils.get_color_from_hex('#023b80')
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.size
+                            shorten: True
+                            shorten_from: 'right'
+                            max_lines: 1
+                    AnchorLayout:
+                        size_hint: 1, 0.20
+                        pos: self.pos
+                        Label:
+                            id: breed
+                            size_hint: 1, 1
+                            text: root.breed
+                            font_name: 'assets/Inter-Regular.ttf'
+                            font_size: sp(13)
+                            color: utils.get_color_from_hex('#6e7c97')
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.size
+                            shorten: True
+                            shorten_from: 'right'
+                            max_lines: 1
+                    AnchorLayout:
+                        size_hint: 1, 0.20
+                        pos: self.pos
+                        Label:
+                            id: gender
+                            size_hint: 1, 1
+                            text: root.gender
+                            font_name: 'assets/Inter-Regular.ttf'
+                            font_size: sp(13)
+                            color: utils.get_color_from_hex('#6e7c97')
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.size
+                            shorten: True
+                            shorten_from: 'right'
+                            max_lines: 1
+                    AnchorLayout:
+                        size_hint: 1, 0.20
+                        pos: self.pos
+                        Label:
+                            id: location
+                            size_hint: 1, 1
+                            text: root.city + ', ' + root.state
+                            font_name: 'assets/Inter-Regular.ttf'
+                            font_size: sp(13)
+                            color: utils.get_color_from_hex('#6e7c97')
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.size
+                            shorten: True
+                            shorten_from: 'right'
+                            max_lines: 1
+                    AnchorLayout:
+                        size_hint: 1, 0.20
+                        pos: self.pos
+                        Label:
+                            id: date
+                            size_hint: 1, 1
+                            text: root.date
+                            font_name: 'assets/Inter-SemiBold.ttf'
+                            font_size: sp(13)
+                            color: utils.get_color_from_hex('#6e7c97')
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.size
+                            shorten: True
+                            shorten_from: 'right'
+                            max_lines: 1
+            AnchorLayout:
+                size_hint: None, 1
+                width: dp(25)
+                Label:
+                    id: chevron
+                    size_hint: 1, 1
+                    text: root.icon
+                    font_name: 'assets/Font-Awesome.ttf'
+                    font_size: sp(20)
+                    color: utils.get_color_from_hex('#023b80')
+                    halign: 'center'
+                    valign: 'center'
+                    text_size: self.size

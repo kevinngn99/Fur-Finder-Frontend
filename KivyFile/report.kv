@@ -1,118 +1,136 @@
 #:import utils kivy.utils
-#:import MDDropdownMenu kivymd.uix.menu
-#:import ScreenManager kivy.uix.screenmanager
-#:import Screen kivy.uix.screenmanager
-#import MDFileManager from kivymd.uix.filemanager
 
 <FormInput>:
+    size_hint: 1, 1
+    padding: dp(1), dp(1)
     canvas.before:
         Color:
-            rgb: utils.get_color_from_hex('#FFFFFF')
+            rgb: root.rgb
         RoundedRectangle:
             pos: self.pos
             size: self.size
             radius: dp(7), dp(7), dp(7), dp(7)
     AnchorLayout:
-        size_hint: None, None
-        size: root.size
-        pos: root.pos
-        anchor_x: 'left'
-        anchor_y: 'center'
-        Label:
-            id: icon
+        size_hint: 1, 1
+        canvas.before:
+            Color:
+                rgb: utils.get_color_from_hex('#FFFFFF')
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: dp(7), dp(7), dp(7), dp(7)
+        AnchorLayout:
             size_hint: None, None
-            size: dp(45), dp(45)
-            pos: self.pos
-            text: root.icon
-            font_name: 'assets/Font-Awesome.ttf'
-            font_size: sp(20)
-            color: utils.get_color_from_hex('#c9d0dc')
-    AnchorLayout:
-        size_hint: None, None
-        size: root.size
-        pos: root.pos
-        anchor_x: 'center'
-        anchor_y: 'center'
-        padding: dp(45), dp(0), dp(45), dp(0)
-        TextInput:
-            id: category
-            size_hint: 1, None
-            height: dp(45)
-            pos: self.pos
-            hint_text: root.type
-            hint_text_color: utils.get_color_from_hex('#c9d0dc')
-            background_active: ''
-            background_normal: ''
-            multiline: False
-            font_name: 'assets/Inter-Regular.ttf'
-            font_size: sp(13)
-            foreground_color: utils.get_color_from_hex('#023b80')
-            cursor_color: utils.get_color_from_hex('#023b80')
-            selection_color: 201/255, 208/255, 220/255, 0.5
-            cursor_width: sp(1)
-            padding: dp(0), dp(self.height / dp(2) - (self.line_height / dp(2)))
-            input_type: root.input_type
+            size: root.size
+            pos: root.pos
+            anchor_x: 'left'
+            anchor_y: 'center'
+            Label:
+                id: icon
+                size_hint: None, None
+                size: dp(45), dp(45)
+                pos: self.pos
+                text: root.icon
+                font_name: 'assets/Font-Awesome.ttf'
+                font_size: sp(20)
+                color: utils.get_color_from_hex('#c9d0dc')
+        AnchorLayout:
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'center'
+            anchor_y: 'center'
+            padding: dp(45), dp(0), dp(45), dp(0)
+            TextInput:
+                id: category
+                size_hint: 1, None
+                height: dp(43)
+                pos: self.pos
+                hint_text: root.type
+                hint_text_color: utils.get_color_from_hex('#c9d0dc')
+                background_active: ''
+                background_normal: ''
+                multiline: False
+                font_name: 'assets/Inter-Regular.ttf'
+                font_size: sp(13)
+                foreground_color: utils.get_color_from_hex('#023b80')
+                cursor_color: utils.get_color_from_hex('#023b80')
+                selection_color: 201/255, 208/255, 220/255, 0.5
+                cursor_width: sp(1)
+                padding: dp(0), dp(self.height / dp(2) - (self.line_height / dp(2)))
+                input_type: root.input_type
 
 <FormLabel>:
+    size_hint: 1, 1
+    padding: dp(1), dp(1)
     canvas.before:
         Color:
-            rgb: utils.get_color_from_hex('#FFFFFF')
+            rgb: root.rgb
         RoundedRectangle:
             pos: self.pos
             size: self.size
             radius: dp(7), dp(7), dp(7), dp(7)
     AnchorLayout:
-        size_hint: None, None
-        size: root.size
-        pos: root.pos
-        anchor_x: 'left'
-        anchor_y: 'center'
-        Label:
-            id: icon
+        size_hint: 1, 1
+        canvas.before:
+            Color:
+                rgb: utils.get_color_from_hex('#FFFFFF')
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: dp(7), dp(7), dp(7), dp(7)
+        AnchorLayout:
             size_hint: None, None
-            size: dp(45), dp(45)
-            pos: self.pos
-            text: root.icon
-            font_name: 'assets/Font-Awesome.ttf'
-            font_size: sp(20)
-            color: utils.get_color_from_hex('#c9d0dc')
-    AnchorLayout:
-        size_hint: None, None
-        size: root.size
-        pos: root.pos
-        anchor_x: 'right'
-        anchor_y: 'center'
-        Label:
-            id: chevron
+            size: root.size
+            pos: root.pos
+            anchor_x: 'left'
+            anchor_y: 'center'
+            Label:
+                id: icon
+                size_hint: None, None
+                size: dp(45), dp(45)
+                pos: self.pos
+                text: root.icon
+                font_name: 'assets/Font-Awesome.ttf'
+                font_size: sp(20)
+                color: utils.get_color_from_hex('#c9d0dc')
+        AnchorLayout:
             size_hint: None, None
-            size: dp(45), dp(45)
-            pos: self.pos
-            text: root.chevron
-            font_name: 'assets/Font-Awesome.ttf'
-            font_size: sp(20)
-            color: utils.get_color_from_hex('#023b80')
-    AnchorLayout:
-        size_hint: None, None
-        size: root.size
-        pos: root.pos
-        anchor_x: 'center'
-        anchor_y: 'center'
-        padding: dp(45), dp(0), dp(45), dp(0)
-        Label:
-            id: category
-            size_hint: 1, None
-            height: dp(45)
-            pos: self.pos
-            text: root.type
-            font_name: 'assets/Inter-Regular.ttf'
-            font_size: sp(13)
-            color: utils.get_color_from_hex('#c9d0dc')
-            halign: 'left'
-            valign: 'center'
-            text_size: self.size
-            shorten: True
-            shorten_from: 'right'
-            max_lines: 1
+            size: root.size
+            pos: root.pos
+            anchor_x: 'right'
+            anchor_y: 'center'
+            Label:
+                id: chevron
+                size_hint: None, None
+                size: dp(45), dp(45)
+                pos: self.pos
+                text: root.chevron
+                font_name: 'assets/Font-Awesome.ttf'
+                font_size: sp(20)
+                color: utils.get_color_from_hex('#023b80')
+        AnchorLayout:
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'center'
+            anchor_y: 'center'
+            padding: dp(45), dp(0), dp(45), dp(0)
+            Label:
+                id: category
+                size_hint: 1, None
+                height: dp(45)
+                pos: self.pos
+                text: root.type
+                font_name: 'assets/Inter-Regular.ttf'
+                font_size: sp(13)
+                color: utils.get_color_from_hex('#c9d0dc')
+                halign: 'left'
+                valign: 'center'
+                text_size: self.size
+                shorten: True
+                shorten_from: 'right'
+                max_lines: 1
 
 <FormImage>:
     canvas.before:
@@ -163,6 +181,44 @@
         StencilUnUse
         StencilPop
 
+<CancelImage>:
+    pos: root.pos
+    size_hint: None, None
+    size: dp(24), dp(24)
+    anchor_x: 'center'
+    anchor_y: 'center'
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#023b80')
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(12), dp(12), dp(12), dp(12)
+    AnchorLayout:
+        pos: self.pos
+        size_hint: None, None
+        size: dp(22), dp(22)
+        anchor_x: 'center'
+        anchor_y: 'center'
+        padding: dp(1), dp(1), dp(1), dp(1)
+        canvas.before:
+            Color:
+                rgb: utils.get_color_from_hex('#FFFFFF')
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: dp(11), dp(11), dp(11), dp(11)
+        Label:
+            id: cancel
+            pos: self.pos
+            size: self.size
+            font_name: 'assets/Font-Awesome.ttf'
+            font_size: sp(16)
+            color: utils.get_color_from_hex('#023b80')
+            halign: 'center'
+            valign: 'center'
+            text_size: self.size
+
 <CustomButton>:
     canvas.before:
         Color:
@@ -194,7 +250,7 @@
             size: self.size
     canvas.after:
         Color:
-            rgb: utils.get_color_from_hex('#d9d9d9')
+            rgb: utils.get_color_from_hex('#c9d0dc')
         Line:
             width: 1
             rectangle: self.x, self.y, self.width, self.height

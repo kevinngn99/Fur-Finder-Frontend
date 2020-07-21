@@ -1,7 +1,7 @@
 from kivy.config import Config
 
-Config.set('graphics', 'width', '375')
-Config.set('graphics', 'height', '812')
+Config.set('graphics', 'width', '432')
+Config.set('graphics', 'height', '768')
 Config.set('graphics', 'resizable', True)
 Config.set('graphics', 'multisamples', '5')
 
@@ -33,6 +33,9 @@ class MyClass(App):
         box_layout.add_widget(navigation)
 
         return box_layout
+
+    def on_start(self):
+        print('APP LOADED')
 
 
 if __name__ == '__main__':
