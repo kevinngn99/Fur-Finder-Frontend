@@ -1,6 +1,12 @@
 #:import utils kivy.utils
-<LoginView>:
-    name: "login"
+
+
+<RegisterView>:
+    email_text: email
+    username_text: username
+    password_text: password
+    password2_text: password2
+    name: "register"
     BackgroundBox:
 
     MDCard:
@@ -11,26 +17,35 @@
             orientation:'vertical'
             MDLabel:
                 font_name: 'assets/Inter-SemiBold.ttf'
-                color: app.theme_cls.primary_color
-                text:"Login"
+                color: utils.get_color_from_hex('#D6B3F8')
+                text:"Register"
                 text_size: self.size
                 font_size: 40
                 halign: "center"
                 valign: "middle"
             MDTextField:
-                hint_text: "  Username"
+                id: email
+                hint_text: "  Email"
+                required: True
             MDTextField:
+                id:username
+                hint_text: "  Username"
+                required: True
+            MDTextField:
+                id:password
                 hint_text: "  Password"
+                required: True
+            MDTextField:
+                id:password2
+                hint_text: "  Confirm Password"
+                required: True
             MDFillRoundFlatButton:
-                text: "Sign In"
+                text: "Sign Up"
                 pos_hint: {"center_x": .5, "center_y": .5}
             MDFillRoundFlatIconButton:
                 icon: "account-circle"
-                text: "Sign Up"
+                text: "Forgot Password"
                 pos_hint: {"center_x": .5, "center_y": .5}
-                on_release:
-                    root.manager.current = 'register'
-
 
 
 
