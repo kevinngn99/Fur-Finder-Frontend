@@ -15,6 +15,7 @@ from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 from kivy.properties import StringProperty
 from kivy.metrics import dp, sp
 from screens.pet import Pet
+import requests
 
 import os
 
@@ -75,6 +76,15 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             rv.screen_manager.current = 'Pet'
 
 
+def getReportedPetsFromBackend():
+    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//').json()
+
+    for i in range(len(data)):
+        print(data[i])
+
+    return data
+
+
 class Reported(MDApp):
     class CustomScreen(Screen):
         def __init__(self, **kwargs):
@@ -99,42 +109,28 @@ class Reported(MDApp):
     class RV(RecycleView):
         def __init__(self, screen_manager=None, **kwargs):
             super().__init__(**kwargs)
-            self.data = []
-            self.data.append(
-                {
-                    'age': 'Puppy',
-                    'breed': 'Corgi',
-                    'city': 'Gainesville',
-                    'color': 'Cream',
-                    'date': 'Jul 19, 2020',
-                    'gender': 'Male',
-                    'images': [],
-                    'name': 'Waffles',
-                    'petid': 'N/A',
-                    'pet_size': 'Small',
-                    'state': 'FL',
-                    'status': 'Found'.upper(),
-                    'zip': '32601'
-                }
-            )
-            self.data.append(
-                {
-                    'age': 'Adult',
-                    'breed': 'German Shepard',
-                    'city': 'Cape Coral',
-                    'color': 'Brown',
-                    'date': 'Jul 20, 2020',
-                    'gender': 'Male',
-                    'images': [],
-                    'name': 'Meatloaf',
-                    'petid': 'N/A',
-                    'pet_size': 'Large',
-                    'state': 'FL',
-                    'status': 'Lost'.upper(),
-                    'zip': '33990'
-                }
-            )
+            pets=getReportedPetsFromBackend()
+            self.data =[]
+            for index in range(len(pets)):
+                self.data.append({'age' : pets[index]["age"],
+                                  'breed': pets[index]["breed"],
+                                  'city': pets[index]["city"],
+                                  'color': pets[index]["color"],
+                                  'date': pets[index]["date"],
+                                  'gender': pets[index]["gender"],
+                                  'images': pets[index]["images"],
+                                  'name': pets[index]["name"],
+                                  'petid': pets[index]["petid"],
+                                  'pet_size': pets[index]["size"],
+                                  'state': pets[index]["state"],
+                                  'status': pets[index]["status"].upper(),
+                                  'zip': pets[index]["zip"]
+                                  })
+
+
+
             self.screen_manager = screen_manager
+
 
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
