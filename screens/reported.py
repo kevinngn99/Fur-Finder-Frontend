@@ -67,7 +67,7 @@ class CustomCard(AnchorLayout):
         self.bind(images=lambda instance, value: self.images_loaded(instance, value))
 
     def images_loaded(self, instance, value):
-        anchor_layout = CustomAnchorLayout(size_hint=(None, None), size=(dp(150), dp(150)))
+        anchor_layout = CustomAnchorLayout(size_hint=(None, None), size=(dp(150), dp(134)))
         layout = CustomStencilView()
         custom_image = CustomImageUpload(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=value[0]['image'])
 
