@@ -61,6 +61,67 @@
                 input_type: root.input_type
                 input_filter: root.input_filter
 
+<SummaryInput>:
+    size_hint: 1, 1
+    padding: dp(1), dp(1)
+    canvas.before:
+        Color:
+            rgb: root.rgb
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(7), dp(7), dp(7), dp(7)
+    AnchorLayout:
+        size_hint: 1, 1
+        canvas.before:
+            Color:
+                rgb: utils.get_color_from_hex('#FFFFFF')
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: dp(7), dp(7), dp(7), dp(7)
+        AnchorLayout:
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'left'
+            anchor_y: 'top'
+            Label:
+                id: icon
+                size_hint: None, None
+                size: dp(45), dp(45)
+                pos: self.pos
+                text: root.icon
+                font_name: 'assets/Font-Awesome.ttf'
+                font_size: sp(20)
+                color: utils.get_color_from_hex('#c9d0dc')
+        AnchorLayout:
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'center'
+            anchor_y: 'center'
+            padding: dp(45), dp(0), dp(45), dp(0)
+            TextInput:
+                id: category
+                size_hint: 1, None
+                height: dp(133)
+                pos: self.pos
+                hint_text: root.type
+                hint_text_color: utils.get_color_from_hex('#c9d0dc')
+                background_active: ''
+                background_normal: ''
+                multiline: True
+                font_name: 'assets/Inter-Regular.ttf'
+                font_size: sp(13)
+                foreground_color: utils.get_color_from_hex('#023b80')
+                cursor_color: utils.get_color_from_hex('#023b80')
+                selection_color: 201/255, 208/255, 220/255, 0.5
+                cursor_width: sp(1)
+                padding: dp(0), dp(dp(43) / dp(2) - (self.line_height / dp(2)))
+                input_type: root.input_type
+                input_filter: root.input_filter
+
 <FormLabel>:
     size_hint: 1, 1
     padding: dp(1), dp(1)

@@ -63,6 +63,14 @@ class FormInput(AnchorLayout):
     rgb = ColorProperty(get_color_from_hex('#c9d0dc'))
 
 
+class SummaryInput(AnchorLayout):
+    icon = StringProperty('')
+    type = StringProperty('')
+    input_type = StringProperty('')
+    input_filter = ObjectProperty(None)
+    rgb = ColorProperty(get_color_from_hex('#c9d0dc'))
+
+
 class FormLabel(ButtonBehavior, AnchorLayout):
     icon = StringProperty('')
     chevron = StringProperty('')
@@ -128,6 +136,7 @@ class Report(MDApp):
             self._status = None
             self._date = None
             self._state = None
+            self._summary = None
             self._zip = None
             self._city = None
             self._images = []
@@ -226,6 +235,20 @@ class Report(MDApp):
                         self._cities.append(item['city'])
                         self._cities.sort()
 
+        def on_summary_focus(self, instance, value, icon=None, border=None):
+            if value:
+                border.rgb = get_color_from_hex('#023b80')
+            else:
+                border.rgb = get_color_from_hex('#c9d0dc')
+
+            if instance.text == '':
+                if value:
+                    icon.color = get_color_from_hex('#023b80')
+                else:
+                    icon.color = get_color_from_hex('#c9d0dc')
+            else:
+                instance.text = instance.text
+
         def on_focus(self, instance, value, icon=None, border=None):
             if value:
                 border.rgb = get_color_from_hex('#023b80')
@@ -312,6 +335,7 @@ class Report(MDApp):
             status = self._status.ids.category.text.replace('Status', '')
             date = self._date.ids.category.text.replace('Date', '')
             state = self._state.ids.category.text.replace('State', '')
+            summary = self._summary.ids.category.text.replace('Summary', '')
             zip = self._zip.ids.category.text.replace('Zip', '')
             city = self._city.ids.category.text.replace('City', '')
             images = self._images
@@ -326,6 +350,7 @@ class Report(MDApp):
                 'status': status.strip(),
                 'date': date.strip(),
                 'state': state.strip(),
+                'summary': summary,
                 'zip': zip.strip(),
                 'city': city.strip(),
                 'petid': 'N/A'
@@ -417,6 +442,9 @@ class Report(MDApp):
             self._state.fbind('on_release', self.create_drop_down, list=self.get_states(), icon=self._state.ids.icon, border=self._state)
             self._state.ids.category.fbind('text', self.on_change_text)
 
+            self._summary = SummaryInput(size_hint=(1, None), height=dp(135), icon='', type='Summary', input_type='text', input_filter=None)
+            self._summary.ids.category.fbind('focus', self.on_summary_focus, icon=self._summary.ids.icon, border=self._summary)
+
             self._button_submit = Button(text='SUBMIT', font_size=dp(16), font_name='assets/Inter-Medium.ttf', size_hint=(None, None), size=(dp(100), dp(50)))
             self._button_submit.on_release = lambda: self.submit_data()
 
@@ -455,6 +483,7 @@ class Report(MDApp):
             main_grid_layout.add_widget(status_and_date_grid_layout)
             main_grid_layout.add_widget(state_and_zip_grid_layout)
             main_grid_layout.add_widget(self._city)
+            main_grid_layout.add_widget(self._summary)
             main_grid_layout.add_widget(self._images_grid_layout)
             main_grid_layout.add_widget(self._button_submit)
 
