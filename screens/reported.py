@@ -1,10 +1,13 @@
 from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.image import AsyncImage
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import BooleanProperty
 from kivy.lang.builder import Builder
 from kivy.uix.button import Button
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivymd.app import MDApp
+from kivy.graphics import Color, RoundedRectangle
 from kivy.utils import get_color_from_hex
 from kivy.uix.label import Label
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
@@ -12,7 +15,8 @@ from kivy.uix.recycleview import RecycleView
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
-from kivy.properties import StringProperty
+from kivy.uix.stencilview import StencilView
+from kivy.properties import StringProperty, ObjectProperty
 from kivy.metrics import dp, sp
 from screens.pet import Pet
 import requests
@@ -22,6 +26,25 @@ import os
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/reported.kv'))
 
 
+class CustomStencilView(FloatLayout, StencilView):
+    pass
+
+
+class CustomImageUpload(AsyncImage):
+    def adjust_image_size(self, stencil):
+        stencil_ratio = stencil.width / float(stencil.height)
+        if self.image_ratio > stencil_ratio:
+            self.width = stencil.height * self.image_ratio
+            self.height = stencil.height
+        else:
+            self.width = stencil.width
+            self.height = stencil.width / self.image_ratio
+
+
+class CustomAnchorLayout(AnchorLayout):
+    pass
+
+
 class CustomCard(AnchorLayout):
     age = StringProperty('N/A')
     breed = StringProperty('N/A')
@@ -29,14 +52,33 @@ class CustomCard(AnchorLayout):
     color = StringProperty('N/A')
     date = StringProperty('N/A')
     gender = StringProperty('N/A')
-    images = []
+    images = ObjectProperty([])
     name = StringProperty('N/A')
     petid = StringProperty('N/A')
     pet_size = StringProperty('N/A')
     state = StringProperty('N/A')
     status = StringProperty('N/A')
+    summary = StringProperty('N/A')
     zip = StringProperty('N/A')
     icon = StringProperty('')
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.bind(images=lambda instance, value: self.images_loaded(instance, value))
+
+    def images_loaded(self, instance, value):
+        anchor_layout = CustomAnchorLayout(size_hint=(None, None), size=(dp(150), dp(150)))
+        layout = CustomStencilView()
+        custom_image = CustomImageUpload(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=value[0]['image'])
+
+        if custom_image.image_ratio <= 1:
+            custom_image.size_hint = (custom_image.image_ratio + 1, custom_image.image_ratio + 1)
+        else:
+            custom_image.size_hint = (custom_image.image_ratio, custom_image.image_ratio)
+
+        layout.add_widget(custom_image)
+        anchor_layout.add_widget(layout)
+        self.ids.photo.add_widget(anchor_layout)
 
 
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior, RecycleBoxLayout):
@@ -73,6 +115,7 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             rv.screen_manager.get_screen('Pet').children[0].petid = rv.data[index]['petid']
             rv.screen_manager.get_screen('Pet').children[0].pet_size = rv.data[index]['pet_size']
             rv.screen_manager.get_screen('Pet').children[0].status = rv.data[index]['status']
+            rv.screen_manager.get_screen('Pet').children[0].summary = rv.data[index]['summary']
             rv.screen_manager.get_screen('Pet').children[0].zip = rv.data[index]['zip']
             rv.screen_manager.current = 'Pet'
 
@@ -123,6 +166,7 @@ class Reported(MDApp):
                         'pet_size': pets[index]['size'],
                         'state': pets[index]['state'],
                         'status': pets[index]['status'].upper(),
+                        'summary': pets[index]['summary'],
                         'zip': pets[index]['zip']
                     }
                 )

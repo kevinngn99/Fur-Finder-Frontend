@@ -129,10 +129,12 @@
                     text_size: self.size
 
 <SummaryLabel>:
-    text: '[color=6e7c97][size='+str(int(dp(13)))+'][font=assets/Inter-Regular.ttf]Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam consequat venenatis augue, gravida laoreet nulla convallis eu. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin at orci in tortor convallis pharetra. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
+    text: 'N/A'
+    color: utils.get_color_from_hex('#6e7c97')
+    font_size: dp(13)
+    font_name: 'assets/Inter-Medium.ttf'
     halign: 'justify'
     size_hint: 1, None
     text_size: root.width, None
     size: self.texture_size
-    markup: True
 

@@ -445,7 +445,7 @@ class Report(MDApp):
             self._summary = SummaryInput(size_hint=(1, None), height=dp(135), icon='', type='Summary', input_type='text', input_filter=None)
             self._summary.ids.category.fbind('focus', self.on_summary_focus, icon=self._summary.ids.icon, border=self._summary)
 
-            self._button_submit = Button(text='SUBMIT', font_size=dp(16), font_name='assets/Inter-Medium.ttf', size_hint=(None, None), size=(dp(100), dp(50)))
+            self._button_submit = Button(text='SUBMIT', background_normal='', background_color=get_color_from_hex('#023b80'), font_size=dp(16), font_name='assets/Inter-Medium.ttf', size_hint=(None, None), size=(dp(100), dp(50)))
             self._button_submit.on_release = lambda: self.submit_data()
 
             gender_and_age_grid_layout = GridLayout(size_hint=(1, None), cols=2, spacing=dp(20))

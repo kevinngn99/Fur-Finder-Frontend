@@ -48,6 +48,7 @@ class CustomFloatLayout(BoxLayout):
     petid = StringProperty('N/A')
     pet_size = StringProperty('N/A')
     status = StringProperty('N/A')
+    summary = StringProperty('N/A')
     zip = StringProperty('N/A')
 
 
@@ -221,14 +222,17 @@ class Pet:
         name_layout.add_widget(pet_name)
 
         summary_layout = AnchorLayout(size_hint=(1, None), height=dp(42), anchor_x='center', anchor_y='center', padding=(dp(0), dp(0), dp(0), dp(20)))
-        summary = Label(halign='left', valign='center', text='[color=6e7c97][size=' + str(int(dp(16))) + '][font=assets/Inter-SemiBold.ttf]Summary',markup=True)
+        summary = Label(halign='left', valign='center', color=get_color_from_hex('#6e7c97'), font_size=dp(16), font_name='assets/Inter-SemiBold.ttf', text='Summary')
         summary.bind(size=summary.setter('text_size'))
         summary_layout.add_widget(summary)
 
         vertical_grid_layout.add_widget(name_layout)
         vertical_grid_layout.add_widget(details_layout)
         vertical_grid_layout.add_widget(summary_layout)
-        vertical_grid_layout.add_widget(SummaryLabel())
+        summary_label = SummaryLabel()
+        vertical_grid_layout.add_widget(summary_label)
+
+        float_layout.bind(summary=lambda instance, value: setattr(summary_label, 'text', value))
 
         vertical_scroll_view.add_widget(vertical_grid_layout)
         background.add_widget(vertical_scroll_view)

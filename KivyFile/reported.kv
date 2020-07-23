@@ -6,6 +6,18 @@
             pos: self.pos
             size: self.size
 
+<CustomAnchorLayout>:
+    canvas.before:
+        StencilPush
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(7), dp(7), dp(7), dp(7)
+        StencilUse
+    canvas.after:
+        StencilUnUse
+        StencilPop
+
 <RV>:
     viewclass: 'SelectableCard'
     SelectableRecycleBoxLayout:
@@ -45,15 +57,9 @@
             orientation: 'horizontal'
             spacing: dp(7)
             AnchorLayout:
-                size_hint: None, 1
-                width: dp(150)
-                canvas.before:
-                    Color:
-                        rgb: utils.get_color_from_hex('#150470')
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: dp(7), dp(7), dp(7), dp(7)
+                id: photo
+                size_hint: None, None
+                size: dp(150), dp(150)
             AnchorLayout:
                 size_hint: 1, 1
                 BoxLayout:
