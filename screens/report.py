@@ -13,7 +13,7 @@ from kivymd.app import MDApp
 from kivymd.uix.picker import MDDatePicker
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.filemanager import MDFileManager
-from kivy.properties import StringProperty, ColorProperty
+from kivy.properties import StringProperty, ColorProperty, ObjectProperty
 from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.snackbar import Snackbar
@@ -58,7 +58,8 @@ class CancelImage(ButtonBehavior, AnchorLayout):
 class FormInput(AnchorLayout):
     icon = StringProperty('')
     type = StringProperty('')
-    input_type = StringProperty('text')
+    input_type = StringProperty('')
+    input_filter = ObjectProperty(None)
     rgb = ColorProperty(get_color_from_hex('#c9d0dc'))
 
 
@@ -134,6 +135,8 @@ class Report(MDApp):
             self._images_grid_layout = None
             self._files = None
             self._button_submit = None
+
+            self.raw_images = []
 
         def get_states(self):
             list = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY',
@@ -340,31 +343,34 @@ class Report(MDApp):
             Snackbar(text='Attempting to send requested pet...').show()
             print('All fields satisfied.')
 
-            pool = Pool(1)
-            pool.apply_async(self.post(images, dict))
-
             self._button_submit.disabled = True
-
-        def post(self, images, dict):
-            raw_images = []
 
             for image in images:
                 tuple = (image, open(image, 'rb'))
-                raw_images.append(tuple)
+                self.raw_images.append(tuple)
 
-            result = requests.post(url='https://fur-finder.herokuapp.com/api/pets//', data=dict, files=raw_images)
+            pool = Pool(1)
+            pool.apply_async(requests.post, args=['https://fur-finder.herokuapp.com/api/pets//'], kwds={'data': dict, 'files': self.raw_images}, callback=self.on_success, error_callback=self.on_error)
 
-            for raw_image in raw_images:
+        def on_success(self, r=requests.Response):
+            print(r)
+
+            for raw_image in self.raw_images:
                 raw_image[1].close()
 
-            if result.ok:
-                Snackbar(text='Successfully reported pet.').show()
-                print(result.text)
-                print('POST successful.')
-            else:
-                Snackbar(text='Could not report pet. Try again.').show()
-                print(result.text)
-                print('POST failed.')
+            Snackbar(text='Successfully reported pet.').show()
+            print('POST successful.')
+
+            self._button_submit.disabled = False
+
+        def on_error(self, ex=requests.RequestException):
+            print(ex)
+
+            for raw_image in self.raw_images:
+                raw_image[1].close()
+
+            Snackbar(text='Could not report pet. Try again.').show()
+            print('POST failed.')
 
             self._button_submit.disabled = False
 
@@ -375,17 +381,17 @@ class Report(MDApp):
             main_grid_layout = GridLayout(size_hint=(1, None), cols=1, spacing=dp(20))
             main_grid_layout.bind(minimum_height=main_grid_layout.setter('height'))
 
-            self._name = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Name')
+            self._name = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Name', input_type='text', input_filter=None)
             self._name.ids.category.fbind('focus', self.on_focus, icon=self._name.ids.icon, border=self._name)
 
-            self._breed = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Breed')
+            self._breed = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Breed', input_type='text', input_filter=None)
             self._breed.ids.category.fbind('focus', self.on_focus, icon=self._breed.ids.icon, border=self._breed)
 
-            self._city = FormInput(size_hint=(1, None), height=dp(45), icon='', type='City')
+            self._city = FormInput(size_hint=(1, None), height=dp(45), icon='', type='City', input_type='text', input_filter=None)
             self._city.ids.category.fbind('focus', self.on_focus_city, icon=self._city.ids.icon, border=self._city)
             self._city.ids.category.fbind('text', self.on_cities)
 
-            self._zip = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Zip', input_type='number')
+            self._zip = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Zip', input_type='number', input_filter='int')
             self._zip.ids.category.fbind('focus', self.on_focus_zip, icon=self._zip.ids.icon, border=self._zip)
             self._zip.ids.category.fbind('text', self.on_zip_codes)
 

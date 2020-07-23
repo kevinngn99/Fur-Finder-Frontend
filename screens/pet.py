@@ -75,13 +75,8 @@ class Pet:
 
         class CustomImage(Image):
             def adjust_image_size(self, stencil):
-                stencil_ratio = stencil.width / float(stencil.height)
-                if self.image_ratio > stencil_ratio:
-                    self.width = stencil.height * self.image_ratio
-                    self.height = stencil.height
-                else:
-                    self.width = stencil.width
-                    self.height = stencil.width / self.image_ratio
+                self.width = stencil.width
+                self.height = stencil.width / self.image_ratio
 
         class Indicator(Widget):
             def __init__(self, **kwargs):
