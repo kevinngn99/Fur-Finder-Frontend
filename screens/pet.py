@@ -12,7 +12,7 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.stencilview import StencilView
-from kivy.properties import ColorProperty, StringProperty
+from kivy.properties import ColorProperty, StringProperty, ObjectProperty
 from kivy.uix.widget import Widget
 from kivy.metrics import dp, sp
 import os
@@ -42,7 +42,7 @@ class CustomFloatLayout(BoxLayout):
     color = StringProperty('N/A')
     date = StringProperty('N/A')
     gender = StringProperty('N/A')
-    images = []
+    images = ObjectProperty([])
     location = StringProperty('N/A')
     name = StringProperty('N/A')
     petid = StringProperty('N/A')
@@ -65,15 +65,17 @@ class SummaryLabel(Label):
 
 
 class Pet:
-    class Top:
-        def __init__(self):
+    class Top(AnchorLayout):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self._carousel = None
             self._box_layout = None
 
         class CustomStencilView(FloatLayout, StencilView):
             def on_size(self, *args):
                 self.children[0].adjust_image_size(self)
 
-        class CustomImage(Image):
+        class CustomImage(AsyncImage):
             def adjust_image_size(self, stencil):
                 self.width = stencil.width
                 self.height = stencil.width / self.image_ratio
@@ -91,40 +93,51 @@ class Pet:
         def index_callback(self, instance, value):
             length = len(self._box_layout.children)
 
-            previous = length - value - 1 + 1
-            current = length - value - 1 + 0
-            next = length - value - 1 - 1
+            try:
+                previous = length - value - 1 + 1
+                current = length - value - 1 + 0
+                next = length - value - 1 - 1
 
-            if previous < length:
-                self._box_layout.children[previous].opacity = 0.5
-            self._box_layout.children[current].opacity = 1
-            if next >= 0:
-                self._box_layout.children[next].opacity = 0.5
+                if previous < length:
+                    self._box_layout.children[previous].opacity = 0.5
+                self._box_layout.children[current].opacity = 1
+                if next >= 0:
+                    self._box_layout.children[next].opacity = 0.5
+            except:
+                pass
+
+        def insert_images(self, instance, value):
+            self._carousel.clear_widgets()
+
+            for image in value:
+                layout = self.CustomStencilView()
+                layout.add_widget(self.CustomImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=image['image']))
+                self._carousel.add_widget(layout)
+
+            self._box_layout.clear_widgets()
+
+            for i in range(len(value)):
+                if i == 0:
+                    indicator = self.Indicator(opacity=1, size_hint=(None, None), size=(dp(10), dp(10)))
+                    indicator.bind(pos=indicator.pos_callback)
+                    self._box_layout.add_widget(indicator)
+                else:
+                    indicator = self.Indicator(opacity=0.5, size_hint=(None, None), size=(dp(10), dp(10)))
+                    indicator.bind(pos=indicator.pos_callback)
+                    self._box_layout.add_widget(indicator)
 
         def create(self):
-            anchor_layout = AnchorLayout(size_hint=(1, 1), anchor_x='center', anchor_y='bottom')
-
-            carousel = Carousel()
-            for i in range(4):
-                image = None
-                if i == 0:
-                    image = 'images/pup.jpg'
-                elif i == 1:
-                    image = 'images/more.jpg'
-                elif i == 2:
-                    image = 'images/doge.jpg'
-                elif i == 3:
-                    image = 'images/other.jpg'
-
+            self._carousel = Carousel()
+            for i in range(1):
                 layout = self.CustomStencilView()
-                layout.add_widget(self.CustomImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=image))
-                carousel.add_widget(layout)
-            carousel.fbind('index', self.index_callback)
+                layout.add_widget(self.CustomImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=None))
+                self._carousel.add_widget(layout)
+            self._carousel.fbind('index', self.index_callback)
 
             indicator_layout = AnchorLayout(size_hint=(1, None), height=dp(30), anchor_x='center', anchor_y='center', padding=(dp(0), dp(0), dp(0), dp(20)))
             self._box_layout = BoxLayout(orientation='horizontal', size_hint=(None, 1), spacing=dp(5))
             self._box_layout.bind(minimum_width=self._box_layout.setter('width'))
-            for i in range(4):
+            for i in range(1):
                 if i == 0:
                     indicator = self.Indicator(opacity=1, size_hint=(None, None), size=(dp(10), dp(10)))
                     indicator.bind(pos=indicator.pos_callback)
@@ -135,22 +148,23 @@ class Pet:
                     self._box_layout.add_widget(indicator)
             indicator_layout.add_widget(self._box_layout)
 
-            anchor_layout.add_widget(carousel)
-            anchor_layout.add_widget(indicator_layout)
-
-            return anchor_layout
+            self.add_widget(self._carousel)
+            self.add_widget(indicator_layout)
 
     def create(self, screen_manager):
         float_layout = CustomFloatLayout(orientation='vertical')
 
         top_layout = AnchorLayout(size_hint=(1, 0.4), anchor_x='center', anchor_y='top')
-        top = self.Top().create()
+        top = self.Top(size_hint=(1, 1), anchor_x='center', anchor_y='bottom')
+        top.create()
         button_layout = AnchorLayout(size_hint=(1, 1), padding=(dp(20), dp(20), dp(20), dp(20)), anchor_x='left', anchor_y='top', opacity=0.5)
         back_button = BackButton()
         back_button.bind(on_release=lambda instance: setattr(screen_manager, 'current', 'RV'))
         button_layout.add_widget(back_button)
         top.add_widget(button_layout)
         top_layout.add_widget(top)
+
+        float_layout.bind(images=lambda instance, value: top.insert_images(instance, value))
 
         background = AnchorLayout(size_hint=(1, 1), anchor_x='center', anchor_y='center')
         vertical_scroll_view = ScrollView(do_scroll=(False, True), size_hint=(1, 1), bar_inactive_color=(0, 0, 0, 0))

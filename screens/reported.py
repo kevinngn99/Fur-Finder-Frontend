@@ -67,6 +67,7 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             rv.screen_manager.get_screen('Pet').children[0].color = rv.data[index]['color']
             rv.screen_manager.get_screen('Pet').children[0].date = rv.data[index]['date']
             rv.screen_manager.get_screen('Pet').children[0].gender = rv.data[index]['gender']
+            rv.screen_manager.get_screen('Pet').children[0].images = rv.data[index]['images']
             rv.screen_manager.get_screen('Pet').children[0].location = rv.data[index]['city'] + ', ' + rv.data[index]['state']
             rv.screen_manager.get_screen('Pet').children[0].name = rv.data[index]['name']
             rv.screen_manager.get_screen('Pet').children[0].petid = rv.data[index]['petid']
@@ -78,10 +79,6 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
 
 def getReportedPetsFromBackend():
     data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//').json()
-
-    for i in range(len(data)):
-        print(data[i])
-
     return data
 
 
@@ -109,28 +106,27 @@ class Reported(MDApp):
     class RV(RecycleView):
         def __init__(self, screen_manager=None, **kwargs):
             super().__init__(**kwargs)
-            pets=getReportedPetsFromBackend()
+            pets = getReportedPetsFromBackend()
             self.data =[]
             for index in range(len(pets)):
-                self.data.append({'age' : pets[index]["age"],
-                                  'breed': pets[index]["breed"],
-                                  'city': pets[index]["city"],
-                                  'color': pets[index]["color"],
-                                  'date': pets[index]["date"],
-                                  'gender': pets[index]["gender"],
-                                  'images': pets[index]["images"],
-                                  'name': pets[index]["name"],
-                                  'petid': pets[index]["petid"],
-                                  'pet_size': pets[index]["size"],
-                                  'state': pets[index]["state"],
-                                  'status': pets[index]["status"].upper(),
-                                  'zip': pets[index]["zip"]
-                                  })
-
-
-
+                self.data.append(
+                    {
+                        'age': pets[index]['age'],
+                        'breed': pets[index]['breed'],
+                        'city': pets[index]['city'],
+                        'color': pets[index]['color'],
+                        'date': pets[index]['date'],
+                        'gender': pets[index]['gender'],
+                        'images': pets[index]['images'],
+                        'name': pets[index]['name'],
+                        'petid': pets[index]['petid'],
+                        'pet_size': pets[index]['size'],
+                        'state': pets[index]['state'],
+                        'status': pets[index]['status'].upper(),
+                        'zip': pets[index]['zip']
+                    }
+                )
             self.screen_manager = screen_manager
-
 
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
