@@ -16,6 +16,7 @@ from kivymd.uix.filemanager import MDFileManager
 from kivy.properties import StringProperty, ColorProperty, ObjectProperty
 from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
+from kivy.effects.scroll import ScrollEffect
 from kivymd.uix.snackbar import Snackbar
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.stencilview import StencilView
@@ -27,7 +28,7 @@ from datetime import datetime
 Window.softinput_mode = "below_target"
 
 import requests
-from multiprocessing.dummy import Pool
+from threading import Thread
 import json
 import os
 import re
@@ -374,28 +375,28 @@ class Report(MDApp):
                 tuple = (image, open(image, 'rb'))
                 self.raw_images.append(tuple)
 
-            pool = Pool(1)
-            pool.apply_async(requests.post, args=['https://fur-finder.herokuapp.com/api/pets//'], kwds={'data': dict, 'files': self.raw_images}, callback=self.on_success, error_callback=self.on_error)
+            #pool = Pool(1)
+            #pool.apply_async(requests.post, args=['https://fur-finder.herokuapp.com/api/pets//'], kwds={'data': dict, 'files': self.raw_images}, callback=self.on_success, error_callback=self.on_error)
 
-        def on_success(self, r=requests.Response):
+            Thread(target=self.post, args=(dict, )).start()
+
+        def post(self, data):
+            s = requests.Session()
+            s.hooks['response'].append(self.callback)
+            s.post('https://fur-finder.herokuapp.com/api/pets//', data=data, files=self.raw_images)
+
+        def callback(self, r, **kwargs):
             print(r)
 
             for raw_image in self.raw_images:
                 raw_image[1].close()
 
-            Snackbar(text='Successfully reported pet.').show()
-            print('POST successful.')
-
-            self._button_submit.disabled = False
-
-        def on_error(self, ex=requests.RequestException):
-            print(ex)
-
-            for raw_image in self.raw_images:
-                raw_image[1].close()
-
-            Snackbar(text='Could not report pet. Try again.').show()
-            print('POST failed.')
+            if r.ok:
+                Snackbar(text='Successfully reported pet.').show()
+                print('POST successful.')
+            else:
+                Snackbar(text='Could not report pet. Try different pictures.').show()
+                print('POST failed.')
 
             self._button_submit.disabled = False
 
@@ -487,7 +488,7 @@ class Report(MDApp):
             main_grid_layout.add_widget(self._images_grid_layout)
             main_grid_layout.add_widget(self._button_submit)
 
-            scroll_view = ScrollView(size_hint=(1, 0.9))
+            scroll_view = ScrollView(size_hint=(1, 0.9), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
             scroll_view.add_widget(main_grid_layout)
 
             return scroll_view

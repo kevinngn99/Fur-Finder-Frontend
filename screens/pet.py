@@ -168,7 +168,7 @@ class Pet:
         float_layout.bind(images=lambda instance, value: top.insert_images(instance, value))
 
         background = AnchorLayout(size_hint=(1, 1), anchor_x='center', anchor_y='center')
-        vertical_scroll_view = ScrollView(do_scroll=(False, True), size_hint=(1, 1), bar_inactive_color=(0, 0, 0, 0))
+        vertical_scroll_view = ScrollView(do_scroll=(False, True), size_hint=(1, 1), bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
         vertical_grid_layout = GridLayout(cols=1, size_hint=(1, None), padding=(dp(20), dp(20), dp(20), dp(20)))
         vertical_grid_layout.bind(minimum_height=vertical_grid_layout.setter('height'))
         details_layout = StackLayout(size_hint=(1, None), spacing=dp(20), padding=(dp(0), dp(20), dp(0), dp(0)))

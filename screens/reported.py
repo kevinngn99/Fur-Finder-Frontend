@@ -16,6 +16,7 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 from kivy.uix.stencilview import StencilView
+from kivy.effects.scroll import ScrollEffect
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.metrics import dp, sp
 from screens.pet import Pet
@@ -177,7 +178,7 @@ class Reported(MDApp):
 
         box_layout = BoxLayout(orientation='vertical', padding=(dp(20), dp(20), dp(20), dp(20)))
         header = self.Header().create()
-        rv = self.RV(screen_manager=screen_manager, size_hint=(1, 0.9))
+        rv = self.RV(screen_manager=screen_manager, size_hint=(1, 0.9), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
         box_layout.add_widget(header)
         box_layout.add_widget(rv)
         rv_screen = Screen(name='RV')
