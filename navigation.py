@@ -4,8 +4,8 @@ from kivy.utils import get_color_from_hex
 from kivy.uix.label import Label
 from kivy.metrics import sp
 
-
 class Navigation:
+
     class TextButton(ButtonBehavior, Label):
         pass
 
@@ -54,6 +54,7 @@ class Navigation:
         box_layout.add_widget(home_button)
         box_layout.add_widget(report_button)
         box_layout.add_widget(message_button)
+
         box_layout.add_widget(reported_button)
 
         return box_layout

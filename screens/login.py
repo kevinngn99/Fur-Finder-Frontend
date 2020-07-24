@@ -5,8 +5,10 @@ from kivy.utils import get_color_from_hex
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 from kivymd.icon_definitions import md_icons
+from kivymd.toast import toast
 import os
 import requests
+import json
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/login.kv'))
 
@@ -24,7 +26,22 @@ class LoginView(Screen):
     def getUser(self):
         data = {'username': self.username_text.text, 'password': self.password_text.text}
         res = requests.post(url='https://fur-finder.herokuapp.com/api/login/', data = data)
-        print(res.text)
+        #print(res.text)
+        if res.status_code == 400:
+            rmv = "['.]"
+            dict = json.loads(res.text)
+            print("we here")
+            if "username" in dict:
+                text = str(dict.get("username"))
+                for ch in rmv:
+                    text = text.replace(ch, "")
+                toast(text)
+            elif "password" in dict:
+                text = str(dict.get("password"))
+                for ch in rmv:
+                    text = text.replace(ch, "")
+                toast(text)
+
 
 
 class Login:

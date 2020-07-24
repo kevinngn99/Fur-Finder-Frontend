@@ -1,6 +1,8 @@
 #:import utils kivy.utils
 <LoginView>:
     name: "login"
+    username_text: username
+    password_text: password
     BackgroundBox:
 
     MDCard:
@@ -18,12 +20,16 @@
                 halign: "center"
                 valign: "middle"
             MDTextField:
+                id: username
                 hint_text: "  Username"
             MDTextField:
+                id: password
                 hint_text: "  Password"
             MDFillRoundFlatButton:
                 text: "Sign In"
                 pos_hint: {"center_x": .5, "center_y": .5}
+                on_release:
+                    root.getUser()
             MDFillRoundFlatIconButton:
                 icon: "account-circle"
                 text: "Sign Up"

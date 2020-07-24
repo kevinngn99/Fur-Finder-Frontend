@@ -10,7 +10,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Color, Rectangle
 from kivy.utils import get_color_from_hex
 from navigation import Navigation
-from screen_manager import Screens
+from screen_manager import Screens, ScreensLogin
 from kivy.uix.screenmanager import Screen, ScreenManager
 from screens.login import Login
 from screens.register import Register
@@ -32,13 +32,22 @@ class MyClass(MDApp):
     def build(self):
         box_layout = self.CustomBoxLayout(orientation='vertical')
         box_layout.fbind('size', box_layout.size_callback)
+
         screens = Screens().create()
+        sm = ScreenManager()
+        register_screen = Register().create()
+        login_screen = Login().create()
+        sm.add_widget(login_screen)
+        sm.add_widget(register_screen)
+
+        app = Screen(name='App')
         navigation = Navigation(screens).create()
-        #screens.add_widget(Login().create())
-        #screens.current = 'login'
         box_layout.add_widget(screens)
         box_layout.add_widget(navigation)
-        return box_layout
+        app.add_widget(box_layout)
+        sm.add_widget(app)
+        return sm
+
 
     def on_start(self):
         print('APP LOADED')
