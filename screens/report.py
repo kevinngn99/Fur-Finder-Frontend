@@ -401,6 +401,7 @@ class Report(MDApp):
 
             self._button_submit.disabled = False
             self._button_submit.text = 'SUBMIT'
+            self.raw_images.clear()
 
         def create(self):
             with open(os.path.join(os.path.dirname(__file__), '../states.json')) as file:

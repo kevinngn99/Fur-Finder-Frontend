@@ -32,17 +32,6 @@ class CustomStencilView(FloatLayout, StencilView):
     pass
 
 
-class CustomImageUpload(AsyncImage):
-    def adjust_image_size(self, stencil):
-        stencil_ratio = stencil.width / float(stencil.height)
-        if self.image_ratio > stencil_ratio:
-            self.width = stencil.height * self.image_ratio
-            self.height = stencil.height
-        else:
-            self.width = stencil.width
-            self.height = stencil.width / self.image_ratio
-
-
 class CustomAnchorLayout(AnchorLayout):
     pass
 
@@ -66,19 +55,23 @@ class CustomCard(AnchorLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.bind(images=lambda instance, value: self.images_loaded(instance, value))
+        self.custom_image = None
+        self.add_image()
+        self.fbind('images', self.images_loaded)
 
     def images_loaded(self, instance, value):
+        image = self.images[0]['image']
+        self.custom_image.source = image
+        if self.custom_image.image_ratio <= 1:
+            self.custom_image.size_hint = (self.custom_image.image_ratio + 1, self.custom_image.image_ratio + 1)
+        else:
+            self.custom_image.size_hint = (self.custom_image.image_ratio, self.custom_image.image_ratio)
+
+    def add_image(self):
+        self.custom_image = AsyncImage(nocache=True, size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=None)
         anchor_layout = CustomAnchorLayout(size_hint=(None, None), size=(dp(150), dp(134)))
         layout = CustomStencilView()
-        custom_image = CustomImageUpload(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=value[0]['image'])
-
-        if custom_image.image_ratio <= 1:
-            custom_image.size_hint = (custom_image.image_ratio + 1, custom_image.image_ratio + 1)
-        else:
-            custom_image.size_hint = (custom_image.image_ratio, custom_image.image_ratio)
-
-        layout.add_widget(custom_image)
+        layout.add_widget(self.custom_image)
         anchor_layout.add_widget(layout)
         self.ids.photo.add_widget(anchor_layout)
 
@@ -159,25 +152,28 @@ class Reported(MDApp):
                 pets = getReportedPetsFromBackend()
                 self.data.clear()
                 self.refresh_from_data()
-                for index in range(len(pets)):
+                for pet in reversed(pets):
                     self.data.append(
                         {
-                            'age': pets[index]['age'],
-                            'breed': pets[index]['breed'],
-                            'city': pets[index]['city'],
-                            'color': pets[index]['color'],
-                            'date': pets[index]['date'],
-                            'gender': pets[index]['gender'],
-                            'images': pets[index]['images'],
-                            'name': pets[index]['name'],
-                            'petid': pets[index]['petid'],
-                            'pet_size': pets[index]['size'],
-                            'state': pets[index]['state'],
-                            'status': pets[index]['status'].upper(),
-                            'summary': pets[index]['summary'],
-                            'zip': pets[index]['zip']
+                            'age': pet['age'],
+                            'breed': pet['breed'],
+                            'city': pet['city'],
+                            'color': pet['color'],
+                            'date': pet['date'],
+                            'gender': pet['gender'],
+                            'images': pet['images'],
+                            'name': pet['name'],
+                            'petid': pet['petid'],
+                            'pet_size': pet['size'],
+                            'state': pet['state'],
+                            'status': pet['status'].upper(),
+                            'summary': pet['summary'],
+                            'zip': pet['zip']
                         }
                     )
+                self.refresh_from_data()
+                self.refresh_from_layout()
+                self.refresh_from_viewport()
                 self.refresh_done()
 
             Clock.schedule_once(refresh_callback, 1)
@@ -188,23 +184,23 @@ class Reported(MDApp):
             self.data = []
             self.refresh_callback = self.refresh_callback
             self.root_layout = self.root
-            for index in range(len(pets)):
+            for pet in reversed(pets):
                 self.data.append(
                     {
-                        'age': pets[index]['age'],
-                        'breed': pets[index]['breed'],
-                        'city': pets[index]['city'],
-                        'color': pets[index]['color'],
-                        'date': pets[index]['date'],
-                        'gender': pets[index]['gender'],
-                        'images': pets[index]['images'],
-                        'name': pets[index]['name'],
-                        'petid': pets[index]['petid'],
-                        'pet_size': pets[index]['size'],
-                        'state': pets[index]['state'],
-                        'status': pets[index]['status'].upper(),
-                        'summary': pets[index]['summary'],
-                        'zip': pets[index]['zip']
+                        'age': pet['age'],
+                        'breed': pet['breed'],
+                        'city': pet['city'],
+                        'color': pet['color'],
+                        'date': pet['date'],
+                        'gender': pet['gender'],
+                        'images': pet['images'],
+                        'name': pet['name'],
+                        'petid': pet['petid'],
+                        'pet_size': pet['size'],
+                        'state': pet['state'],
+                        'status': pet['status'].upper(),
+                        'summary': pet['summary'],
+                        'zip': pet['zip']
                     }
                 )
             self.screen_manager = screen_manager
