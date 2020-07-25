@@ -110,7 +110,7 @@ class Report(MDApp):
 
     class Header:
         def create(self):
-            anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top')
+            anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(20), dp(0)))
 
             header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]Report a Pet', markup=True)
             header.bind(size=header.setter('text_size'))
@@ -370,6 +370,7 @@ class Report(MDApp):
             print('All fields satisfied.')
 
             self._button_submit.disabled = True
+            self._button_submit.text = 'SENDING'
 
             for image in images:
                 tuple = (image, open(image, 'rb'))
@@ -399,12 +400,13 @@ class Report(MDApp):
                 print('POST failed.')
 
             self._button_submit.disabled = False
+            self._button_submit.text = 'SUBMIT'
 
         def create(self):
             with open(os.path.join(os.path.dirname(__file__), '../states.json')) as file:
                 self._states = json.load(file)
 
-            main_grid_layout = GridLayout(size_hint=(1, None), cols=1, spacing=dp(20))
+            main_grid_layout = GridLayout(size_hint=(1, None), cols=1, spacing=dp(20), padding=(dp(20), dp(0), dp(20), dp(0)))
             main_grid_layout.bind(minimum_height=main_grid_layout.setter('height'))
 
             self._name = FormInput(size_hint=(1, None), height=dp(45), icon='', type='Name', input_type='text', input_filter=None)
@@ -499,7 +501,7 @@ class Report(MDApp):
         self.theme_cls.primary_palette = 'BlueGray'
 
     def create(self):
-        box_layout = BoxLayout(orientation='vertical', padding=(dp(20), dp(20), dp(20), dp(20)))
+        box_layout = BoxLayout(orientation='vertical')
         header = self.Header().create()
         scroll_view = self.Form().create()
         box_layout.add_widget(header)

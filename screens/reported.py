@@ -4,6 +4,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import BooleanProperty
 from kivy.lang.builder import Builder
 from kivy.uix.button import Button
+from kivy.clock import Clock
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivymd.app import MDApp
@@ -11,7 +12,7 @@ from kivy.graphics import Color, RoundedRectangle
 from kivy.utils import get_color_from_hex
 from kivy.uix.label import Label
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
-from kivy.uix.recycleview import RecycleView
+from custom_recycle_view import RecycleView
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
@@ -96,8 +97,8 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
         return super(SelectableCard, self).refresh_view_attrs(
             rv, index, data)
 
-    def on_touch_down(self, touch):
-        if super(SelectableCard, self).on_touch_down(touch):
+    def on_touch_up(self, touch):
+        if super(SelectableCard, self).on_touch_up(touch):
             return True
         if self.collide_point(*touch.pos) and self.selectable:
             self.selected = True
@@ -119,6 +120,7 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             rv.screen_manager.get_screen('Pet').children[0].summary = rv.data[index]['summary']
             rv.screen_manager.get_screen('Pet').children[0].zip = rv.data[index]['zip']
             rv.screen_manager.current = 'Pet'
+            self.selected = False
 
 
 def getReportedPetsFromBackend():
@@ -139,7 +141,7 @@ class Reported(MDApp):
 
     class Header:
         def create(self):
-            anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top')
+            anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(20), dp(0)))
 
             header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]Reported Pets', markup=True)
             header.bind(size=header.setter('text_size'))
@@ -148,10 +150,44 @@ class Reported(MDApp):
             return anchor_layout
 
     class RV(RecycleView):
+        root = ObjectProperty()
+
+        def refresh_callback(self, *args):
+            print('refreshed')
+
+            def refresh_callback(interval):
+                pets = getReportedPetsFromBackend()
+                self.data.clear()
+                self.refresh_from_data()
+                for index in range(len(pets)):
+                    self.data.append(
+                        {
+                            'age': pets[index]['age'],
+                            'breed': pets[index]['breed'],
+                            'city': pets[index]['city'],
+                            'color': pets[index]['color'],
+                            'date': pets[index]['date'],
+                            'gender': pets[index]['gender'],
+                            'images': pets[index]['images'],
+                            'name': pets[index]['name'],
+                            'petid': pets[index]['petid'],
+                            'pet_size': pets[index]['size'],
+                            'state': pets[index]['state'],
+                            'status': pets[index]['status'].upper(),
+                            'summary': pets[index]['summary'],
+                            'zip': pets[index]['zip']
+                        }
+                    )
+                self.refresh_done()
+
+            Clock.schedule_once(refresh_callback, 1)
+
         def __init__(self, screen_manager=None, **kwargs):
             super().__init__(**kwargs)
             pets = getReportedPetsFromBackend()
-            self.data =[]
+            self.data = []
+            self.refresh_callback = self.refresh_callback
+            self.root_layout = self.root
             for index in range(len(pets)):
                 self.data.append(
                     {
@@ -176,11 +212,13 @@ class Reported(MDApp):
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
 
-        box_layout = BoxLayout(orientation='vertical', padding=(dp(20), dp(20), dp(20), dp(20)))
+        box_layout = BoxLayout(orientation='vertical')
         header = self.Header().create()
-        rv = self.RV(screen_manager=screen_manager, size_hint=(1, 0.9), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
+        anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(0), dp(20), dp(0)))
+        rv = self.RV(root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
+        anchor_layout.add_widget(rv)
         box_layout.add_widget(header)
-        box_layout.add_widget(rv)
+        box_layout.add_widget(anchor_layout)
         rv_screen = Screen(name='RV')
         rv_screen.add_widget(box_layout)
 
