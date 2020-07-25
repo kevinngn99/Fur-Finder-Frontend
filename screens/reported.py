@@ -24,6 +24,7 @@ from screens.pet import Pet
 import requests
 
 import os
+from threading import Thread
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/reported.kv'))
 
@@ -62,13 +63,21 @@ class CustomCard(AnchorLayout):
     def images_loaded(self, instance, value):
         image = self.images[0]['image']
         self.custom_image.source = image
-        if self.custom_image.image_ratio <= 1:
-            self.custom_image.size_hint = (self.custom_image.image_ratio + 1, self.custom_image.image_ratio + 1)
-        else:
-            self.custom_image.size_hint = (self.custom_image.image_ratio, self.custom_image.image_ratio)
+        self.custom_image.fbind('texture_size', self.update_size)
+
+    def update_size(self, instance, value):
+        instance.size = value
+
+        if value[0] < dp(150) or value[1] < dp(134):
+            if value[0] < value[1]:
+                scale = 150 / value[0]
+                instance.size = (dp(value[0] * scale), dp(value[1] * scale))
+            elif value[1] < value[0]:
+                scale = 134 / value[1]
+                instance.size = (dp(value[0] * scale), dp(value[1] * scale))
 
     def add_image(self):
-        self.custom_image = AsyncImage(nocache=True, size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=None)
+        self.custom_image = AsyncImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=None)
         anchor_layout = CustomAnchorLayout(size_hint=(None, None), size=(dp(150), dp(134)))
         layout = CustomStencilView()
         layout.add_widget(self.custom_image)
@@ -116,11 +125,6 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             self.selected = False
 
 
-def getReportedPetsFromBackend():
-    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//').json()
-    return data
-
-
 class Reported(MDApp):
     class CustomScreen(Screen):
         def __init__(self, **kwargs):
@@ -145,42 +149,47 @@ class Reported(MDApp):
     class RV(RecycleView):
         root = ObjectProperty()
 
+        def getReportedPetsFromBackend(self):
+            s = requests.Session()
+            s.hooks['response'].append(self.callback)
+            data = s.get(url='https://fur-finder.herokuapp.com/api/pets//').json()
+            return data
+
+        def callback(self, r, **kwargs):
+            self.data.clear()
+            self.refresh_from_data()
+            for pet in reversed(r.json()):
+                self.data.append(
+                    {
+                        'age': pet['age'],
+                        'breed': pet['breed'],
+                        'city': pet['city'],
+                        'color': pet['color'],
+                        'date': pet['date'],
+                        'gender': pet['gender'],
+                        'images': pet['images'],
+                        'name': pet['name'],
+                        'petid': pet['petid'],
+                        'pet_size': pet['size'],
+                        'state': pet['state'],
+                        'status': pet['status'].upper(),
+                        'summary': pet['summary'],
+                        'zip': pet['zip']
+                    }
+                )
+            self.refresh_done()
+
         def refresh_callback(self, *args):
             print('refreshed')
 
             def refresh_callback(interval):
-                pets = getReportedPetsFromBackend()
-                self.data.clear()
-                self.refresh_from_data()
-                for pet in reversed(pets):
-                    self.data.append(
-                        {
-                            'age': pet['age'],
-                            'breed': pet['breed'],
-                            'city': pet['city'],
-                            'color': pet['color'],
-                            'date': pet['date'],
-                            'gender': pet['gender'],
-                            'images': pet['images'],
-                            'name': pet['name'],
-                            'petid': pet['petid'],
-                            'pet_size': pet['size'],
-                            'state': pet['state'],
-                            'status': pet['status'].upper(),
-                            'summary': pet['summary'],
-                            'zip': pet['zip']
-                        }
-                    )
-                self.refresh_from_data()
-                self.refresh_from_layout()
-                self.refresh_from_viewport()
-                self.refresh_done()
+                Thread(target=self.getReportedPetsFromBackend).start()
 
             Clock.schedule_once(refresh_callback, 1)
 
         def __init__(self, screen_manager=None, **kwargs):
             super().__init__(**kwargs)
-            pets = getReportedPetsFromBackend()
+            pets = self.getReportedPetsFromBackend()
             self.data = []
             self.refresh_callback = self.refresh_callback
             self.root_layout = self.root
