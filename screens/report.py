@@ -386,10 +386,13 @@ class Report(MDApp):
         def post(self, data):
             s = requests.Session()
             s.hooks['response'].append(self.callback)
-            s.post('https://fur-finder.herokuapp.com/api/pets//', data=data, files=self.raw_images)
+            headers = {
+                'Authorization': 'Token 2f7fa80ec3de9ba11a26fbcb2ee34e6274173d09'
+            }
+            s.post('http://127.0.0.1:8000/api/pets//', data=data, files=self.raw_images, headers=headers)
 
         def callback(self, r, **kwargs):
-            print(r)
+            print(r.text)
 
             for raw_image in self.raw_images:
                 raw_image[1].close()

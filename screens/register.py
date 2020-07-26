@@ -10,6 +10,7 @@ from kivymd.toast import toast
 import os
 import requests
 import json
+from kivymd.app import MDApp
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/register.kv'))
 
@@ -27,6 +28,7 @@ class RegisterView(Screen):
         print(self.password2_text.text)
 
     def postUser(self):
+        print('BRUH')
         #checks:
         #no other username or email like that exists
         #password1 and 2 are the same
@@ -54,13 +56,12 @@ class RegisterView(Screen):
                         text = text.replace(ch, "")
                     toast(text)
 
-
 class Register:
 
     def __init__(self):
-        super().__init__
+        super().__init__()
 
     def create(self):
-       register_screen = RegisterView(name="login")
+       register_screen = RegisterView(name="register")
 
        return register_screen
