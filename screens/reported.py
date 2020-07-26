@@ -183,7 +183,9 @@ class Reported(MDApp):
             print('refreshed')
 
             def refresh_callback(interval):
-                Thread(target=self.getReportedPetsFromBackend).start()
+                th = Thread(target=self.getReportedPetsFromBackend)
+                th.setDaemon(True)
+                th.start()
 
             Clock.schedule_once(refresh_callback, 1)
 
@@ -220,7 +222,7 @@ class Reported(MDApp):
         box_layout = BoxLayout(orientation='vertical')
         header = self.Header().create()
         anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(0), dp(20), dp(0)))
-        rv = self.RV(root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
+        rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
         anchor_layout.add_widget(rv)
         box_layout.add_widget(header)
         box_layout.add_widget(anchor_layout)

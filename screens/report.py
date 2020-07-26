@@ -379,7 +379,9 @@ class Report(MDApp):
             #pool = Pool(1)
             #pool.apply_async(requests.post, args=['https://fur-finder.herokuapp.com/api/pets//'], kwds={'data': dict, 'files': self.raw_images}, callback=self.on_success, error_callback=self.on_error)
 
-            Thread(target=self.post, args=(dict, )).start()
+            th = Thread(target=self.post, args=(dict, ))
+            th.setDaemon(True)
+            th.start()
 
         def post(self, data):
             s = requests.Session()
