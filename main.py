@@ -5,15 +5,14 @@ Config.set('graphics', 'height', '768')
 Config.set('graphics', 'resizable', True)
 Config.set('graphics', 'multisamples', '5')
 
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Color, Rectangle
 from kivy.utils import get_color_from_hex
 from navigation import Navigation
 from screen_manager import Screens
 
-
-class MyClass(App):
+class MyClass(MDApp):
     class CustomBoxLayout(BoxLayout):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)

@@ -3,7 +3,8 @@ from screens.home import Home
 from screens.report import Report
 from screens.message import Message
 from screens.reported import Reported
-
+from screens.login import Login
+from screens.register import Register
 
 class Screens:
     def create(self):

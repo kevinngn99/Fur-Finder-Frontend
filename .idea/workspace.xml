@@ -21,13 +21,24 @@
   <component name="ChangeListManager">
     <list default="true" id="02c45309-d660-43e1-86d7-24d06636ccd7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/screens/report.py" beforeDir="false" afterPath="$PROJECT_DIR$/screens/report.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/reported.py" beforeDir="false" afterPath="$PROJECT_DIR$/screens/reported.py" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+>>>>>>> 2b686c6ce16282d05b5606748f804b007ac85699
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -85,9 +96,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\Ashley\PycharmProjects\FurFinder\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
@@ -179,6 +190,7 @@
       <workItem from="1594611437936" duration="16045000" />
       <workItem from="1594669646854" duration="45847000" />
       <workItem from="1594752964575" duration="37162000" />
+<<<<<<< HEAD
       <workItem from="1594839032924" duration="38667000" />
       <workItem from="1594931772553" duration="37507000" />
       <workItem from="1595013572538" duration="5645000" />
@@ -198,6 +210,13 @@
       <workItem from="1595706753235" duration="2204000" />
       <workItem from="1595714005039" duration="635000" />
       <workItem from="1595741008275" duration="75000" />
+=======
+      <workItem from="1594839032924" duration="19570000" />
+      <workItem from="1594866603400" duration="1365000" />
+      <workItem from="1594947987541" duration="15544000" />
+      <workItem from="1595296934541" duration="412000" />
+      <workItem from="1595297348162" duration="2000" />
+>>>>>>> 2b686c6ce16282d05b5606748f804b007ac85699
     </task>
     <servers />
   </component>
@@ -249,11 +268,16 @@
       <screen x="-1600" y="0" width="1600" height="860" />
     </state>
     <state x="-1038" y="313" key="#com.intellij.tools.ToolEditorDialog/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1592244945572" />
-    <state x="-983" y="227" key="FileChooserDialogImpl" timestamp="1592254937670">
-      <screen x="-1600" y="0" width="1600" height="860" />
+    <state x="669" y="263" key="#main" timestamp="1594866632768">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="669" y="263" key="#main/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1594866632768" />
+    <state x="740" y="306" key="FileChooserDialogImpl" timestamp="1595297344239">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="-983" y="227" key="FileChooserDialogImpl/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1592254937670" />
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1591714977493" />
+<<<<<<< HEAD
     <state width="1557" height="659" key="GridCell.Tab.0.bottom" timestamp="1595720391552">
       <screen x="-1600" y="0" width="1600" height="860" />
     </state>
@@ -298,6 +322,61 @@
     </state>
     <state width="1877" height="356" key="GridCell.Tab.1.right/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1594944222442" />
     <state width="1877" height="356" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1594981323811" />
+=======
+    <state x="740" y="306" key="FileChooserDialogImpl/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1595297344239" />
+    <state width="1877" height="11" key="GridCell.Tab.0.bottom" timestamp="1595048526080">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1557" height="341" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1592282072761" />
+    <state width="1877" height="816" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1594866052983" />
+    <state width="1877" height="816" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1594862478958" />
+    <state width="1877" height="11" key="GridCell.Tab.0.bottom/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1595048526080" />
+    <state width="1877" height="11" key="GridCell.Tab.0.center" timestamp="1595048526080">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1557" height="341" key="GridCell.Tab.0.center/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1592282072761" />
+    <state width="1877" height="816" key="GridCell.Tab.0.center/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1594866052982" />
+    <state width="1877" height="816" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1594862478958" />
+    <state width="1877" height="11" key="GridCell.Tab.0.center/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1595048526080" />
+    <state width="1877" height="11" key="GridCell.Tab.0.left" timestamp="1595048526080">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1557" height="341" key="GridCell.Tab.0.left/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1592282072761" />
+    <state width="1877" height="816" key="GridCell.Tab.0.left/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1594866052982" />
+    <state width="1877" height="816" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1594862478958" />
+    <state width="1877" height="11" key="GridCell.Tab.0.left/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1595048526080" />
+    <state width="1877" height="11" key="GridCell.Tab.0.right" timestamp="1595048526080">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1557" height="341" key="GridCell.Tab.0.right/0.0.1920.1040/-1600.0.1600.860@-1600.0.1600.860" timestamp="1592282072761" />
+    <state width="1877" height="816" key="GridCell.Tab.0.right/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1594866052982" />
+    <state width="1877" height="816" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1594862478958" />
+    <state width="1877" height="11" key="GridCell.Tab.0.right/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1595048526080" />
+    <state width="1877" height="11" key="GridCell.Tab.1.bottom" timestamp="1595048526080">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1877" height="356" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1594680888091" />
+    <state width="1877" height="356" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1594719107735" />
+    <state width="1877" height="11" key="GridCell.Tab.1.bottom/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1595048526080" />
+    <state width="1877" height="11" key="GridCell.Tab.1.center" timestamp="1595048526080">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1877" height="356" key="GridCell.Tab.1.center/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1594680888091" />
+    <state width="1877" height="356" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1594719107735" />
+    <state width="1877" height="11" key="GridCell.Tab.1.center/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1595048526080" />
+    <state width="1877" height="11" key="GridCell.Tab.1.left" timestamp="1595048526080">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1877" height="356" key="GridCell.Tab.1.left/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1594680888090" />
+    <state width="1877" height="356" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1594719107735" />
+    <state width="1877" height="11" key="GridCell.Tab.1.left/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1595048526080" />
+    <state width="1877" height="11" key="GridCell.Tab.1.right" timestamp="1595048526080">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state width="1877" height="356" key="GridCell.Tab.1.right/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1594680888091" />
+    <state width="1877" height="356" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1594719107735" />
+    <state width="1877" height="11" key="GridCell.Tab.1.right/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1595048526080" />
+>>>>>>> 2b686c6ce16282d05b5606748f804b007ac85699
     <state x="354" y="155" key="SettingsEditor" timestamp="1594839471957">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -308,6 +387,7 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1592358897226" />
+<<<<<<< HEAD
     <state x="623" y="225" width="672" height="160" key="search.everywhere.popup" timestamp="1595210586266">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -316,5 +396,21 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Kivy$main.coverage" NAME="main Coverage Results" MODIFIED="1595714047262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+=======
+    <state x="650" y="368" key="git4idea.merge.GitPullDialog" timestamp="1594866611406">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="650" y="368" key="git4idea.merge.GitPullDialog/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1594866611406" />
+    <state x="623" y="251" width="672" height="160" key="search.everywhere.popup" timestamp="1594950679444">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1600.0.1600.860@0.0.1920.1040" timestamp="1593204359879" />
+    <state x="623" y="225" width="670" height="58" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1594709236708" />
+    <state x="623" y="251" width="672" height="160" key="search.everywhere.popup/0.0.1920.1160/-1920.77.1920.1160@0.0.1920.1160" timestamp="1594950679444" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Fur_Finder_Frontend$main.coverage" NAME="main Coverage Results" MODIFIED="1595297434341" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Kivy$main.coverage" NAME="main Coverage Results" MODIFIED="1594866052969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+>>>>>>> 2b686c6ce16282d05b5606748f804b007ac85699
   </component>
 </project>
