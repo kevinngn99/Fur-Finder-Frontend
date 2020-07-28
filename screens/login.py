@@ -35,10 +35,6 @@ class LoginView(Screen):
     def getUser(self):
         data = {'username': self.username_text.text, 'password': self.password_text.text}
         res = requests.post(url='https://fur-finder.herokuapp.com/api/login/', data=data)
-        LoginView.token = res.json()['token']
-        self.access_token = LoginView.token
-        print(LoginView.token)
-        self.m.token = LoginView.token
         if res.status_code == 400:
             rmv = "['.]"
             dict = json.loads(res.text)
@@ -55,6 +51,10 @@ class LoginView(Screen):
                 toast(text)
         else:
             self.sm.current = 'App'
+            LoginView.token = res.json()['token']
+            self.access_token = LoginView.token
+            print(LoginView.token)
+            self.m.token = LoginView.token
 
 
 class Login:

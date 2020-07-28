@@ -154,13 +154,13 @@ class Reported(MDApp):
             s = requests.Session()
             s.hooks['response'].append(self.callback)
             headers = {
-                'Authorization': 'Token 155ba92f0d5058799eaab90c51ea626fd166b7ac'
+                'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
             }
             data = s.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
             return data
 
         def callback(self, r, **kwargs):
-            if not self.data:
+            if self.load:
                 self.data.clear()
                 self.refresh_from_data()
                 for pet in reversed(r.json()):
@@ -196,6 +196,7 @@ class Reported(MDApp):
 
         def __init__(self, screen_manager=None, **kwargs):
             super().__init__(**kwargs)
+            self.load = False
             self.data = []
             pets = self.getReportedPetsFromBackend()
             self.refresh_callback = self.refresh_callback
@@ -220,6 +221,7 @@ class Reported(MDApp):
                     }
                 )
             self.screen_manager = screen_manager
+            self.load = True
 
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))

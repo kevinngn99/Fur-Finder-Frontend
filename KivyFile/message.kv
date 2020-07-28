@@ -1,0 +1,118 @@
+#:import utils kivy.utils
+
+<MessageBox>:
+    size_hint: 1, 1
+    padding: dp(1), dp(1)
+    canvas.before:
+        Color:
+            rgb: root.rgb
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(7), dp(7), dp(7), dp(7)
+    AnchorLayout:
+        size_hint: 1, 1
+        canvas.before:
+            Color:
+                rgb: utils.get_color_from_hex('#FFFFFF')
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: dp(7), dp(7), dp(7), dp(7)
+        AnchorLayout:
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'left'
+            anchor_y: 'center'
+            Label:
+                id: icon
+                size_hint: None, None
+                size: dp(45), dp(45)
+                pos: self.pos
+                text: root.icon
+                font_name: 'assets/Font-Awesome.ttf'
+                font_size: sp(20)
+                color: utils.get_color_from_hex('#c9d0dc')
+        AnchorLayout:
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'center'
+            anchor_y: 'center'
+            padding: dp(45), dp(0), dp(45), dp(0)
+            TextInput:
+                id: category
+                size_hint: 1, None
+                height: dp(43)
+                pos: self.pos
+                hint_text: 'Type a message'
+                hint_text_color: utils.get_color_from_hex('#c9d0dc')
+                background_active: ''
+                background_normal: ''
+                multiline: False
+                font_name: 'assets/Inter-Medium.ttf'
+                font_size: sp(13)
+                foreground_color: utils.get_color_from_hex('#023b80')
+                cursor_color: utils.get_color_from_hex('#023b80')
+                selection_color: 201/255, 208/255, 220/255, 0.5
+                cursor_width: sp(1)
+                padding: dp(0), dp(self.height / dp(2) - (self.line_height / dp(2)))
+
+<Sender>:
+    size_hint: 1, None
+    height: bubble.height
+    anchor_x: 'right'
+    anchor_y: 'bottom'
+    BoxLayout:
+        id: bubble
+        size_hint: None, None
+        width: dp(200)
+        height: self.minimum_height
+        orientation: 'vertical'
+        Label:
+            id: message
+            text: 'This is message from the sender. Helluuuur'
+            color: utils.get_color_from_hex('#FFFFFF')
+            font_size: dp(13)
+            font_name: 'assets/Inter-Medium.ttf'
+            size_hint: 1, None
+            text_size: self.width, None
+            size: self.texture_size
+            padding: dp(7), dp(7)
+            canvas.before:
+                Color:
+                    rgb: utils.get_color_from_hex('#023b80')
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: dp(7), dp(7), dp(0), dp(7)
+
+<Receiver>:
+    size_hint: 1, None
+    height: bubble.height
+    anchor_x: 'left'
+    anchor_y: 'bottom'
+    BoxLayout:
+        id: bubble
+        size_hint: None, None
+        width: dp(200)
+        height: self.minimum_height
+        orientation: 'vertical'
+        Label:
+            id: message
+            text: 'This is message from the receiver. Helluuuur'
+            color: utils.get_color_from_hex('#000000')
+            font_size: dp(13)
+            font_name: 'assets/Inter-Medium.ttf'
+            size_hint: 1, None
+            text_size: self.width, None
+            size: self.texture_size
+            padding: dp(7), dp(7)
+            canvas.before:
+                Color:
+                    rgb: utils.get_color_from_hex('#c9d0dc')
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: dp(0), dp(7), dp(7), dp(7)

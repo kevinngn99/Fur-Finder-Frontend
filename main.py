@@ -46,6 +46,17 @@ class MyClass(MDApp):
         sm.add_widget(app)
         return sm
 
+        '''
+        box_layout = self.CustomBoxLayout(orientation='vertical')
+        box_layout.fbind('size', box_layout.size_callback)
+        screens = Screens().create()
+        navigation = Navigation(screens).create()
+        box_layout.add_widget(screens)
+        box_layout.add_widget(navigation)
+
+        return box_layout
+        '''
+
     def on_start(self):
         print('APP LOADED')
 
