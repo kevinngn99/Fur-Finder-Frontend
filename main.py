@@ -34,7 +34,7 @@ class MyClass(MDApp):
         screens = Screens().create()
         sm = ScreenManager()
         register_screen = Register().create()
-        login_screen = Login(sm).create()
+        login_screen = Login(sm, screens.get_screen('Message')).create()
         sm.add_widget(login_screen)
         sm.add_widget(register_screen)
 

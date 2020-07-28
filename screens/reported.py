@@ -22,6 +22,7 @@ from kivy.properties import StringProperty, ObjectProperty
 from kivy.metrics import dp, sp
 from screens.pet import Pet
 import requests
+import json
 
 import os
 from threading import Thread
@@ -152,32 +153,36 @@ class Reported(MDApp):
         def getReportedPetsFromBackend(self):
             s = requests.Session()
             s.hooks['response'].append(self.callback)
-            data = s.get(url='https://fur-finder.herokuapp.com/api/pets//').json()
+            headers = {
+                'Authorization': 'Token 155ba92f0d5058799eaab90c51ea626fd166b7ac'
+            }
+            data = s.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
             return data
 
         def callback(self, r, **kwargs):
-            self.data.clear()
-            self.refresh_from_data()
-            for pet in reversed(r.json()):
-                self.data.append(
-                    {
-                        'age': pet['age'],
-                        'breed': pet['breed'],
-                        'city': pet['city'],
-                        'color': pet['color'],
-                        'date': pet['date'],
-                        'gender': pet['gender'],
-                        'images': pet['images'],
-                        'name': pet['name'],
-                        'petid': pet['petid'],
-                        'pet_size': pet['size'],
-                        'state': pet['state'],
-                        'status': pet['status'].upper(),
-                        'summary': pet['summary'],
-                        'zip': pet['zip']
-                    }
-                )
-            self.refresh_done()
+            if not self.data:
+                self.data.clear()
+                self.refresh_from_data()
+                for pet in reversed(r.json()):
+                    self.data.append(
+                        {
+                            'age': pet['age'],
+                            'breed': pet['breed'],
+                            'city': pet['city'],
+                            'color': pet['color'],
+                            'date': pet['date'],
+                            'gender': pet['gender'],
+                            'images': pet['images'],
+                            'name': pet['name'],
+                            'petid': pet['petid'],
+                            'pet_size': pet['size'],
+                            'state': pet['state'],
+                            'status': pet['status'].upper(),
+                            'summary': pet['summary'],
+                            'zip': pet['zip']
+                        }
+                    )
+                self.refresh_done()
 
         def refresh_callback(self, *args):
             print('refreshed')
@@ -191,8 +196,8 @@ class Reported(MDApp):
 
         def __init__(self, screen_manager=None, **kwargs):
             super().__init__(**kwargs)
-            pets = self.getReportedPetsFromBackend()
             self.data = []
+            pets = self.getReportedPetsFromBackend()
             self.refresh_callback = self.refresh_callback
             self.root_layout = self.root
             for pet in reversed(pets):

@@ -14,7 +14,7 @@ class Screens:
         home_screen = Home().create()
         reported_screen = Reported().create()
         report_screen = Report(reported_screen).create()
-        message_screen = Message().create()
+        message_screen = Message(name='Message')
 
         screen_manager.add_widget(home_screen)
         screen_manager.add_widget(report_screen)

@@ -24,6 +24,7 @@ from kivy.metrics import sp, dp
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from datetime import datetime
+from screens.login import LoginView
 
 Window.softinput_mode = "below_target"
 
@@ -387,9 +388,9 @@ class Report(MDApp):
             s = requests.Session()
             s.hooks['response'].append(self.callback)
             headers = {
-                'Authorization': 'Token 2f7fa80ec3de9ba11a26fbcb2ee34e6274173d09'
+                'Authorization': 'Token ' + LoginView.token
             }
-            s.post('http://127.0.0.1:8000/api/pets//', data=data, files=self.raw_images, headers=headers)
+            s.post('http://fur-finder.herokuapp.com/api/pets//', data=data, files=self.raw_images, headers=headers)
 
         def callback(self, r, **kwargs):
             print(r.text)
