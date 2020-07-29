@@ -19,6 +19,7 @@ class Navigation:
         self.dict['Report'].color = get_color_from_hex('#c9d0dc')
         self.dict['Message'].color = get_color_from_hex('#c9d0dc')
         self.dict['Reported'].color = get_color_from_hex('#c9d0dc')
+        self.dict['Profile'].color = get_color_from_hex('#c9d0dc')
         self.dict[current].color = get_color_from_hex('#023b80')
 
     def home_callback(self, screen_manager):
@@ -37,6 +38,10 @@ class Navigation:
         print('The reported button is being pressed')
         screen_manager.current = 'Reported'
 
+    def profile_callback(self, screen_manager):
+        print('The profile button is being pressed')
+        screen_manager.current = 'Profile'
+
     def create(self):
         self._screen_manager.fbind('current', self.on_switch)
 
@@ -46,18 +51,20 @@ class Navigation:
         report_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(20), color=get_color_from_hex('#c9d0dc'), text='[font=assets/Font-Awesome.ttf]', markup=True)
         message_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(20), color=get_color_from_hex('#c9d0dc'), text='[font=assets/Font-Awesome.ttf]', markup=True)
         reported_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(20), color=get_color_from_hex('#c9d0dc'), text='[font=assets/Font-Awesome.ttf]', markup=True)
+        profile_button = self.TextButton(size_hint=(0.25, 1), font_size=sp(20), color=get_color_from_hex('#c9d0dc'), text='[font=assets/Font-Awesome.ttf]', markup=True)
 
-        self.dict = {'Home': home_button, 'Report': report_button, 'Message': message_button, 'Reported': reported_button}
+        self.dict = {'Home': home_button, 'Report': report_button, 'Message': message_button, 'Reported': reported_button, 'Profile': profile_button}
 
         home_button.on_release = lambda: self.home_callback(self._screen_manager)
         report_button.on_release = lambda: self.report_callback(self._screen_manager)
         message_button.on_release = lambda: self.message_callback(self._screen_manager)
         reported_button.on_release = lambda: self.reported_callback(self._screen_manager)
+        profile_button.on_release = lambda: self.profile_callback(self._screen_manager)
 
         box_layout.add_widget(home_button)
         box_layout.add_widget(report_button)
         box_layout.add_widget(message_button)
-
         box_layout.add_widget(reported_button)
+        box_layout.add_widget(profile_button)
 
         return box_layout
