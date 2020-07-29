@@ -40,6 +40,7 @@ class RegisterView(Screen):
         else:
             res = requests.post(url='https://fur-finder.herokuapp.com/api/register//', data=data)
             print(res.status_code)
+            print(res.text)
             if res.status_code == 400:
                 rmv = "['.]"
                 dict = json.loads(res.text)

@@ -19,4 +19,15 @@ class Message:
         message_screen = Screen(name='Message')
         message_screen.add_widget(anchor_layout)
 
+<<<<<<< Updated upstream
         return message_screen
+=======
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        anchor_layout = AnchorLayout(anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(0), dp(0)))
+        anchor_layout.add_widget(Header().create())
+        self.add_widget(anchor_layout)
+        self.fbind('token', self.run_main)
+#        self.fbind('room', self.run_chat)
+        self.stop = True
+>>>>>>> Stashed changes
