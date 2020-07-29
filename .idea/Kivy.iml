@@ -5,7 +5,7 @@
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/venv-38" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.7 (Kivy)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.7 (Backend)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

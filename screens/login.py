@@ -28,11 +28,30 @@ class LoginView(Screen):
         self.sm = sm
         self.m = m
 
-    def getText(self):
+    def get_pets_by_author(self):
         print(self.username_text.text)
-        print(self.password_text.text)
+        # print(self.password_text.text)
+        headers = {
+            'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
+        }
+        pets = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
+        users = requests.get(url='https://fur-finder.herokuapp.com/api/register//').json()
+        author = ''
+        pets_list = []
+
+        for user in users:
+            if user['username'] == self.username_text.text:
+                author = user['email']
+
+        for pet in pets:
+            if pet['author'] == author:
+                pets_list.append(pet)
+
+        print(pets_list)
+        return pets_list
 
     def getUser(self):
+        self.get_pets_by_author()
         data = {'username': self.username_text.text, 'password': self.password_text.text}
         res = requests.post(url='https://fur-finder.herokuapp.com/api/login/', data=data)
         if res.status_code == 400:
