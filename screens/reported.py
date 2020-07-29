@@ -223,6 +223,10 @@ class Reported(MDApp):
             self.screen_manager = screen_manager
             self.load = True
 
+    def __init__(self, root_sm=None, **kwargs):
+        super().__init__(**kwargs)
+        self.root_sm = root_sm
+
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
 
@@ -237,7 +241,7 @@ class Reported(MDApp):
         rv_screen.add_widget(box_layout)
 
         pet_screen = Screen(name='Pet')
-        pet_screen.add_widget(Pet().create(screen_manager))
+        pet_screen.add_widget(Pet(root_sm=self.root_sm).create(screen_manager))
 
         screen_manager.add_widget(rv_screen)
         screen_manager.add_widget(pet_screen)

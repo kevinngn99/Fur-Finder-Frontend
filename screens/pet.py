@@ -26,7 +26,7 @@ class PinButton(AnchorLayout):
     color = ColorProperty()
 
 
-class MessageButton(AnchorLayout):
+class MessageButton(ButtonBehavior, AnchorLayout):
     text = StringProperty('')
     icon = StringProperty('')
     color = ColorProperty()
@@ -152,6 +152,12 @@ class Pet:
             self.add_widget(self._carousel)
             self.add_widget(indicator_layout)
 
+    def message_callback(self, root_sm):
+        root_sm.current = 'Message'
+
+    def __init__(self, root_sm=None):
+        self.root_sm = root_sm
+
     def create(self, screen_manager):
         float_layout = CustomFloatLayout(orientation='vertical')
 
@@ -242,7 +248,9 @@ class Pet:
 
         pin_and_message_layout = BoxLayout(size_hint=(1, None), height=dp(45), orientation='horizontal')
         pin_and_message_layout.add_widget(PinButton(icon='', text='Pin', color=get_color_from_hex('#e01646'), padding=(dp(20), dp(0), dp(7), dp(0))))
-        pin_and_message_layout.add_widget(MessageButton(icon='', text='Message', color=get_color_from_hex('#023b80'), padding=(dp(0), dp(0), dp(20), dp(0))))
+        message_button = MessageButton(icon='', text='Message', color=get_color_from_hex('#023b80'), padding=(dp(0), dp(0), dp(20), dp(0)))
+        message_button.on_release = lambda: self.message_callback(self.root_sm)
+        pin_and_message_layout.add_widget(message_button)
 
         float_layout.add_widget(top_layout)
         float_layout.add_widget(bottom_layout)

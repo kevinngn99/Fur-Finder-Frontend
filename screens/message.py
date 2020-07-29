@@ -1,12 +1,15 @@
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.lang.builder import Builder
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import ButtonBehavior
 from kivy.utils import get_color_from_hex
 from kivy.uix.label import Label
-from kivy.uix.screenmanager import Screen
 from kivy.metrics import dp, sp
 from kivy.properties import StringProperty, ColorProperty
 from kivy.uix.scrollview import ScrollView
+from kivy.effects.scroll import ScrollEffect
+from kivymd.uix.snackbar import Snackbar
+from kivy.uix.screenmanager import Screen, ScreenManager
 import asyncio
 import websockets
 import json
@@ -17,6 +20,11 @@ import os
 
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/message.kv'))
+
+
+class MessagePreview(ButtonBehavior, AnchorLayout):
+    icon = StringProperty('')
+    chevron = StringProperty('')
 
 
 class MessageBox(AnchorLayout):
@@ -32,47 +40,133 @@ class Receiver(AnchorLayout):
     pass
 
 
-class Message(Screen):
-    token = StringProperty('')
-    room = StringProperty('')
+class MessageHeader(AnchorLayout):
+    name = StringProperty('')
+    icon = StringProperty('')
+
+
+class CustomBackButton(ButtonBehavior, AnchorLayout):
+    pass
+
+
+class Header:
+    def create(self, name='', padding=(dp(20), dp(20), dp(20), dp(0))):
+        anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top', padding=padding)
+        header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]' + name, markup=True)
+        header.bind(size=header.setter('text_size'))
+        anchor_layout.add_widget(header)
+        return anchor_layout
+
+
+class Chat(Screen):
     message = StringProperty('')
 
-    class Header:
-        def create(self):
-            anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(20), dp(0)))
-            header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]Messages', markup=True)
-            header.bind(size=header.setter('text_size'))
-            anchor_layout.add_widget(header)
-            return anchor_layout
+    def on_focus(self, instance, value, icon=None, border=None):
+        if value:
+            border.rgb = get_color_from_hex('#023b80')
+            icon.color = get_color_from_hex('#023b80')
+        else:
+            if instance.text != '':
+                pass
+                sender = Sender()
+                sender.ids.message.text = instance.text
+                self.message_layout.add_widget(sender)
+                self.current_widget = sender
+                self.message = instance.text
+
+            border.rgb = get_color_from_hex('#c9d0dc')
+            icon.color = get_color_from_hex('#c9d0dc')
+            instance.text = ''
+
+    def callback(self, instance, value):
+        if value > self.sv_size:
+            if self.current_widget is not None:
+                self.scroll_view.scroll_to(self.current_widget)
+
+    def scroll_view_size(self, instance, value):
+        self.sv_size = value
+
+    def go_back(self, screen_manager):
+        screen_manager.current = 'MS'
 
     def on_message(self, instance, value):
+        # you can do this or use fbind method, didn't know that
         self.sem.release()
         return value
 
-    async def send_message(self, websocket):
-        while self.stop:
-            self.sem.acquire()
-            await websocket.send(json.dumps({'message': self.message}))
+    def __init__(self, sm=None, sem=None, **kw):
+        super().__init__(**kw)
+        self.sv_size = None
+        self.current_widget = None
+        self.sem = sem
 
-    def message_loop(self, websocket):
+        box_layout = BoxLayout(orientation='vertical', spacing=dp(14), padding=(dp(20), dp(0), dp(20), dp(0)))
+        message_header = MessageHeader(name=self.name)
+        message_header.ids.back_button.on_release = lambda: self.go_back(sm)
+        box_layout.add_widget(message_header)
+
+        message_box = MessageBox(size_hint=(1, None), height=dp(45), icon='')
+        message_box.ids.category.fbind('focus', self.on_focus, icon=message_box.ids.icon, border=message_box)
+
+        self.message_layout = BoxLayout(size_hint=(1, None), orientation='vertical', spacing=dp(7))
+        self.message_layout.bind(minimum_height=self.message_layout.setter('height'))
+        self.scroll_view = ScrollView(size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
+        self.scroll_view.add_widget(self.message_layout)
+        self.scroll_view.fbind('size', self.scroll_view_size)
+        self.scroll_view.fbind('viewport_size', self.callback)
+
+        box_layout.add_widget(self.scroll_view)
+        box_layout.add_widget(message_box)
+
+        self.add_widget(box_layout)
+
+
+class Message(Screen):
+    token = StringProperty('')
+    room = StringProperty('')
+
+    async def send_message(self, websocket, sem, uri):
+        screen = self.screen_manager.get_screen(uri)
+
+        while self.stop:
+            sem.acquire()
+            await websocket.send(json.dumps({'message': screen.message}))
+
+    def message_loop(self, websocket, sem, uri):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        loop.run_until_complete(self.send_message(websocket))
+        loop.run_until_complete(self.send_message(websocket, sem, uri))
 
     async def secret_room(self, uri):
         try:
             async with websockets.connect(uri) as websocket:
-                th = Thread(target=self.message_loop, args=(websocket, ))
-                th.setDaemon(True)
-                th.start()
+                sem = Semaphore()
 
                 while self.stop:
                     resp = json.loads(await websocket.recv())['message']
 
-                    if resp != self.message:
+                    if not self.screen_manager.has_screen(uri):
+                        Snackbar(text='You got a new message!').show()
+                        message_preview = MessagePreview(size_hint=(1, None), height=dp(60))
+                        message_preview.ids.user.text = uri
+                        message_preview.on_release = lambda: self.profile_callback(self.screen_manager, message_preview.ids.user.text)
+                        chat_screen = Chat(name=message_preview.ids.user.text, sm=self.screen_manager, sem=sem)
                         receiver = Receiver()
                         receiver.ids.message.text = resp
-                        self.message_layout.add_widget(receiver)
+                        chat_screen.message_layout.add_widget(receiver)
+                        self.screen_manager.add_widget(chat_screen)
+                        self.message_layout.add_widget(message_preview)
+
+                        th = Thread(target=self.message_loop, args=(websocket, sem, uri))
+                        th.setDaemon(True)
+                        th.start()
+                    else:
+                        chat_screen = self.screen_manager.get_screen(uri)
+
+                        if chat_screen.message != resp:
+                            receiver = Receiver()
+                            receiver.ids.message.text = resp
+                            self.screen_manager.get_screen(uri).message_layout.add_widget(receiver)
 
         except Exception as e:
             print(e)
@@ -110,43 +204,30 @@ class Message(Screen):
         th.setDaemon(True)
         th.start()
 
-    def on_focus(self, instance, value, icon=None, border=None):
-        if value:
-            border.rgb = get_color_from_hex('#023b80')
-            icon.color = get_color_from_hex('#023b80')
-        else:
-            if instance.text != '':
-                sender = Sender()
-                sender.ids.message.text = instance.text
-                self.message_layout.add_widget(sender)
-                self.message = instance.text
-
-            border.rgb = get_color_from_hex('#c9d0dc')
-            icon.color = get_color_from_hex('#c9d0dc')
-            instance.text = ''
+    def profile_callback(self, screen_manager, screen_name):
+        screen_manager.current = str(screen_name)
 
     def __init__(self, **kw):
         super().__init__(**kw)
+
         self.stop = True
-        self.sem = Semaphore()
+        self.screen_manager = ScreenManager(size_hint=(1, 1))
 
-        box_layout = BoxLayout(orientation='vertical', spacing=dp(14), padding=(dp(20), dp(0), dp(20), dp(0)))
-        box_layout.add_widget(self.Header().create())
-
-        self.message_box = MessageBox(size_hint=(1, None), height=dp(45), icon='')
-        self.message_box.ids.category.fbind('focus', self.on_focus, icon=self.message_box.ids.icon, border=self.message_box)
-
-        self.message_layout = BoxLayout(orientation='vertical', spacing=dp(7))
+        box_layout = BoxLayout(orientation='vertical')
+        box_layout.add_widget(Header().create('Messages'))
+        self.message_layout = BoxLayout(size_hint=(1, None), orientation='vertical', spacing=dp(20), padding=(dp(20), dp(0), dp(20), dp(0)))
         self.message_layout.bind(minimum_height=self.message_layout.setter('height'))
-        self.message_layout.add_widget(Sender())
-        self.message_layout.add_widget(Receiver())
-        scroll_view = ScrollView(size_hint=(1, 1))
+
+        scroll_view = ScrollView(size_hint=(1, 0.9), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
         scroll_view.add_widget(self.message_layout)
-
         box_layout.add_widget(scroll_view)
-        box_layout.add_widget(self.message_box)
 
-        self.add_widget(box_layout)
+        message_layout_screen = Screen(name='MS')
+        message_layout_screen.add_widget(box_layout)
+
+        self.screen_manager.add_widget(message_layout_screen)
+        self.screen_manager.current = 'MS'
+        self.add_widget(self.screen_manager)
 
         self.fbind('token', self.run_main)
         self.fbind('room', self.run_chat)

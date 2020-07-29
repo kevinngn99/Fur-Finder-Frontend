@@ -12,7 +12,7 @@ class Screens:
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 0.9))
 
         home_screen = Home().create()
-        reported_screen = Reported().create()
+        reported_screen = Reported(root_sm=screen_manager).create()
         report_screen = Report(reported_screen).create()
         message_screen = Message(name='Message')
 

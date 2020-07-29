@@ -1,5 +1,76 @@
 #:import utils kivy.utils
 
+<MessagePreview>:
+    size_hint: 1, 1
+    padding: dp(1), dp(1)
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#c9d0dc')
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: dp(7), dp(7), dp(7), dp(7)
+    AnchorLayout:
+        size_hint: 1, 1
+        canvas.before:
+            Color:
+                rgb: utils.get_color_from_hex('#FFFFFF')
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: dp(7), dp(7), dp(7), dp(7)
+        AnchorLayout:
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'left'
+            anchor_y: 'center'
+            Label:
+                id: icon
+                size_hint: None, None
+                size: dp(45), dp(45)
+                pos: self.pos
+                text: root.icon
+                font_name: 'assets/Font-Awesome.ttf'
+                font_size: sp(20)
+                color: utils.get_color_from_hex('#023b80')
+        AnchorLayout:
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'right'
+            anchor_y: 'center'
+            Label:
+                id: chevron
+                size_hint: None, None
+                size: dp(45), dp(45)
+                pos: self.pos
+                text: root.chevron
+                font_name: 'assets/Font-Awesome.ttf'
+                font_size: sp(20)
+                color: utils.get_color_from_hex('#023b80')
+        AnchorLayout:
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'center'
+            anchor_y: 'center'
+            padding: dp(45), dp(0), dp(45), dp(0)
+            Label:
+                id: user
+                size_hint: 1, None
+                height: dp(45)
+                pos: self.pos
+                font_name: 'assets/Inter-Regular.ttf'
+                font_size: sp(13)
+                color: utils.get_color_from_hex('#023b80')
+                halign: 'left'
+                valign: 'center'
+                text_size: self.size
+                shorten: True
+                shorten_from: 'right'
+                max_lines: 1
+
 <MessageBox>:
     size_hint: 1, 1
     padding: dp(1), dp(1)
@@ -116,3 +187,47 @@
                     pos: self.pos
                     size: self.size
                     radius: dp(0), dp(7), dp(7), dp(7)
+
+<MessageHeader>:
+    size_hint: 1, 0.1
+    padding: dp(0), dp(20), dp(0), dp(0)
+    AnchorLayout:
+        size_hint: 1, 1
+        CustomBackButton:
+            id: back_button
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'left'
+            anchor_y: 'center'
+            Label:
+                id: icon
+                size_hint: None, None
+                size: dp(20), dp(20)
+                pos: self.pos
+                text: root.icon
+                font_name: 'assets/Font-Awesome.ttf'
+                font_size: sp(20)
+                color: utils.get_color_from_hex('#6e7c97')
+        AnchorLayout:
+            size_hint: None, None
+            size: root.size
+            pos: root.pos
+            anchor_x: 'center'
+            anchor_y: 'center'
+            padding: dp(40), dp(0), dp(45), dp(0)
+            Label:
+                id: user
+                size_hint: 1, None
+                height: dp(45)
+                pos: self.pos
+                text: root.name
+                font_name: 'assets/Inter-SemiBold.ttf'
+                font_size: sp(20)
+                color: utils.get_color_from_hex('#023b80')
+                halign: 'left'
+                valign: 'center'
+                text_size: self.size
+                shorten: True
+                shorten_from: 'right'
+                max_lines: 1
