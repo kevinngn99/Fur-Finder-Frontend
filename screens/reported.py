@@ -146,6 +146,18 @@ class Reported(MDApp):
 
             anchor_layout.add_widget(header)
             return anchor_layout
+    class Filter:
+        def create(self):
+            anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(20), dp(0)))
+
+            header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]Filter', markup=True)
+            header.bind(size=header.setter('text_size'))
+
+
+
+
+            anchor_layout.add_widget(header)
+            return anchor_layout
 
     class RV(RecycleView):
         root = ObjectProperty()
@@ -232,13 +244,20 @@ class Reported(MDApp):
 
         box_layout = BoxLayout(orientation='vertical')
         header = self.Header().create()
+        filter = self.Filter().create()
         anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(0), dp(20), dp(0)))
         rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
         anchor_layout.add_widget(rv)
         box_layout.add_widget(header)
+        box_layout.add_widget(filter)
         box_layout.add_widget(anchor_layout)
         rv_screen = Screen(name='RV')
         rv_screen.add_widget(box_layout)
+
+        foundBtn = Button(text="Found", size_hint=(1, None), size=(dp(100), dp(50)))
+        box_layout.add_widget(foundBtn)
+
+
 
         pet_screen = Screen(name='Pet')
         pet_screen.add_widget(Pet(root_sm=self.root_sm).create(screen_manager))
@@ -248,5 +267,6 @@ class Reported(MDApp):
 
         reported_screen = self.CustomScreen(name='Reported')
         reported_screen.add_widget(screen_manager)
+
 
         return reported_screen
