@@ -1,4 +1,4 @@
-from kivy.uix.screenmanager import ScreenManager, SlideTransition
+from kivy.uix.screenmanager import ScreenManager, SlideTransition, Screen
 from screens.home import Home
 from screens.report import Report
 from screens.message import Message
@@ -15,11 +15,13 @@ class Screens:
         reported_screen = Reported(root_sm=screen_manager).create()
         report_screen = Report(reported_screen).create()
         message_screen = Message(name='Message')
+        profile_screen = Screen(name='Profile')
 
         screen_manager.add_widget(home_screen)
         screen_manager.add_widget(report_screen)
         screen_manager.add_widget(message_screen)
         screen_manager.add_widget(reported_screen)
+        screen_manager.add_widget(profile_screen)
 
         return screen_manager
 
