@@ -10,6 +10,7 @@ from kivy.properties import StringProperty
 import os
 import requests
 import json
+import re
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/login.kv'))
 
@@ -24,7 +25,9 @@ class LoginView(Screen):
     def __init__(self, sm=None, m=None, **kw):
         super().__init__(**kw)
         global token
+        global usr
         token = None
+        usr = None
         self.sm = sm
         self.m = m
 
@@ -48,6 +51,10 @@ class LoginView(Screen):
                 pets_list.append(pet)
 
         print(pets_list)
+        regex = re.compile('[^a-zA-Z]')
+        self.m.token = regex.sub('', author)
+        LoginView.usr = self.m.token
+        print(self.m.token)
         return pets_list
 
     def getUser(self):
@@ -73,7 +80,6 @@ class LoginView(Screen):
             LoginView.token = res.json()['token']
             self.access_token = LoginView.token
             print(LoginView.token)
-            self.m.token = LoginView.token
 
 
 class Login:

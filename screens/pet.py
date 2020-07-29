@@ -9,12 +9,16 @@ from kivy.utils import get_color_from_hex
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image, AsyncImage
 from kivy.uix.label import Label
+from kivymd.uix.snackbar import Snackbar
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.stencilview import StencilView
 from kivy.properties import ColorProperty, StringProperty, ObjectProperty
 from kivy.uix.widget import Widget
 from kivy.metrics import dp, sp
+from screens.login import LoginView
+
+import re
 import os
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/pet.kv'))
@@ -50,6 +54,7 @@ class CustomFloatLayout(BoxLayout):
     status = StringProperty('N/A')
     summary = StringProperty('N/A')
     zip = StringProperty('N/A')
+    author = StringProperty('N/A')
 
 
 class CustomLabel(Label):
@@ -153,13 +158,20 @@ class Pet:
             self.add_widget(indicator_layout)
 
     def message_callback(self, root_sm):
-        root_sm.current = 'Message'
+        regex = re.compile('[^a-zA-Z]')
+        usr = regex.sub('', self.float_layout.author)
+
+        if LoginView.usr == usr:
+            Snackbar(text='Sorry you can\'t message yourself!').show()
+        else:
+            root_sm.current = 'Message'
+            root_sm.get_screen('Message').init_chat(usr)
 
     def __init__(self, root_sm=None):
         self.root_sm = root_sm
+        self.float_layout = CustomFloatLayout(orientation='vertical')
 
     def create(self, screen_manager):
-        float_layout = CustomFloatLayout(orientation='vertical')
 
         top_layout = AnchorLayout(size_hint=(1, 0.4), anchor_x='center', anchor_y='top')
         top = self.Top(size_hint=(1, 1), anchor_x='center', anchor_y='bottom')
@@ -171,7 +183,7 @@ class Pet:
         top.add_widget(button_layout)
         top_layout.add_widget(top)
 
-        float_layout.bind(images=lambda instance, value: top.insert_images(instance, value))
+        self.float_layout.bind(images=lambda instance, value: top.insert_images(instance, value))
 
         background = AnchorLayout(size_hint=(1, 1), anchor_x='center', anchor_y='center')
         vertical_scroll_view = ScrollView(do_scroll=(False, True), size_hint=(1, 1), bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
@@ -180,35 +192,35 @@ class Pet:
         details_layout = StackLayout(size_hint=(1, None), spacing=dp(20), padding=(dp(0), dp(20), dp(0), dp(0)))
         details_layout.bind(minimum_height=details_layout.setter('height'))
 
-        age = CustomLabel(type='Age', txt=str(float_layout.age))
-        float_layout.bind(age=lambda instance, value: setattr(age, 'txt', value))
+        age = CustomLabel(type='Age', txt=str(self.float_layout.age))
+        self.float_layout.bind(age=lambda instance, value: setattr(age, 'txt', value))
 
-        breed = CustomLabel(type='Breed', txt=str(float_layout.breed))
-        float_layout.bind(breed=lambda instance, value: setattr(breed, 'txt', value))
+        breed = CustomLabel(type='Breed', txt=str(self.float_layout.breed))
+        self.float_layout.bind(breed=lambda instance, value: setattr(breed, 'txt', value))
 
-        location = CustomLabel(type='Location', txt=str(float_layout.location))
-        float_layout.bind(location=lambda instance, value: setattr(location, 'txt', value))
+        location = CustomLabel(type='Location', txt=str(self.float_layout.location))
+        self.float_layout.bind(location=lambda instance, value: setattr(location, 'txt', value))
 
-        color = CustomLabel(type='Color', txt=str(float_layout.color))
-        float_layout.bind(color=lambda instance, value: setattr(color, 'txt', value))
+        color = CustomLabel(type='Color', txt=str(self.float_layout.color))
+        self.float_layout.bind(color=lambda instance, value: setattr(color, 'txt', value))
 
-        date = CustomLabel(type='Date', txt=str(float_layout.date))
-        float_layout.bind(date=lambda instance, value: setattr(date, 'txt', value))
+        date = CustomLabel(type='Date', txt=str(self.float_layout.date))
+        self.float_layout.bind(date=lambda instance, value: setattr(date, 'txt', value))
 
-        gender = CustomLabel(type='Gender', txt=str(float_layout.gender))
-        float_layout.bind(gender=lambda instance, value: setattr(gender, 'txt', value))
+        gender = CustomLabel(type='Gender', txt=str(self.float_layout.gender))
+        self.float_layout.bind(gender=lambda instance, value: setattr(gender, 'txt', value))
 
-        petid = CustomLabel(type='Pet ID', txt=str(float_layout.petid))
-        float_layout.bind(petid=lambda instance, value: setattr(petid, 'txt', value))
+        petid = CustomLabel(type='Pet ID', txt=str(self.float_layout.petid))
+        self.float_layout.bind(petid=lambda instance, value: setattr(petid, 'txt', value))
 
-        size = CustomLabel(type='Size', txt=str(float_layout.pet_size))
-        float_layout.bind(pet_size=lambda instance, value: setattr(size, 'txt', value))
+        size = CustomLabel(type='Size', txt=str(self.float_layout.pet_size))
+        self.float_layout.bind(pet_size=lambda instance, value: setattr(size, 'txt', value))
 
-        status = CustomLabel(type='Status', txt=str(float_layout.status))
-        float_layout.bind(status=lambda instance, value: setattr(status, 'txt', value.title()))
+        status = CustomLabel(type='Status', txt=str(self.float_layout.status))
+        self.float_layout.bind(status=lambda instance, value: setattr(status, 'txt', value.title()))
 
-        zip = CustomLabel(type='Zip', txt=str(float_layout.zip))
-        float_layout.bind(zip=lambda instance, value: setattr(zip, 'txt', value))
+        zip = CustomLabel(type='Zip', txt=str(self.float_layout.zip))
+        self.float_layout.bind(zip=lambda instance, value: setattr(zip, 'txt', value))
 
         details_layout.add_widget(age)
         details_layout.add_widget(breed)
@@ -222,8 +234,8 @@ class Pet:
         details_layout.add_widget(zip)
 
         name_layout = AnchorLayout(size_hint=(1, None), height=dp(30), anchor_x='center', anchor_y='center')
-        pet_name = CustomName(name=str(float_layout.name))
-        float_layout.bind(name=lambda instance, value: setattr(pet_name, 'name', value))
+        pet_name = CustomName(name=str(self.float_layout.name))
+        self.float_layout.bind(name=lambda instance, value: setattr(pet_name, 'name', value))
         pet_name.bind(size=pet_name.setter('text_size'))
         name_layout.add_widget(pet_name)
 
@@ -238,7 +250,7 @@ class Pet:
         summary_label = SummaryLabel()
         vertical_grid_layout.add_widget(summary_label)
 
-        float_layout.bind(summary=lambda instance, value: setattr(summary_label, 'text', value))
+        self.float_layout.bind(summary=lambda instance, value: setattr(summary_label, 'text', value))
 
         vertical_scroll_view.add_widget(vertical_grid_layout)
         background.add_widget(vertical_scroll_view)
@@ -252,8 +264,8 @@ class Pet:
         message_button.on_release = lambda: self.message_callback(self.root_sm)
         pin_and_message_layout.add_widget(message_button)
 
-        float_layout.add_widget(top_layout)
-        float_layout.add_widget(bottom_layout)
-        float_layout.add_widget(pin_and_message_layout)
+        self.float_layout.add_widget(top_layout)
+        self.float_layout.add_widget(bottom_layout)
+        self.float_layout.add_widget(pin_and_message_layout)
 
-        return float_layout
+        return self.float_layout

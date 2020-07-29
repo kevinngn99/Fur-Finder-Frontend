@@ -10,12 +10,12 @@ from kivy.uix.scrollview import ScrollView
 from kivy.effects.scroll import ScrollEffect
 from kivymd.uix.snackbar import Snackbar
 from kivy.uix.screenmanager import Screen, ScreenManager
+
 import asyncio
 import websockets
 import json
 from threading import Thread
 from threading import Semaphore
-
 import os
 
 
@@ -71,7 +71,6 @@ class Chat(Screen):
                 sender = Sender()
                 sender.ids.message.text = instance.text
                 self.message_layout.add_widget(sender)
-                self.current_widget = sender
                 self.message = instance.text
 
             border.rgb = get_color_from_hex('#c9d0dc')
@@ -80,8 +79,9 @@ class Chat(Screen):
 
     def callback(self, instance, value):
         if value > self.sv_size:
-            if self.current_widget is not None:
-                self.scroll_view.scroll_to(self.current_widget)
+            if len(self.message_layout.children) > 0:
+                widget = self.message_layout.children[0]
+                self.scroll_view.scroll_to(widget)
 
     def scroll_view_size(self, instance, value):
         self.sv_size = value
@@ -97,7 +97,6 @@ class Chat(Screen):
     def __init__(self, sm=None, sem=None, **kw):
         super().__init__(**kw)
         self.sv_size = None
-        self.current_widget = None
         self.sem = sem
 
         box_layout = BoxLayout(orientation='vertical', spacing=dp(14), padding=(dp(20), dp(0), dp(20), dp(0)))
@@ -130,38 +129,62 @@ class Message(Screen):
 
         while self.stop:
             sem.acquire()
-            await websocket.send(json.dumps({'message': screen.message}))
+            if screen.message != '':
+                await websocket.send(json.dumps({'message': screen.message}))
 
     def message_loop(self, websocket, sem, uri):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self.send_message(websocket, sem, uri))
 
-    async def secret_room(self, uri):
+    async def secret_room(self, uri, initiator=False):
         try:
             async with websockets.connect(uri) as websocket:
-                sem = Semaphore()
+                if not initiator:
+                    sem = Semaphore()
 
-                while self.stop:
-                    resp = json.loads(await websocket.recv())['message']
+                    while self.stop:
+                        resp = json.loads(await websocket.recv())['message']
 
-                    if not self.screen_manager.has_screen(uri):
-                        Snackbar(text='You got a new message!').show()
-                        message_preview = MessagePreview(size_hint=(1, None), height=dp(60))
-                        message_preview.ids.user.text = uri
-                        message_preview.on_release = lambda: self.profile_callback(self.screen_manager, message_preview.ids.user.text)
-                        chat_screen = Chat(name=message_preview.ids.user.text, sm=self.screen_manager, sem=sem)
-                        receiver = Receiver()
-                        receiver.ids.message.text = resp
-                        chat_screen.message_layout.add_widget(receiver)
-                        self.screen_manager.add_widget(chat_screen)
-                        self.message_layout.add_widget(message_preview)
+                        if not self.screen_manager.has_screen(uri):
+                            Snackbar(text='You got a new message!').show()
+                            message_preview = MessagePreview(size_hint=(1, None), height=dp(60))
+                            message_preview.ids.user.text = uri
+                            message_preview.on_release = lambda: self.profile_callback(self.screen_manager, message_preview.ids.user.text)
+                            chat_screen = Chat(name=message_preview.ids.user.text, sm=self.screen_manager, sem=sem)
+                            receiver = Receiver()
+                            receiver.ids.message.text = resp
+                            chat_screen.message_layout.add_widget(receiver)
+                            self.screen_manager.add_widget(chat_screen)
+                            self.message_layout.add_widget(message_preview)
 
-                        th = Thread(target=self.message_loop, args=(websocket, sem, uri))
-                        th.setDaemon(True)
-                        th.start()
-                    else:
-                        chat_screen = self.screen_manager.get_screen(uri)
+                            th = Thread(target=self.message_loop, args=(websocket, sem, uri))
+                            th.setDaemon(True)
+                            th.start()
+                        else:
+                            chat_screen = self.screen_manager.get_screen(uri)
+
+                            if chat_screen.message != resp:
+                                receiver = Receiver()
+                                receiver.ids.message.text = resp
+                                self.screen_manager.get_screen(uri).message_layout.add_widget(receiver)
+                else:
+                    sem = Semaphore()
+
+                    message_preview = MessagePreview(size_hint=(1, None), height=dp(60))
+                    message_preview.ids.user.text = uri
+                    message_preview.on_release = lambda: self.profile_callback(self.screen_manager, message_preview.ids.user.text)
+                    chat_screen = Chat(name=message_preview.ids.user.text, sm=self.screen_manager, sem=sem)
+                    self.screen_manager.add_widget(chat_screen)
+                    self.message_layout.add_widget(message_preview)
+                    self.screen_manager.current = chat_screen.name
+
+                    th = Thread(target=self.message_loop, args=(websocket, sem, uri))
+                    th.setDaemon(True)
+                    th.start()
+
+                    while self.stop:
+                        resp = json.loads(await websocket.recv())['message']
 
                         if chat_screen.message != resp:
                             receiver = Receiver()
@@ -171,16 +194,27 @@ class Message(Screen):
         except Exception as e:
             print(e)
 
-    def chat(self):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        uri = 'wss://fur-finder-chat.herokuapp.com/ws/chatt/' + str(self.room) + '/'
-        loop.run_until_complete(self.secret_room(uri))
+    def chat(self, value=None):
+        if value is None:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            uri = 'wss://fur-finder-chat.herokuapp.com/ws/chatt/' + str(self.room) + '/'
+            loop.run_until_complete(self.secret_room(uri))
+        else:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            uri = 'wss://fur-finder-chat.herokuapp.com/ws/chatt/' + value + '/'
+            loop.run_until_complete(self.secret_room(uri, True))
 
     def run_chat(self, instance, value):
-        th = Thread(target=self.chat)
-        th.setDaemon(True)
-        th.start()
+        if instance is not None:
+            th = Thread(target=self.chat)
+            th.setDaemon(True)
+            th.start()
+        else:
+            th = Thread(target=self.chat, args=(value, ))
+            th.setDaemon(True)
+            th.start()
 
     async def web(self, uri):
         try:
@@ -203,6 +237,32 @@ class Message(Screen):
         th = Thread(target=self.main)
         th.setDaemon(True)
         th.start()
+
+    async def connect_room(self, uri, user):
+        try:
+            async with websockets.connect(uri) as websocket:
+                await websocket.send(json.dumps({'message': user + self.token}))
+
+        except Exception as e:
+            print(e)
+
+    def send_room(self, user):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        uri = 'wss://fur-finder-chat.herokuapp.com/ws/chatt/' + user + '/'
+        loop.run_until_complete(self.connect_room(uri, user))
+        print('ROOM SENT')
+
+    def run_send_room(self, user):
+        th = Thread(target=self.send_room, args=(user, ))
+        th.setDaemon(True)
+        th.start()
+        th.join()
+
+        self.run_chat(None, user + self.token)
+
+    def init_chat(self, user):
+        self.run_send_room(user)
 
     def profile_callback(self, screen_manager, screen_name):
         screen_manager.current = str(screen_name)

@@ -53,6 +53,7 @@ class CustomCard(AnchorLayout):
     status = StringProperty('N/A')
     summary = StringProperty('N/A')
     zip = StringProperty('N/A')
+    author = StringProperty('N/A')
     icon = StringProperty('')
 
     def __init__(self, **kwargs):
@@ -122,6 +123,7 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             rv.screen_manager.get_screen('Pet').children[0].status = rv.data[index]['status']
             rv.screen_manager.get_screen('Pet').children[0].summary = rv.data[index]['summary']
             rv.screen_manager.get_screen('Pet').children[0].zip = rv.data[index]['zip']
+            rv.screen_manager.get_screen('Pet').children[0].author = rv.data[index]['author']
             rv.screen_manager.current = 'Pet'
             self.selected = False
 
@@ -179,7 +181,8 @@ class Reported(MDApp):
                             'state': pet['state'],
                             'status': pet['status'].upper(),
                             'summary': pet['summary'],
-                            'zip': pet['zip']
+                            'zip': pet['zip'],
+                            'author': pet['author']
                         }
                     )
                 self.refresh_done()
@@ -217,7 +220,8 @@ class Reported(MDApp):
                         'state': pet['state'],
                         'status': pet['status'].upper(),
                         'summary': pet['summary'],
-                        'zip': pet['zip']
+                        'zip': pet['zip'],
+                        'author': pet['author']
                     }
                 )
             self.screen_manager = screen_manager
