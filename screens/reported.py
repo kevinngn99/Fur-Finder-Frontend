@@ -161,13 +161,13 @@ class Reported(MDApp):
             # header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]Filter', markup=True)
             # header.bind(size=header.setter('text_size'))
 
-            foundBtn = ToggleButton(text="Found", group="status")
+            foundBtn = ToggleButton(text="Found", group="1", background_normal='', background_color=get_color_from_hex('#023b80'),font_name='assets/Inter-Medium.ttf')
             foundBtn.bind(on_press=Reported.RV.Foundbutton)
-            lostBtn = ToggleButton(text="Lost", group="status")
+            lostBtn = ToggleButton(text="Lost", group="1", background_normal='', background_color=get_color_from_hex('#023b80'),font_name='assets/Inter-Medium.ttf')
             lostBtn.bind(on_press=Reported.RV.Lostbutton)
-            catBtn = ToggleButton(text="Cat", group="type")
+            catBtn = ToggleButton(text="Cat", group="1", background_normal='', background_color=get_color_from_hex('#023b80'),font_name='assets/Inter-Medium.ttf')
             catBtn.bind(on_press=Reported.RV.Catbutton)
-            dogBtn = ToggleButton(text="Dog", group="type")
+            dogBtn = ToggleButton(text="Dog", group="1", background_normal='', background_color=get_color_from_hex('#023b80'),font_name='assets/Inter-Medium.ttf')
             dogBtn.bind(on_press=Reported.RV.Dogbutton)
             box_layout.add_widget(foundBtn)
             box_layout.add_widget(lostBtn)
@@ -312,8 +312,10 @@ class Reported(MDApp):
             print('The button <%s> is being pressed' % instance.text)
 
 
+
         def Dogbutton(instance):
             print('The button <%s> is being pressed' % instance.text)
+
 
         def Foundbutton(instance):
             print('The button <%s> is being pressed' % instance.text)
