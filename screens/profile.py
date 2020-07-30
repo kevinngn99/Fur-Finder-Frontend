@@ -128,6 +128,9 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
 
 
 class Profile(MDApp):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     class CustomScreen(Screen):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
@@ -180,7 +183,9 @@ class Profile(MDApp):
             headers = {
                 'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
             }
+
             data = s.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
+
             return data
 
         def callback(self, r, **kwargs):
@@ -218,14 +223,15 @@ class Profile(MDApp):
 
             Clock.schedule_once(refresh_callback, 1)
 
-        def __init__(self, screen_manager=None, **kwargs):
+        def __init__(self, screen_manager=None, pets_list=None, **kwargs):
             super().__init__(**kwargs)
+            #print("hello")
+            #print(self.data)
+
             self.load = False
-            self.data = []
-            pets = self.getReportedPetsFromBackend()
             self.refresh_callback = self.refresh_callback
-            #self.root_layout = self.root
-            for pet in reversed(pets):
+            self.root_layout = self.root
+            for pet in reversed(pets_list):
                 self.data.append(
                     {
                         'age': pet['age'],
@@ -241,15 +247,17 @@ class Profile(MDApp):
                         'state': pet['state'],
                         'status': pet['status'].upper(),
                         'summary': pet['summary'],
-                        'zip': pet['zip']
+                        'zip': pet['zip'],
+                        'author': pet['author']
                     }
                 )
             self.screen_manager = screen_manager
             self.load = True
 
-    def create(self):
+    def create(self, data):
+        print("hey")
+        print(data)
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
-
         box_layout = BoxLayout(orientation='vertical')
         grid_layout = GridLayout(cols=1)
         header = self.Header().create()
@@ -257,8 +265,8 @@ class Profile(MDApp):
         lasthead = self.LastHead().create()
         anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(0), dp(20), dp(0)))
         anchor_layout2 = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(0), dp(20), dp(0)))
-        rv2 = self.RV2(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
-        rv3 = self.RV2(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1),
+        rv2 = self.RV2(pets_list=data, smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
+        rv3 = self.RV2(pets_list=data, smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1),
                        effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
 
         anchor_layout.add_widget(rv2)
@@ -272,11 +280,11 @@ class Profile(MDApp):
         rv_screen = Screen(name='RV')
         rv_screen.add_widget(grid_layout)
 
-        pet_screen = Screen(name='Pet')
-        pet_screen.add_widget(Pet().create(screen_manager))
+        #pet_screen = Screen(name='Pet')
+        #pet_screen.add_widget(Pet().create(screen_manager))
 
         screen_manager.add_widget(rv_screen)
-        screen_manager.add_widget(pet_screen)
+        #screen_manager.add_widget(pet_screen)
 
         reported_screen = self.CustomScreen(name='Profile')
         reported_screen.add_widget(screen_manager)

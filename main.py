@@ -33,13 +33,14 @@ class MyClass(MDApp):
         box_layout = self.CustomBoxLayout(orientation='vertical')
         box_layout.fbind('size', box_layout.size_callback)
 
-        screens = Screens().create()
+
         sm = ScreenManager()
         register_screen = Register().create()
         login_screen = Login().create()
         sm.add_widget(login_screen)
         sm.add_widget(register_screen)
 
+        screens = Screens().create()
         app = Screen(name='App')
         navigation = Navigation(screens).create()
         box_layout.add_widget(screens)
