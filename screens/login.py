@@ -28,9 +28,11 @@ class LoginView(Screen):
         global token
         global usr
         global pets_list
+        global author
         token = None
         usr = None
         pets_list = None
+        author = None
         self.sm = sm
         self.m = m
         self.screens = screens
@@ -43,7 +45,6 @@ class LoginView(Screen):
         }
         pets = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
         users = requests.get(url='https://fur-finder.herokuapp.com/api/register//').json()
-        author = ''
         pets_list = []
 
         for user in users:
@@ -55,12 +56,13 @@ class LoginView(Screen):
                 pets_list.append(pet)
 
         print(pets_list)
+        author = author.split('@', 1)[0]
         regex = re.compile('[^a-zA-Z]')
         self.m.token = regex.sub('', author)
         LoginView.usr = self.m.token
         print(self.m.token)
-
         LoginView.pets_list = pets_list
+        LoginView.author = author
         return pets_list
 
     def getUser(self):
@@ -82,7 +84,8 @@ class LoginView(Screen):
                 toast(text)
         else:
             pet_list = self.get_pets_by_author()
-            self.screens.add_widget(Profile().create(pet_list))
+            #print(LoginView.author)
+            self.screens.add_widget(Profile().create(pet_list, LoginView.author))
             self.sm.current = 'App'
             LoginView.token = res.json()['token']
             self.access_token = LoginView.token

@@ -4,7 +4,6 @@
     username_text: username
     password_text: password
     BackgroundBox:
-
     MDCard:
         orientation:'vertical'
         size_hint: [0.8,0.4]
@@ -30,6 +29,7 @@
                 pos_hint: {"center_x": .5, "center_y": .5}
                 on_release:
                     root.getUser()
+
             MDFillRoundFlatIconButton:
                 icon: "account-circle"
                 text: "Sign Up"
@@ -38,15 +38,17 @@
                     root.manager.current = 'register'
 
 
+
 <BackgroundBox>:
-    orientation: 'horizontal'
+    orientation: 'vertical'
     BoxLayout:
         orientation: 'vertical'
         canvas.before:
             Color:
-            ##f6f7fb #023b80
                 rgba: utils.get_color_from_hex('#023b80')
             RoundedRectangle:
                 pos:self.pos
                 size: self.size
                 radius: [0,0,20,20]
+    BoxLayout:
+        orientation: 'vertical'
