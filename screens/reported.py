@@ -182,14 +182,14 @@ def getLostPetsFromBackend():
             )
     return newdata
 
-def getCatsFromBackend():
+def getFemaleFromBackend():
     headers = {
         'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
     }
     data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
     newdata = []
     for pet in reversed(data):
-        if (pet['breed'] == "Cat"):
+        if (pet['gender'] == "Female"):
             newdata.append(
                 {
                     'age': pet['age'],
@@ -205,19 +205,20 @@ def getCatsFromBackend():
                     'state': pet['state'],
                     'status': pet['status'].upper(),
                     'summary': pet['summary'],
-                    'zip': pet['zip']
+                    'zip': pet['zip'],
+                    'author': pet["author"]
                 }
             )
     return newdata
 
-def getDogsFromBackend():
+def getMaleFromBackend():
     headers = {
         'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
     }
     data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
     newdata = []
     for pet in reversed(data):
-        if (pet['breed'] == "Dog"):
+        if (pet['gender'] == "Male"):
             newdata.append(
                 {
                     'age': pet['age'],
@@ -233,7 +234,8 @@ def getDogsFromBackend():
                     'state': pet['state'],
                     'status': pet['status'].upper(),
                     'summary': pet['summary'],
-                    'zip': pet['zip']
+                    'zip': pet['zip'],
+                    'author': pet['author']
                 }
             )
     return newdata
@@ -396,50 +398,97 @@ class Reported(MDApp):
                 }
             )
 
-    def Catbutton(self, instance):
-        print(instance)
+    def Femalebutton(self, instance, rv=None):
+        rv.data.clear()
+        rv.refresh_from_data()
+        data = getFemaleFromBackend()
+        print(data)
+        for pet in reversed(data):
+            rv.data.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['pet_size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip'],
+                    'author': pet['author']
+                }
+            )
 
-    def Dogbutton(self, instance):
-        print(instance)
+    def Malebutton(self, instance, rv=None):
+        rv.data.clear()
+        rv.refresh_from_data()
+        data = getMaleFromBackend()
+        print(data)
+        for pet in reversed(data):
+            rv.data.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['pet_size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip'],
+                    'author': pet['author']
+                }
+            )
+
 
     def create(self):
-        screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
+            screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
 
-        box_layout = BoxLayout(orientation='vertical')
-        header = self.Header().create()
-        anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(20), dp(20), dp(20)))
-        rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1),
-                     effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
-        anchor_layout.add_widget(rv)
-        box_layout.add_widget(header)
+            box_layout = BoxLayout(orientation='vertical')
+            header = self.Header().create()
+            anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(20), dp(20), dp(20)))
+            rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1),
+                         effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
+            anchor_layout.add_widget(rv)
+            box_layout.add_widget(header)
 
-        filter_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
-        foundBtn = Button(text="Found", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-        foundBtn.fbind('on_press', self.Foundbutton, rv=rv)
-        lostBtn = ToggleButton(text="Lost", group="1", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-        lostBtn.fbind('on_press', self.Lostbutton, rv=rv)
-        catBtn = ToggleButton(text="Cat", group="1", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-        catBtn.fbind('on_press', self.Catbutton)
-        dogBtn = ToggleButton(text="Dog", group="1", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-        dogBtn.fbind('on_press', self.Dogbutton)
-        filter_layout.add_widget(foundBtn)
-        filter_layout.add_widget(lostBtn)
-        filter_layout.add_widget(catBtn)
-        filter_layout.add_widget(dogBtn)
+            filter_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
+            foundBtn = Button(text="Found", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+            foundBtn.fbind('on_press', self.Foundbutton, rv=rv)
+            lostBtn = Button(text="Lost", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+            lostBtn.fbind('on_press', self.Lostbutton, rv=rv)
+            femaleBtn = Button(text="Female", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+            femaleBtn.fbind('on_press', self.Femalebutton,rv=rv)
+            maleBtn = Button(text="Male", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+            maleBtn.fbind('on_press', self.Malebutton,rv=rv)
+            filter_layout.add_widget(foundBtn)
+            filter_layout.add_widget(lostBtn)
+            filter_layout.add_widget(femaleBtn)
+            filter_layout.add_widget(maleBtn)
 
-        box_layout.add_widget(filter_layout)
-        box_layout.add_widget(anchor_layout)
+            box_layout.add_widget(filter_layout)
+            box_layout.add_widget(anchor_layout)
 
-        rv_screen = Screen(name='RV')
-        rv_screen.add_widget(box_layout)
+            rv_screen = Screen(name='RV')
+            rv_screen.add_widget(box_layout)
 
-        pet_screen = Screen(name='Pet')
-        pet_screen.add_widget(Pet(root_sm=self.root_sm).create(screen_manager))
+            pet_screen = Screen(name='Pet')
+            pet_screen.add_widget(Pet(root_sm=self.root_sm).create(screen_manager))
 
-        screen_manager.add_widget(rv_screen)
-        screen_manager.add_widget(pet_screen)
+            screen_manager.add_widget(rv_screen)
+            screen_manager.add_widget(pet_screen)
 
-        reported_screen = self.CustomScreen(name='Reported')
-        reported_screen.add_widget(screen_manager)
+            reported_screen = self.CustomScreen(name='Reported')
+            reported_screen.add_widget(screen_manager)
 
-        return reported_screen
+            return reported_screen
