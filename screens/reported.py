@@ -31,7 +31,6 @@ from threading import Thread
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/reported.kv'))
 
-stateOfFilter=[True,True,True,True]
 
 class WickedAnchorLayout(AnchorLayout, StencilView):
     pass
@@ -78,7 +77,8 @@ class CustomCard(AnchorLayout):
                 instance.size = (dp(value[0] * scale), dp(value[1] * scale))
 
     def add_image(self):
-        self.custom_image = AsyncImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=None)
+        self.custom_image = AsyncImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5},
+                                       keep_ratio=True, allow_stretch=True, source=None)
         anchor_layout = WickedAnchorLayout(size_hint=(None, None), size=(dp(150), dp(134)))
         anchor_layout.add_widget(self.custom_image)
         self.ids.photo.add_widget(anchor_layout)
@@ -125,136 +125,32 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             rv.screen_manager.current = 'Pet'
             self.selected = False
 
-def getFoundPetsFromBackend():
+
+def filterBackend(male, female, lost, found):
     headers = {
         'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
     }
     data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
     newdata = []
-    for pet in reversed(data):
-        if (pet['status'] == "Found"):
-            newdata.append(
-                {
-                    'age': pet['age'],
-                    'breed': pet['breed'],
-                    'city': pet['city'],
-                    'color': pet['color'],
-                    'date': pet['date'],
-                    'gender': pet['gender'],
-                    'images': pet['images'],
-                    'name': pet['name'],
-                    'petid': pet['petid'],
-                    'pet_size': pet['size'],
-                    'state': pet['state'],
-                    'status': pet['status'].upper(),
-                    'summary': pet['summary'],
-                    'zip': pet['zip'],
-                    'author': pet['author']
-                }
-            )
-    return newdata
-
-def getLostPetsFromBackend():
-    headers = {
-        'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
-    }
-    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-    newdata = []
-    for pet in reversed(data):
-        if (pet['status'] == "Lost"):
-            newdata.append(
-                {
-                    'age': pet['age'],
-                    'breed': pet['breed'],
-                    'city': pet['city'],
-                    'color': pet['color'],
-                    'date': pet['date'],
-                    'gender': pet['gender'],
-                    'images': pet['images'],
-                    'name': pet['name'],
-                    'petid': pet['petid'],
-                    'pet_size': pet['size'],
-                    'state': pet['state'],
-                    'status': pet['status'].upper(),
-                    'summary': pet['summary'],
-                    'zip': pet['zip'],
-                    'author': pet['author']
-                }
-            )
-    return newdata
-
-def getFemaleFromBackend():
-    headers = {
-        'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
-    }
-    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-    newdata = []
-    for pet in reversed(data):
-        if (pet['gender'] == "Female"):
-            newdata.append(
-                {
-                    'age': pet['age'],
-                    'breed': pet['breed'],
-                    'city': pet['city'],
-                    'color': pet['color'],
-                    'date': pet['date'],
-                    'gender': pet['gender'],
-                    'images': pet['images'],
-                    'name': pet['name'],
-                    'petid': pet['petid'],
-                    'pet_size': pet['size'],
-                    'state': pet['state'],
-                    'status': pet['status'].upper(),
-                    'summary': pet['summary'],
-                    'zip': pet['zip'],
-                    'author': pet["author"]
-                }
-            )
-    return newdata
-def filterBackend(male,female,lost,found):
-
-    headers = {
-        'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
-    }
-    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-    newdata = []
-    if male == True: gender = "Male"
-    else: gender="Female"
-    if lost == True: status="Lost"
-    else: status = "Found"
+    if male == True:
+        gender = "Male"
+    else:
+        gender = "Female"
+    if female == True:
+        gender = "Female"
+    else:
+        gender = "Male"
+    if lost == True:
+        status = "Lost"
+    else:
+        status = "Found"
+    if found == True:
+        status = "Found"
+    else:
+        status = "Lost"
     for pet in reversed(data):
 
-        if (pet['gender'] == gender or pet["status"]==status):
-            newdata.append(
-                {
-                    'age': pet['age'],
-                    'breed': pet['breed'],
-                    'city': pet['city'],
-                    'color': pet['color'],
-                    'date': pet['date'],
-                    'gender': pet['gender'],
-                    'images': pet['images'],
-                    'name': pet['name'],
-                    'petid': pet['petid'],
-                    'pet_size': pet['size'],
-                    'state': pet['state'],
-                    'status': pet['status'].upper(),
-                    'summary': pet['summary'],
-                    'zip': pet['zip'],
-                    'author': pet['author']
-                }
-            )
-    return newdata
-
-
-def getMaleFromBackend():
-    headers = {
-        'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
-    }
-    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-    newdata = []
-    for pet in reversed(data):
-        if (pet['gender'] == "Male"):
+        if (pet['gender'] == gender and pet["status"] == status):
             newdata.append(
                 {
                     'age': pet['age'],
@@ -278,6 +174,8 @@ def getMaleFromBackend():
 
 
 class Reported(MDApp):
+    stateOfFilter = [True, True, True, False]
+
     class CustomScreen(Screen):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
@@ -382,11 +280,27 @@ class Reported(MDApp):
         super().__init__(**kwargs)
         self.root_sm = root_sm
 
-    def Foundbutton(self, instance, rv=None):
+    def stateOfButtons(self, instance, value, rv=None):
+        print(instance.text, value)  # male,female,lost,found
+        if instance.text == "Found" and value == "down":
+            self.stateOfFilter[3] = True
+            self.stateOfFilter[2] = False
+
+        if instance.text == "Male" and value == "down":
+            self.stateOfFilter[0] = True
+            self.stateOfFilter[1] = False
+
+        if instance.text == "Female" and value == "down":
+            self.stateOfFilter[0] = False
+            self.stateOfFilter[1] = True
+
+        if instance.text == "Lost" and value == "down":
+            self.stateOfFilter[2] = True
+            self.stateOfFilter[3] = False
 
         rv.data.clear()
         rv.refresh_from_data()
-        data = getFoundPetsFromBackend()
+        data = filterBackend(self.stateOfFilter[0], self.stateOfFilter[1], self.stateOfFilter[2], self.stateOfFilter[3])
         print(data)
         for pet in reversed(data):
             rv.data.append(
@@ -408,171 +322,53 @@ class Reported(MDApp):
                     'author': pet['author']
                 }
             )
-
-    def Lostbutton(self, instance, rv=None):
-        rv.data.clear()
-        rv.refresh_from_data()
-        data = getLostPetsFromBackend()
-        print(data)
-        for pet in reversed(data):
-            rv.data.append(
-                {
-                    'age': pet['age'],
-                    'breed': pet['breed'],
-                    'city': pet['city'],
-                    'color': pet['color'],
-                    'date': pet['date'],
-                    'gender': pet['gender'],
-                    'images': pet['images'],
-                    'name': pet['name'],
-                    'petid': pet['petid'],
-                    'pet_size': pet['pet_size'],
-                    'state': pet['state'],
-                    'status': pet['status'].upper(),
-                    'summary': pet['summary'],
-                    'zip': pet['zip'],
-                    'author': pet['author']
-                }
-            )
-
-    def Femalebutton(self, instance, rv=None):
-        rv.data.clear()
-        rv.refresh_from_data()
-        data = getFemaleFromBackend()
-        print(data)
-        for pet in reversed(data):
-            rv.data.append(
-                {
-                    'age': pet['age'],
-                    'breed': pet['breed'],
-                    'city': pet['city'],
-                    'color': pet['color'],
-                    'date': pet['date'],
-                    'gender': pet['gender'],
-                    'images': pet['images'],
-                    'name': pet['name'],
-                    'petid': pet['petid'],
-                    'pet_size': pet['pet_size'],
-                    'state': pet['state'],
-                    'status': pet['status'].upper(),
-                    'summary': pet['summary'],
-                    'zip': pet['zip'],
-                    'author': pet['author']
-                }
-            )
-
-    def Malebutton(self, instance, rv=None):
-        rv.data.clear()
-        rv.refresh_from_data()
-        data = getMaleFromBackend()
-        print(data)
-        for pet in reversed(data):
-            rv.data.append(
-                {
-                    'age': pet['age'],
-                    'breed': pet['breed'],
-                    'city': pet['city'],
-                    'color': pet['color'],
-                    'date': pet['date'],
-                    'gender': pet['gender'],
-                    'images': pet['images'],
-                    'name': pet['name'],
-                    'petid': pet['petid'],
-                    'pet_size': pet['pet_size'],
-                    'state': pet['state'],
-                    'status': pet['status'].upper(),
-                    'summary': pet['summary'],
-                    'zip': pet['zip'],
-                    'author': pet['author']
-                }
-            )
-
-    def stateOfButtons(self,instance,value,rv=None):
-        print(instance.text,value)
-        if instance.text=="Found" and value == "down":
-            stateOfFilter[3]=True
-            stateOfFilter[2]=False
-        else:
-            stateOfFilter[3]=False
-            stateOfFilter[2]=True
-
-        if instance.text=="Male" and value == "down":
-            stateOfFilter[0]=True
-            stateOfFilter[1]=False
-        else:
-            stateOfFilter[1]=False
-            stateOfFilter[0]=True
-
-        rv.data.clear()
-        rv.refresh_from_data()
-        data=filterBackend(stateOfFilter[0],stateOfFilter[1],stateOfFilter[2],stateOfFilter[3])
-        print(data)
-        for pet in reversed(data):
-            rv.data.append(
-                {
-                    'age': pet['age'],
-                    'breed': pet['breed'],
-                    'city': pet['city'],
-                    'color': pet['color'],
-                    'date': pet['date'],
-                    'gender': pet['gender'],
-                    'images': pet['images'],
-                    'name': pet['name'],
-                    'petid': pet['petid'],
-                    'pet_size': pet['pet_size'],
-                    'state': pet['state'],
-                    'status': pet['status'].upper(),
-                    'summary': pet['summary'],
-                    'zip': pet['zip'],
-                    'author': pet['author']
-                }
-            )
-
-
 
     def create(self):
-            screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
+        screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
 
+        box_layout = BoxLayout(orientation='vertical')
+        header = self.Header().create()
+        anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(20), dp(20), dp(20)))
+        rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1),
+                     effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
+        anchor_layout.add_widget(rv)
+        box_layout.add_widget(header)
 
-            box_layout = BoxLayout(orientation='vertical')
-            header = self.Header().create()
-            anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(20), dp(20), dp(20)))
-            rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1),
-                         effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
-            anchor_layout.add_widget(rv)
-            box_layout.add_widget(header)
+        filter_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
+        foundBtn = ToggleButton(text="Found", group="status", background_normal='',
+                                background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
 
-            filter_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
-            foundBtn = ToggleButton(text="Found", group="status", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-            foundBtn.fbind('on_press', self.Foundbutton, rv=rv)
-            foundBtn.fbind('state', self.stateOfButtons, rv=rv)
-            lostBtn = ToggleButton(text="Lost",group="status", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-            lostBtn.fbind('on_press', self.Lostbutton, rv=rv)
-            lostBtn.fbind('state', self.stateOfButtons, rv=rv)
-            femaleBtn = ToggleButton(text="Female",group="gender", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-            femaleBtn.fbind('on_press', self.Femalebutton,rv=rv)
-            femaleBtn.fbind('state', self.stateOfButtons, rv=rv)
-            maleBtn = ToggleButton(text="Male",group="gender", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-            maleBtn.fbind('on_press', self.Malebutton,rv=rv)
-            maleBtn.fbind('state', self.stateOfButtons, rv=rv)
-            filter_layout.add_widget(foundBtn)
-            filter_layout.add_widget(lostBtn)
-            filter_layout.add_widget(femaleBtn)
-            filter_layout.add_widget(maleBtn)
+        foundBtn.fbind('state', self.stateOfButtons, rv=rv)
+        lostBtn = ToggleButton(text="Lost", group="status", background_normal='',
+                               background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
 
-            box_layout.add_widget(filter_layout)
-            box_layout.add_widget(anchor_layout)
+        lostBtn.fbind('state', self.stateOfButtons, rv=rv)
+        femaleBtn = ToggleButton(text="Female", group="gender", background_normal='',
+                                 background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
 
-            rv_screen = Screen(name='RV')
-            rv_screen.add_widget(box_layout)
+        femaleBtn.fbind('state', self.stateOfButtons, rv=rv)
+        maleBtn = ToggleButton(text="Male", group="gender", background_normal='',
+                               background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
 
-            pet_screen = Screen(name='Pet')
-            pet_screen.add_widget(Pet(root_sm=self.root_sm).create(screen_manager))
+        maleBtn.fbind('state', self.stateOfButtons, rv=rv)
+        filter_layout.add_widget(foundBtn)
+        filter_layout.add_widget(lostBtn)
+        filter_layout.add_widget(femaleBtn)
+        filter_layout.add_widget(maleBtn)
 
-            screen_manager.add_widget(rv_screen)
-            screen_manager.add_widget(pet_screen)
+        box_layout.add_widget(filter_layout)
+        box_layout.add_widget(anchor_layout)
 
-            reported_screen = self.CustomScreen(name='Reported')
-            reported_screen.add_widget(screen_manager)
+        rv_screen = Screen(name='RV')
+        rv_screen.add_widget(box_layout)
 
-            return reported_screen
+        pet_screen = Screen(name='Pet')
+        pet_screen.add_widget(Pet(root_sm=self.root_sm).create(screen_manager))
+
+        screen_manager.add_widget(rv_screen)
+        screen_manager.add_widget(pet_screen)
+
+        reported_screen = self.CustomScreen(name='Reported')
+        reported_screen.add_widget(screen_manager)
+
+        return reported_screen
