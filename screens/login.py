@@ -1,13 +1,12 @@
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen
-from kivymd.toast import toast
-from kivy.properties import StringProperty
+from kivymd.uix.snackbar import Snackbar
+from screens.profile import Profile
+
 import os
 import requests
-import json
 import re
-from screens.profile import Profile
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/login.kv'))
 
@@ -17,8 +16,6 @@ class BackgroundBox(BoxLayout):
 
 
 class LoginView(Screen):
-    access_token = StringProperty('')
-
     def __init__(self, sm=None, screens=None, m=None, **kw):
         super().__init__(**kw)
         global token
@@ -63,27 +60,15 @@ class LoginView(Screen):
     def getUser(self):
         data = {'username': self.username_text.text, 'password': self.password_text.text}
         res = requests.post(url='https://fur-finder.herokuapp.com/api/login/', data=data)
-        if res.status_code == 400:
-            rmv = "['.]"
-            dict = json.loads(res.text)
-            print("we here")
-            if "username" in dict:
-                text = str(dict.get("username"))
-                for ch in rmv:
-                    text = text.replace(ch, "")
-                toast(text)
-            elif "password" in dict:
-                text = str(dict.get("password"))
-                for ch in rmv:
-                    text = text.replace(ch, "")
-                toast(text)
-        else:
+        print(res.status_code)
+        if res.status_code == 200:
             pet_list = self.get_pets_by_author()
             self.screens.add_widget(Profile().create(pet_list, LoginView.author))
-            self.sm.current = 'App'
             LoginView.token = res.json()['token']
-            self.access_token = LoginView.token
             print(LoginView.token)
+            self.sm.current = 'App'
+        else:
+            Snackbar(text='Invalid credentials, try again.').show()
 
 
 class Login:

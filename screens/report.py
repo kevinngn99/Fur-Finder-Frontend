@@ -373,7 +373,12 @@ class Report(MDApp):
 
             pet_list_size = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
             data['petid'] = len(pet_list_size) - 1
-            s.post('http://fur-finder.herokuapp.com/api/pets//', data=data, files=self.raw_images, headers=headers)
+            resp = s.post('http://fur-finder.herokuapp.com/api/pets//', data=data, files=self.raw_images, headers=headers)
+
+            if resp.ok:
+                pass
+            else:
+                print(resp.text)
 
         def callback(self, r, **kwargs):
             print(r.text)
