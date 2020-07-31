@@ -11,6 +11,7 @@ import os
 import requests
 import json
 import re
+from screens.profile import Profile
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/login.kv'))
 
@@ -22,7 +23,7 @@ class BackgroundBox(BoxLayout):
 class LoginView(Screen):
     access_token = StringProperty('')
 
-    def __init__(self, sm=None, m=None, **kw):
+    def __init__(self, sm=None, screens=None, m=None, **kw):
         super().__init__(**kw)
         global token
         global usr
@@ -32,6 +33,7 @@ class LoginView(Screen):
         pets_list = None
         self.sm = sm
         self.m = m
+        self.screens = screens
 
     def get_pets_by_author(self):
         print(self.username_text.text)
@@ -62,7 +64,6 @@ class LoginView(Screen):
         return pets_list
 
     def getUser(self):
-        self.get_pets_by_author()
         data = {'username': self.username_text.text, 'password': self.password_text.text}
         res = requests.post(url='https://fur-finder.herokuapp.com/api/login/', data=data)
         if res.status_code == 400:
@@ -80,6 +81,8 @@ class LoginView(Screen):
                     text = text.replace(ch, "")
                 toast(text)
         else:
+            pet_list = self.get_pets_by_author()
+            self.screens.add_widget(Profile().create(pet_list))
             self.sm.current = 'App'
             LoginView.token = res.json()['token']
             self.access_token = LoginView.token
@@ -87,11 +90,12 @@ class LoginView(Screen):
 
 
 class Login:
-    def __init__(self, sm=None, m=None):
+    def __init__(self, sm=None, screens=None, m=None):
         super().__init__()
         self.sm = sm
         self.m = m
+        self.screens = screens
 
     def create(self):
-        login_screen = LoginView(sm=self.sm, m=self.m, name="login")
+        login_screen = LoginView(sm=self.sm, screens=self.screens, m=self.m, name="login")
         return login_screen

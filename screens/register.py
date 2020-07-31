@@ -28,12 +28,6 @@ class RegisterView(Screen):
         print(self.password2_text.text)
 
     def postUser(self):
-        print('BRUH')
-        #checks:
-        #no other username or email like that exists
-        #password1 and 2 are the same
-        #email is legit
-        #data = {'username': self.username_text.text, 'password': self.password_text.text}
         data = {'email': self.email_text.text, 'username': self.username_text.text,
                 'password': self.password_text.text, 'password2': self.password2_text.text}
         if self.password2_text.text != self.password_text.text:
@@ -41,6 +35,7 @@ class RegisterView(Screen):
         else:
             res = requests.post(url='https://fur-finder.herokuapp.com/api/register//', data=data)
             print(res.status_code)
+            print(res.text)
             if res.status_code == 400:
                 rmv = "['.]"
                 dict = json.loads(res.text)
@@ -59,7 +54,7 @@ class RegisterView(Screen):
 class Register:
 
     def __init__(self):
-        super().__init__()
+        super().__init__
 
     def create(self):
        register_screen = RegisterView(name="register")

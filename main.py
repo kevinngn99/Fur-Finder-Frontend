@@ -36,7 +36,7 @@ class MyClass(MDApp):
         screens = Screens().create()
         navigation = Navigation(screens).create()
         register_screen = Register().create()
-        login_screen = Login(sm, screens.get_screen('Message')).create()
+        login_screen = Login(sm, screens, screens.get_screen('Message')).create()
 
         box_layout.add_widget(screens)
         box_layout.add_widget(navigation)
