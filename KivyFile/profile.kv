@@ -153,8 +153,8 @@
             AnchorLayout:
                 size_hint: None, 1
                 width: dp(25)
-                Label:
-                    id: chevron
+                MDTextButton:
+                    id: trashbin
                     size_hint: 1, 1
                     text: root.icon
                     font_name: 'assets/Font-Awesome.ttf'
@@ -163,3 +163,6 @@
                     halign: 'center'
                     valign: 'center'
                     text_size: self.size
+                    on_release:
+                        root.delete_pet()
+

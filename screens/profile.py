@@ -29,6 +29,8 @@ from threading import Thread
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/profile.kv'))
 
 
+
+
 class ProfileAnchorLayout(AnchorLayout, StencilView):
     pass
 
@@ -78,6 +80,14 @@ class ProfileCustomCard(AnchorLayout):
         anchor_layout.add_widget(self.custom_image)
         self.ids.photo.add_widget(anchor_layout)
 
+    def delete_pet(self):
+        print(self.petid)
+        headers = {
+            'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
+        }
+
+        r = requests.delete(url='https://fur-finder.herokuapp.com/api/pets//'+self.petid, headers=headers)
+        print(r.text)
 
 class ProfileSelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior, RecycleBoxLayout):
     pass
@@ -102,13 +112,13 @@ class ProfileSelectableCard(RecycleDataViewBehavior, ProfileCustomCard):
 
     def apply_selection(self, rv, index, is_selected):
         if self.selected:
-
             self.selected = False
 
 
 class Profile(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
 
     class CustomScreen(Screen):
         def __init__(self, **kwargs):
@@ -121,7 +131,7 @@ class Profile(MDApp):
 
     class Header:
         def create(self):
-            anchor_layout = AnchorLayout(size_hint=(1, 0.2), anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(20), dp(0)))
+            anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(0), dp(0)))
             header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]Profile Page', markup=True)
             header.bind(size=header.setter('text_size'))
             anchor_layout.add_widget(header)
@@ -129,19 +139,12 @@ class Profile(MDApp):
 
     class MidHead:
         def create(self):
-            anchor_layout = AnchorLayout(size_hint=(1, 0.3), anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(20), dp(0)))
+            anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(0), dp(0)))
             header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]My Reported Pets', markup=True)
             header.bind(size=header.setter('text_size'))
             anchor_layout.add_widget(header)
             return anchor_layout
 
-    class LastHead:
-        def create(self):
-            anchor_layout = AnchorLayout(size_hint=(1, 0.3), anchor_x='left', anchor_y='top', padding=(dp(20), dp(20), dp(20), dp(0)))
-            header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]My Pinned Pets', markup=True)
-            header.bind(size=header.setter('text_size'))
-            anchor_layout.add_widget(header)
-            return anchor_layout
 
     class ProfileRV(RecycleView):
         root = ObjectProperty()
@@ -153,22 +156,21 @@ class Profile(MDApp):
                 'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
             }
 
-            #data = s.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-            pets = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-            pets_list = []
-
-            for pet in pets:
-                if pet['author'] == self.author:
-                    pets_list.append(pet)
-
-            print(pets_list)
-            return pets_list
+            pets = s.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
+            return pets
 
         def callback(self, r, **kwargs):
             if self.load:
                 self.data.clear()
                 self.refresh_from_data()
-                for pet in reversed(r.json()):
+                pets_list = []
+                #print(r.json())
+                for pet in r.json():
+                    if pet['author'] == self.author:
+                        pets_list.append(pet)
+                print(pets_list)
+                print(self.author)
+                for pet in reversed(pets_list):
                     self.data.append(
                         {
                             'age': pet['age'],
@@ -236,28 +238,17 @@ class Profile(MDApp):
         grid_layout = GridLayout(cols=1)
         header = self.Header().create()
         midhead = self.MidHead().create()
-        lasthead = self.LastHead().create()
         anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(0), dp(20), dp(0)))
         anchor_layout2 = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(0), dp(20), dp(0)))
         rv2 = self.ProfileRV(pets_list=data, author=author, smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
-        rv3 = self.ProfileRV(pets_list=data, author=author,smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
 
         anchor_layout.add_widget(rv2)
-        anchor_layout2.add_widget(rv3)
-
         grid_layout.add_widget(header)
         grid_layout.add_widget(midhead)
         grid_layout.add_widget(anchor_layout)
-        grid_layout.add_widget(lasthead)
-        grid_layout.add_widget(anchor_layout2)
         rv_screen = Screen(name='RV2')
         rv_screen.add_widget(grid_layout)
-
-        #pet_screen = Screen(name='Pet')
-        #pet_screen.add_widget(Pet().create(screen_manager))
-
         screen_manager.add_widget(rv_screen)
-        #screen_manager.add_widget(pet_screen)
 
         reported_screen = self.CustomScreen(name='Profile')
         reported_screen.add_widget(screen_manager)
