@@ -15,7 +15,7 @@ from kivymd.app import MDApp
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/register.kv'))
 
 
-class BackgroundBox(BoxLayout):
+class BackgroundBox2(BoxLayout):
     pass
 
 
@@ -50,7 +50,9 @@ class RegisterView(Screen):
                     for ch in rmv:
                         text = text.replace(ch, "")
                     toast(text)
-
+            else:
+                print("registered")
+                self.manager.current = 'App'
 class Register:
 
     def __init__(self):
