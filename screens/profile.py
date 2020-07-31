@@ -31,7 +31,7 @@ from threading import Thread
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/profile.kv'))
 
 
-class CustomAnchorLayout(AnchorLayout, StencilView):
+class ProfileAnchorLayout(AnchorLayout, StencilView):
     pass
 
 
@@ -50,7 +50,7 @@ class ProfileCustomCard(AnchorLayout):
     status = StringProperty('N/A')
     summary = StringProperty('N/A')
     zip = StringProperty('N/A')
-    icon = StringProperty('')
+    icon = StringProperty('')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -76,7 +76,7 @@ class ProfileCustomCard(AnchorLayout):
 
     def add_image(self):
         self.custom_image = AsyncImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=None)
-        anchor_layout = CustomAnchorLayout(size_hint=(None, None), size=(dp(150), dp(134)))
+        anchor_layout = ProfileAnchorLayout(size_hint=(None, None), size=(dp(150), dp(134)))
         anchor_layout.add_widget(self.custom_image)
         self.ids.photo.add_widget(anchor_layout)
 
