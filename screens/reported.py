@@ -31,7 +31,7 @@ from threading import Thread
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/reported.kv'))
 
-stateOfFilter=[True,True,True,True]
+
 
 class WickedAnchorLayout(AnchorLayout, StencilView):
     pass
@@ -220,11 +220,15 @@ def filterBackend(male,female,lost,found):
     newdata = []
     if male == True: gender = "Male"
     else: gender="Female"
+    if female == True: gender = "Female"
+    else: gender="Male"
     if lost == True: status="Lost"
     else: status = "Found"
+    if found == True: status="Found"
+    else: status = "Lost"
     for pet in reversed(data):
 
-        if (pet['gender'] == gender or pet["status"]==status):
+        if (pet['gender'] == gender and pet["status"]==status):
             newdata.append(
                 {
                     'age': pet['age'],
@@ -278,6 +282,7 @@ def getMaleFromBackend():
 
 
 class Reported(MDApp):
+    stateOfFilter = [True, True, True, False]
     class CustomScreen(Screen):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
@@ -302,6 +307,7 @@ class Reported(MDApp):
 
     class RV(RecycleView):
         root = ObjectProperty()
+
 
         def getReportedPetsFromBackend(self):
             s = requests.Session()
@@ -488,24 +494,28 @@ class Reported(MDApp):
             )
 
     def stateOfButtons(self,instance,value,rv=None):
-        print(instance.text,value)
-        if instance.text=="Found" and value == "down":
-            stateOfFilter[3]=True
-            stateOfFilter[2]=False
-        else:
-            stateOfFilter[3]=False
-            stateOfFilter[2]=True
+        print(instance.text,value) #male,female,lost,found
+        if instance.text=="Found" and value == "down" :
+            self.stateOfFilter[3]=True
+            self.stateOfFilter[2]=False
 
-        if instance.text=="Male" and value == "down":
-            stateOfFilter[0]=True
-            stateOfFilter[1]=False
-        else:
-            stateOfFilter[1]=False
-            stateOfFilter[0]=True
+        if instance.text=="Male" and value == "down" :
+            self.stateOfFilter[0]=True
+            self.stateOfFilter[1]=False
+
+        if instance.text == "Female" and value == "down":
+            self.stateOfFilter[0] = False
+            self.stateOfFilter[1] = True
+
+        if instance.text == "Lost" and value == "down":
+            self.stateOfFilter[2] = True
+            self.stateOfFilter[3] = False
+    
+
 
         rv.data.clear()
         rv.refresh_from_data()
-        data=filterBackend(stateOfFilter[0],stateOfFilter[1],stateOfFilter[2],stateOfFilter[3])
+        data=filterBackend(self.stateOfFilter[0],self.stateOfFilter[1],self.stateOfFilter[2],self.stateOfFilter[3])
         print(data)
         for pet in reversed(data):
             rv.data.append(
@@ -544,16 +554,16 @@ class Reported(MDApp):
 
             filter_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
             foundBtn = ToggleButton(text="Found", group="status", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-            foundBtn.fbind('on_press', self.Foundbutton, rv=rv)
+            #foundBtn.fbind('on_press', self.Foundbutton, rv=rv)
             foundBtn.fbind('state', self.stateOfButtons, rv=rv)
             lostBtn = ToggleButton(text="Lost",group="status", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-            lostBtn.fbind('on_press', self.Lostbutton, rv=rv)
+            #lostBtn.fbind('on_press', self.Lostbutton, rv=rv)
             lostBtn.fbind('state', self.stateOfButtons, rv=rv)
             femaleBtn = ToggleButton(text="Female",group="gender", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-            femaleBtn.fbind('on_press', self.Femalebutton,rv=rv)
+            #femaleBtn.fbind('on_press', self.Femalebutton,rv=rv)
             femaleBtn.fbind('state', self.stateOfButtons, rv=rv)
             maleBtn = ToggleButton(text="Male",group="gender", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-            maleBtn.fbind('on_press', self.Malebutton,rv=rv)
+            #maleBtn.fbind('on_press', self.Malebutton,rv=rv)
             maleBtn.fbind('state', self.stateOfButtons, rv=rv)
             filter_layout.add_widget(foundBtn)
             filter_layout.add_widget(lostBtn)
