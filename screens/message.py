@@ -187,9 +187,9 @@ class Message(Screen):
                         self.message_layout.add_widget(message_preview)
                         self.screen_manager.current = chat_screen.name
 
-                    th = Thread(target=self.message_loop, args=(websocket, sem, uri))
-                    th.setDaemon(True)
-                    th.start()
+                        th = Thread(target=self.message_loop, args=(websocket, sem, uri))
+                        th.setDaemon(True)
+                        th.start()
 
                     while self.stop:
                         resp = json.loads(await websocket.recv())['message']
