@@ -288,7 +288,35 @@ class Reported(MDApp):
         self.root_sm = root_sm
 
     def stateOfButtons(self, instance, value, rv=None):
-        if value is "normal": return
+        if value is "normal":
+            if self.RV.foundBtn.state == "normal" and self.RV.lostBtn.state == "normal" and self.RV.femaleBtn.state == "normal" and self.RV.maleBtn.state == "normal":
+                rv.data.clear()
+                rv.refresh_from_data()
+                pets = rv.getReportedPetsFromBackend()
+                print(pets)
+
+                for pet in reversed(pets):
+                    rv.data.append(
+                        {
+                            'age': pet['age'],
+                            'breed': pet['breed'],
+                            'city': pet['city'],
+                            'color': pet['color'],
+                            'date': pet['date'],
+                            'gender': pet['gender'],
+                            'images': pet['images'],
+                            'name': pet['name'],
+                            'petid': pet['petid'],
+                            'pet_size': pet['size'],
+                            'state': pet['state'],
+                            'status': pet['status'].upper(),
+                            'summary': pet['summary'],
+                            'zip': pet['zip'],
+                            'author': pet['author']
+                        }
+                    )
+
+            return
         print(instance.text, value)  # male,female,lost,found
         if instance.text == "Found" and value == "down":
             self.stateOfFilter[3] = True
@@ -331,6 +359,9 @@ class Reported(MDApp):
                 }
             )
             rv.refresh_done()
+
+
+
 
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
