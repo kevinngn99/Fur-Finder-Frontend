@@ -49,6 +49,10 @@ class CustomBackButton(ButtonBehavior, AnchorLayout):
     pass
 
 
+class MainMessageHeader(BoxLayout):
+    pass
+
+
 class Header:
     def create(self, name='', padding=(dp(20), dp(20), dp(20), dp(0))):
         anchor_layout = AnchorLayout(size_hint=(1, 0.1), anchor_x='left', anchor_y='top', padding=padding)
@@ -171,13 +175,14 @@ class Message(Screen):
                 else:
                     sem = Semaphore()
 
-                    message_preview = MessagePreview(size_hint=(1, None), height=dp(60))
-                    message_preview.ids.user.text = uri
-                    message_preview.on_release = lambda: self.profile_callback(self.screen_manager, message_preview.ids.user.text)
-                    chat_screen = Chat(name=message_preview.ids.user.text, sm=self.screen_manager, sem=sem)
-                    self.screen_manager.add_widget(chat_screen)
-                    self.message_layout.add_widget(message_preview)
-                    self.screen_manager.current = chat_screen.name
+                    if not self.screen_manager.has_screen(uri):
+                        message_preview = MessagePreview(size_hint=(1, None), height=dp(60))
+                        message_preview.ids.user.text = uri
+                        message_preview.on_release = lambda: self.profile_callback(self.screen_manager, message_preview.ids.user.text)
+                        chat_screen = Chat(name=message_preview.ids.user.text, sm=self.screen_manager, sem=sem)
+                        self.screen_manager.add_widget(chat_screen)
+                        self.message_layout.add_widget(message_preview)
+                        self.screen_manager.current = chat_screen.name
 
                     th = Thread(target=self.message_loop, args=(websocket, sem, uri))
                     th.setDaemon(True)
@@ -274,7 +279,7 @@ class Message(Screen):
         self.screen_manager = ScreenManager(size_hint=(1, 1))
 
         box_layout = BoxLayout(orientation='vertical')
-        box_layout.add_widget(Header().create('Messages'))
+        box_layout.add_widget(MainMessageHeader())
         self.message_layout = BoxLayout(size_hint=(1, None), orientation='vertical', spacing=dp(20), padding=(dp(20), dp(0), dp(20), dp(0)))
         self.message_layout.bind(minimum_height=self.message_layout.setter('height'))
 

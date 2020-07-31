@@ -26,8 +26,10 @@ class LoginView(Screen):
         super().__init__(**kw)
         global token
         global usr
+        global pets_list
         token = None
         usr = None
+        pets_list = None
         self.sm = sm
         self.m = m
 
@@ -55,6 +57,8 @@ class LoginView(Screen):
         self.m.token = regex.sub('', author)
         LoginView.usr = self.m.token
         print(self.m.token)
+
+        LoginView.pets_list = pets_list
         return pets_list
 
     def getUser(self):

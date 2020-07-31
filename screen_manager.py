@@ -6,7 +6,6 @@ from screens.reported import Reported
 from screens.login import Login
 from screens.register import Register
 
-
 class Screens:
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 0.9))
@@ -17,6 +16,12 @@ class Screens:
         message_screen = Message(name='Message')
         profile_screen = Screen(name='Profile')
 
+        register_screen = Register().create()
+        login_screen = Login(screen_manager, message_screen).create()
+
+
+        #screen_manager.add_widget(login_screen)
+        #screen_manager.add_widget(register_screen)
         screen_manager.add_widget(home_screen)
         screen_manager.add_widget(report_screen)
         screen_manager.add_widget(message_screen)

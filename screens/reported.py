@@ -20,6 +20,7 @@ from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 from kivy.uix.stencilview import StencilView
 from kivy.effects.scroll import ScrollEffect
 from kivy.properties import StringProperty, ObjectProperty
+from kivy.graphics.stencil_instructions import StencilPop, StencilUse, StencilUnUse, StencilPush
 from kivy.metrics import dp, sp
 from screens.pet import Pet
 import requests
@@ -31,11 +32,7 @@ from threading import Thread
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/reported.kv'))
 
 
-class CustomStencilView(FloatLayout, StencilView):
-    pass
-
-
-class CustomAnchorLayout(AnchorLayout):
+class WickedAnchorLayout(AnchorLayout, StencilView):
     pass
 
 
@@ -80,12 +77,9 @@ class CustomCard(AnchorLayout):
                 instance.size = (dp(value[0] * scale), dp(value[1] * scale))
 
     def add_image(self):
-        self.custom_image = AsyncImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5},
-                                       keep_ratio=True, allow_stretch=True, source=None)
-        anchor_layout = CustomAnchorLayout(size_hint=(None, None), size=(dp(150), dp(134)))
-        layout = CustomStencilView()
-        layout.add_widget(self.custom_image)
-        anchor_layout.add_widget(layout)
+        self.custom_image = AsyncImage(size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5}, keep_ratio=True, allow_stretch=True, source=None)
+        anchor_layout = WickedAnchorLayout(size_hint=(None, None), size=(dp(150), dp(134)))
+        anchor_layout.add_widget(self.custom_image)
         self.ids.photo.add_widget(anchor_layout)
 
 
@@ -130,6 +124,120 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             rv.screen_manager.current = 'Pet'
             self.selected = False
 
+def getFoundPetsFromBackend():
+    headers = {
+        'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
+    }
+    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
+    newdata = []
+    for pet in reversed(data):
+        if (pet['status'] == "Found"):
+            newdata.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip'],
+                    'author': pet['author']
+                }
+            )
+    return newdata
+
+def getLostPetsFromBackend():
+    headers = {
+        'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
+    }
+    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
+    newdata = []
+    for pet in reversed(data):
+        if (pet['status'] == "Lost"):
+            newdata.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip'],
+                    'author': pet['author']
+                }
+            )
+    return newdata
+
+def getCatsFromBackend():
+    headers = {
+        'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
+    }
+    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
+    newdata = []
+    for pet in reversed(data):
+        if (pet['breed'] == "Cat"):
+            newdata.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip']
+                }
+            )
+    return newdata
+
+def getDogsFromBackend():
+    headers = {
+        'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
+    }
+    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
+    newdata = []
+    for pet in reversed(data):
+        if (pet['breed'] == "Dog"):
+            newdata.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip']
+                }
+            )
+    return newdata
+
 
 class Reported(MDApp):
     class CustomScreen(Screen):
@@ -154,28 +262,6 @@ class Reported(MDApp):
             anchor_layout.add_widget(header)
             return anchor_layout
 
-    class Filter:
-        def create(self):
-            box_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
-
-            # header = Label(halign='left', valign='top', font_size=sp(20), color=get_color_from_hex('#023b80'), text='[font=assets/Inter-SemiBold.ttf]Filter', markup=True)
-            # header.bind(size=header.setter('text_size'))
-
-            foundBtn = ToggleButton(text="Found", group="1", background_normal='', background_color=get_color_from_hex('#023b80'),font_name='assets/Inter-Medium.ttf')
-            foundBtn.bind(on_press=Reported.RV.Foundbutton)
-            lostBtn = ToggleButton(text="Lost", group="1", background_normal='', background_color=get_color_from_hex('#023b80'),font_name='assets/Inter-Medium.ttf')
-            lostBtn.bind(on_press=Reported.RV.Lostbutton)
-            catBtn = ToggleButton(text="Cat", group="1", background_normal='', background_color=get_color_from_hex('#023b80'),font_name='assets/Inter-Medium.ttf')
-            catBtn.bind(on_press=Reported.RV.Catbutton)
-            dogBtn = ToggleButton(text="Dog", group="1", background_normal='', background_color=get_color_from_hex('#023b80'),font_name='assets/Inter-Medium.ttf')
-            dogBtn.bind(on_press=Reported.RV.Dogbutton)
-            box_layout.add_widget(foundBtn)
-            box_layout.add_widget(lostBtn)
-            box_layout.add_widget(catBtn)
-            box_layout.add_widget(dogBtn)
-
-            return box_layout
-
     class RV(RecycleView):
         root = ObjectProperty()
 
@@ -187,141 +273,6 @@ class Reported(MDApp):
             }
             data = s.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
             return data
-
-        def getFoundPetsFromBackend(self):
-            s = requests.Session()
-            s.hooks['response'].append(self.callback)
-            headers = {
-                'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
-            }
-            data = s.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-            newdata = []
-            for pet in reversed(data):
-                if (pet['status'] == "Found"):
-                    newdata.append(
-                        {
-                            'age': pet['age'],
-                            'breed': pet['breed'],
-                            'city': pet['city'],
-                            'color': pet['color'],
-                            'date': pet['date'],
-                            'gender': pet['gender'],
-                            'images': pet['images'],
-                            'name': pet['name'],
-                            'petid': pet['petid'],
-                            'pet_size': pet['size'],
-                            'state': pet['state'],
-                            'status': pet['status'].upper(),
-                            'summary': pet['summary'],
-                            'zip': pet['zip']
-                        }
-                    )
-            return newdata
-
-        def getLostPetsFromBackend(self):
-            s = requests.Session()
-            s.hooks['response'].append(self.callback)
-            headers = {
-                'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
-            }
-            data = s.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-            newdata = []
-            for pet in reversed(data):
-                if (pet['status'] == "Lost"):
-                    newdata.append(
-                        {
-                            'age': pet['age'],
-                            'breed': pet['breed'],
-                            'city': pet['city'],
-                            'color': pet['color'],
-                            'date': pet['date'],
-                            'gender': pet['gender'],
-                            'images': pet['images'],
-                            'name': pet['name'],
-                            'petid': pet['petid'],
-                            'pet_size': pet['size'],
-                            'state': pet['state'],
-                            'status': pet['status'].upper(),
-                            'summary': pet['summary'],
-                            'zip': pet['zip']
-                        }
-                    )
-            return newdata
-
-        def getCatsFromBackend(self):
-            s = requests.Session()
-            s.hooks['response'].append(self.callback)
-            headers = {
-                'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
-            }
-            data = s.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-            newdata = []
-            for pet in reversed(data):
-                if (pet['breed'] == "Cat"):
-                    newdata.append(
-                        {
-                            'age': pet['age'],
-                            'breed': pet['breed'],
-                            'city': pet['city'],
-                            'color': pet['color'],
-                            'date': pet['date'],
-                            'gender': pet['gender'],
-                            'images': pet['images'],
-                            'name': pet['name'],
-                            'petid': pet['petid'],
-                            'pet_size': pet['size'],
-                            'state': pet['state'],
-                            'status': pet['status'].upper(),
-                            'summary': pet['summary'],
-                            'zip': pet['zip']
-                        }
-                    )
-            return newdata
-
-        def getDogsFromBackend(self):
-            s = requests.Session()
-            s.hooks['response'].append(self.callback)
-            headers = {
-                'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
-            }
-            data = s.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-            newdata = []
-            for pet in reversed(data):
-                if (pet['breed'] == "Dog"):
-                    newdata.append(
-                        {
-                            'age': pet['age'],
-                            'breed': pet['breed'],
-                            'city': pet['city'],
-                            'color': pet['color'],
-                            'date': pet['date'],
-                            'gender': pet['gender'],
-                            'images': pet['images'],
-                            'name': pet['name'],
-                            'petid': pet['petid'],
-                            'pet_size': pet['size'],
-                            'state': pet['state'],
-                            'status': pet['status'].upper(),
-                            'summary': pet['summary'],
-                            'zip': pet['zip']
-                        }
-                    )
-            return newdata
-
-        def Catbutton(instance):
-            print('The button <%s> is being pressed' % instance.text)
-
-
-
-        def Dogbutton(instance):
-            print('The button <%s> is being pressed' % instance.text)
-
-
-        def Foundbutton(instance):
-            print('The button <%s> is being pressed' % instance.text)
-
-        def Lostbutton(instance):
-            print('The button <%s> is being pressed' % instance.text)
 
         def callback(self, r, **kwargs):
             if self.load:
@@ -393,20 +344,92 @@ class Reported(MDApp):
         super().__init__(**kwargs)
         self.root_sm = root_sm
 
+    def Foundbutton(self, instance, rv=None):
+        rv.data.clear()
+        rv.refresh_from_data()
+        data = getFoundPetsFromBackend()
+        print(data)
+        for pet in reversed(data):
+            rv.data.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['pet_size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip'],
+                    'author': pet['author']
+                }
+            )
+
+    def Lostbutton(self, instance, rv=None):
+        rv.data.clear()
+        rv.refresh_from_data()
+        data = getLostPetsFromBackend()
+        print(data)
+        for pet in reversed(data):
+            rv.data.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['pet_size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip'],
+                    'author': pet['author']
+                }
+            )
+
+    def Catbutton(self, instance):
+        print(instance)
+
+    def Dogbutton(self, instance):
+        print(instance)
+
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
 
         box_layout = BoxLayout(orientation='vertical')
         header = self.Header().create()
-        filter = self.Filter().create()
-        anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(0), dp(20), dp(0)))
+        anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(20), dp(20), dp(20)))
         rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1),
                      effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
         anchor_layout.add_widget(rv)
         box_layout.add_widget(header)
-        box_layout.add_widget(filter)
 
+        filter_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
+        foundBtn = Button(text="Found", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+        foundBtn.fbind('on_press', self.Foundbutton, rv=rv)
+        lostBtn = ToggleButton(text="Lost", group="1", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+        lostBtn.fbind('on_press', self.Lostbutton, rv=rv)
+        catBtn = ToggleButton(text="Cat", group="1", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+        catBtn.fbind('on_press', self.Catbutton)
+        dogBtn = ToggleButton(text="Dog", group="1", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+        dogBtn.fbind('on_press', self.Dogbutton)
+        filter_layout.add_widget(foundBtn)
+        filter_layout.add_widget(lostBtn)
+        filter_layout.add_widget(catBtn)
+        filter_layout.add_widget(dogBtn)
+
+        box_layout.add_widget(filter_layout)
         box_layout.add_widget(anchor_layout)
+
         rv_screen = Screen(name='RV')
         rv_screen.add_widget(box_layout)
 
