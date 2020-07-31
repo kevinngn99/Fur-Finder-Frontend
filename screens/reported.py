@@ -31,6 +31,7 @@ from threading import Thread
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/reported.kv'))
 
+stateOfFilter=[True,True,True,True]
 
 class WickedAnchorLayout(AnchorLayout, StencilView):
     pass
@@ -210,6 +211,41 @@ def getFemaleFromBackend():
                 }
             )
     return newdata
+def filterBackend(male,female,lost,found):
+
+    headers = {
+        'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
+    }
+    data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
+    newdata = []
+    if male == True: gender = "Male"
+    else: gender="Female"
+    if lost == True: status="Lost"
+    else: status = "Found"
+    for pet in reversed(data):
+
+        if (pet['gender'] == gender or pet["status"]==status):
+            newdata.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip'],
+                    'author': pet['author']
+                }
+            )
+    return newdata
+
 
 def getMaleFromBackend():
     headers = {
@@ -347,6 +383,7 @@ class Reported(MDApp):
         self.root_sm = root_sm
 
     def Foundbutton(self, instance, rv=None):
+
         rv.data.clear()
         rv.refresh_from_data()
         data = getFoundPetsFromBackend()
@@ -450,9 +487,52 @@ class Reported(MDApp):
                 }
             )
 
+    def stateOfButtons(self,instance,value,rv=None):
+        print(instance.text,value)
+        if instance.text=="Found" and value == "down":
+            stateOfFilter[3]=True
+            stateOfFilter[2]=False
+        else:
+            stateOfFilter[3]=False
+            stateOfFilter[2]=True
+
+        if instance.text=="Male" and value == "down":
+            stateOfFilter[0]=True
+            stateOfFilter[1]=False
+        else:
+            stateOfFilter[1]=False
+            stateOfFilter[0]=True
+
+        rv.data.clear()
+        rv.refresh_from_data()
+        data=filterBackend(stateOfFilter[0],stateOfFilter[1],stateOfFilter[2],stateOfFilter[3])
+        print(data)
+        for pet in reversed(data):
+            rv.data.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['pet_size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip'],
+                    'author': pet['author']
+                }
+            )
+
+
 
     def create(self):
             screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
+
 
             box_layout = BoxLayout(orientation='vertical')
             header = self.Header().create()
@@ -463,14 +543,18 @@ class Reported(MDApp):
             box_layout.add_widget(header)
 
             filter_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
-            foundBtn = Button(text="Found", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+            foundBtn = ToggleButton(text="Found", group="status", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
             foundBtn.fbind('on_press', self.Foundbutton, rv=rv)
-            lostBtn = Button(text="Lost", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+            foundBtn.fbind('state', self.stateOfButtons, rv=rv)
+            lostBtn = ToggleButton(text="Lost",group="status", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
             lostBtn.fbind('on_press', self.Lostbutton, rv=rv)
-            femaleBtn = Button(text="Female", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+            lostBtn.fbind('state', self.stateOfButtons, rv=rv)
+            femaleBtn = ToggleButton(text="Female",group="gender", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
             femaleBtn.fbind('on_press', self.Femalebutton,rv=rv)
-            maleBtn = Button(text="Male", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+            femaleBtn.fbind('state', self.stateOfButtons, rv=rv)
+            maleBtn = ToggleButton(text="Male",group="gender", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
             maleBtn.fbind('on_press', self.Malebutton,rv=rv)
+            maleBtn.fbind('state', self.stateOfButtons, rv=rv)
             filter_layout.add_widget(foundBtn)
             filter_layout.add_widget(lostBtn)
             filter_layout.add_widget(femaleBtn)
