@@ -1,10 +1,6 @@
-from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
-from kivy.utils import get_color_from_hex
-from kivy.uix.label import Label
-from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
-from kivymd.icon_definitions import md_icons
+from kivy.uix.screenmanager import Screen
 from kivymd.toast import toast
 from kivy.properties import StringProperty
 import os
@@ -39,7 +35,6 @@ class LoginView(Screen):
 
     def get_pets_by_author(self):
         print(self.username_text.text)
-        # print(self.password_text.text)
         headers = {
             'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
         }
@@ -84,7 +79,6 @@ class LoginView(Screen):
                 toast(text)
         else:
             pet_list = self.get_pets_by_author()
-            #print(LoginView.author)
             self.screens.add_widget(Profile().create(pet_list, LoginView.author))
             self.sm.current = 'App'
             LoginView.token = res.json()['token']

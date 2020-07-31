@@ -332,9 +332,9 @@ class Report(MDApp):
                 'status': status.strip(),
                 'date': date.strip(),
                 'state': state.strip(),
-                'summary': summary,
                 'zip': zip.strip(),
                 'city': city.strip(),
+                'summary': summary,
                 'petid': 'N/A'
             }
 
@@ -420,10 +420,10 @@ class Report(MDApp):
             self._gender.fbind('on_release', self.create_drop_down, list=['Male', 'Female'], icon=self._gender.ids.icon, border=self._gender)
 
             self._age = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Age')
-            self._age.fbind('on_release', self.create_drop_down, list=['Puppy', 'Adult', 'Senior'], icon=self._age.ids.icon, border=self._age)
+            self._age.fbind('on_release', self.create_drop_down, list=['Puppy', 'Kitten', 'Adult', 'Senior'], icon=self._age.ids.icon, border=self._age)
 
             self._color = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Color')
-            self._color.fbind('on_release', self.create_drop_down, list=['Black', 'Blue', 'Brown', 'Cream', 'Fawn', 'Gold', 'Grey', 'Orange', 'Red', 'Tan', 'White'], icon=self._color.ids.icon, border=self._color)
+            self._color.fbind('on_release', self.create_drop_down, list=['Black', 'Blue', 'Brown', 'Cream', 'Fawn', 'Gold', 'Grey', 'Multicolor', 'Orange', 'Red', 'Tan', 'White'], icon=self._color.ids.icon, border=self._color)
 
             self._size = FormLabel(size_hint=(1, None), height=dp(45), icon='', type='Size')
             self._size.fbind('on_release', self.create_drop_down, list=['Small', 'Medium', 'Large'], icon=self._size.ids.icon, border=self._size)

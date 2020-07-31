@@ -193,6 +193,9 @@ class Pet:
         details_layout = StackLayout(size_hint=(1, None), spacing=dp(20), padding=(dp(0), dp(20), dp(0), dp(0)))
         details_layout.bind(minimum_height=details_layout.setter('height'))
 
+        author = CustomLabel(type='Author', txt=str(self.float_layout.author))
+        self.float_layout.bind(author=lambda instance, value: setattr(author, 'txt', value))
+
         age = CustomLabel(type='Age', txt=str(self.float_layout.age))
         self.float_layout.bind(age=lambda instance, value: setattr(age, 'txt', value))
 
@@ -223,6 +226,7 @@ class Pet:
         zip = CustomLabel(type='Zip', txt=str(self.float_layout.zip))
         self.float_layout.bind(zip=lambda instance, value: setattr(zip, 'txt', value))
 
+        details_layout.add_widget(author)
         details_layout.add_widget(age)
         details_layout.add_widget(breed)
         details_layout.add_widget(location)
@@ -259,9 +263,8 @@ class Pet:
         bottom_layout = AnchorLayout(size_hint=(1, 0.5), anchor_x='center', anchor_y='bottom')
         bottom_layout.add_widget(background)
 
-        pin_and_message_layout = BoxLayout(size_hint=(1, None), height=dp(45), orientation='horizontal')
-        pin_and_message_layout.add_widget(PinButton(icon='', text='Pin', color=get_color_from_hex('#e01646'), padding=(dp(20), dp(0), dp(7), dp(0))))
-        message_button = MessageButton(icon='', text='Message', color=get_color_from_hex('#023b80'), padding=(dp(0), dp(0), dp(20), dp(0)))
+        pin_and_message_layout = BoxLayout(size_hint=(1, None), height=dp(65), orientation='horizontal')
+        message_button = MessageButton(icon='', text='Message', color=get_color_from_hex('#023b80'), padding=(dp(20), dp(20), dp(20), dp(0)))
         message_button.on_release = lambda: self.message_callback(self.root_sm)
         pin_and_message_layout.add_widget(message_button)
 

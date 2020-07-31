@@ -1,16 +1,10 @@
-#remeber to add this to the screen manager py
-from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
-from kivy.utils import get_color_from_hex
-from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen
-from kivymd.icon_definitions import md_icons
 from kivymd.toast import toast
 import os
 import requests
 import json
-from kivymd.app import MDApp
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/register.kv'))
 
@@ -20,6 +14,20 @@ class BackgroundBox2(BoxLayout):
 
 
 class RegisterView(Screen):
+
+    def __init__(self, sm=None, screens=None, m=None, **kw):
+        super().__init__(**kw)
+        global token
+        global usr
+        global pets_list
+        global author
+        token = None
+        usr = None
+        pets_list = None
+        author = None
+        self.sm = sm
+        self.m = m
+        self.screens = screens
 
     def getText(self):
         print(self.email_text.text)
@@ -53,12 +61,15 @@ class RegisterView(Screen):
             else:
                 print("registered")
                 self.manager.current = 'App'
-class Register:
 
-    def __init__(self):
-        super().__init__
+
+class Register:
+    def __init__(self, sm=None, screens=None, m=None):
+        super().__init__()
+        self.sm = sm
+        self.m = m
+        self.screens = screens
 
     def create(self):
-       register_screen = RegisterView(name="register")
-
-       return register_screen
+        register_screen = RegisterView(sm=self.sm, screens=self.screens, m=self.m, name="register")
+        return register_screen
