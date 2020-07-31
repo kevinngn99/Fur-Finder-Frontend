@@ -22,7 +22,6 @@ from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.gridlayout import GridLayout
 from kivy.metrics import dp, sp
 import requests
-#from screens.pet import Pet
 import json
 import os
 from threading import Thread
