@@ -7,11 +7,11 @@
     password_text: password
     password2_text: password2
     name: "register"
-    BackgroundBox:
+    BackgroundBox2:
 
     MDCard:
         orientation:'vertical'
-        size_hint: [0.8,0.4]
+        size_hint: [0.8,0.5]
         pos_hint: {"center_x": .5, "center_y": .5}
         BoxLayout:
             orientation:'vertical'
@@ -46,15 +46,16 @@
                     root.postUser()
             MDFillRoundFlatIconButton:
                 icon: "account-circle"
-                text: "Forgot Password"
+                text: "Log In"
                 pos_hint: {"center_x": .5, "center_y": .5}
+                on_release:
+                    root.manager.current = 'login'
 
 
-
-<BackgroundBox>:
+<BackgroundBox2>:
     orientation: 'vertical'
     BoxLayout:
-        orientation: 'vertical'
+        orientation: 'horizontal'
         canvas.before:
             Color:
                 rgba: utils.get_color_from_hex('#023b80')
