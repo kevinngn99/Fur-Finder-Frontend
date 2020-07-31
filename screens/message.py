@@ -98,13 +98,14 @@ class Chat(Screen):
         self.sem.release()
         return value
 
-    def __init__(self, sm=None, sem=None, **kw):
+    def __init__(self, sm=None, sem=None, text_name=None, **kw):
         super().__init__(**kw)
         self.sv_size = None
         self.sem = sem
+        self.text_name = text_name
 
         box_layout = BoxLayout(orientation='vertical', spacing=dp(14), padding=(dp(20), dp(0), dp(20), dp(0)))
-        message_header = MessageHeader(name=self.name)
+        message_header = MessageHeader(name=self.text_name)
         message_header.ids.back_button.on_release = lambda: self.go_back(sm)
         box_layout.add_widget(message_header)
 
@@ -153,9 +154,10 @@ class Message(Screen):
                         if not self.screen_manager.has_screen(uri):
                             Snackbar(text='You got a new message!').show()
                             message_preview = MessagePreview(size_hint=(1, None), height=dp(60))
-                            message_preview.ids.user.text = uri
-                            message_preview.on_release = lambda: self.profile_callback(self.screen_manager, message_preview.ids.user.text)
-                            chat_screen = Chat(name=message_preview.ids.user.text, sm=self.screen_manager, sem=sem)
+                            username = uri.replace('wss://fur-finder-chat.herokuapp.com/ws/chatt/', '').replace(self.token, '').replace('/', '')
+                            message_preview.ids.user.text = username
+                            message_preview.on_release = lambda: self.profile_callback(self.screen_manager, uri)
+                            chat_screen = Chat(name=uri, sm=self.screen_manager, sem=sem, text_name=username)
                             receiver = Receiver()
                             receiver.ids.message.text = resp
                             chat_screen.message_layout.add_widget(receiver)
@@ -177,9 +179,10 @@ class Message(Screen):
 
                     if not self.screen_manager.has_screen(uri):
                         message_preview = MessagePreview(size_hint=(1, None), height=dp(60))
-                        message_preview.ids.user.text = uri
-                        message_preview.on_release = lambda: self.profile_callback(self.screen_manager, message_preview.ids.user.text)
-                        chat_screen = Chat(name=message_preview.ids.user.text, sm=self.screen_manager, sem=sem)
+                        username = uri.replace('wss://fur-finder-chat.herokuapp.com/ws/chatt/', '').replace(self.token, '').replace('/', '')
+                        message_preview.ids.user.text = username
+                        message_preview.on_release = lambda: self.profile_callback(self.screen_manager, uri)
+                        chat_screen = Chat(name=uri, sm=self.screen_manager, sem=sem, text_name=username)
                         self.screen_manager.add_widget(chat_screen)
                         self.message_layout.add_widget(message_preview)
                         self.screen_manager.current = chat_screen.name

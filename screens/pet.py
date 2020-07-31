@@ -158,8 +158,9 @@ class Pet:
             self.add_widget(indicator_layout)
 
     def message_callback(self, root_sm):
+        author = self.float_layout.author.split('@', 1)[0]
         regex = re.compile('[^a-zA-Z]')
-        usr = regex.sub('', self.float_layout.author)
+        usr = regex.sub('', author)
 
         if LoginView.usr == usr:
             Snackbar(text='Sorry you can\'t message yourself!').show()

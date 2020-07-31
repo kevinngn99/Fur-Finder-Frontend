@@ -55,6 +55,7 @@ class LoginView(Screen):
                 pets_list.append(pet)
 
         print(pets_list)
+        author = author.split('@', 1)[0]
         regex = re.compile('[^a-zA-Z]')
         self.m.token = regex.sub('', author)
         LoginView.usr = self.m.token
