@@ -166,3 +166,18 @@
                     on_release:
                         root.delete_pet()
 
+<MainProfileHeader>:
+    size_hint: 1, None
+    height: self.minimum_height
+    orientation: 'vertical'
+    padding: dp(20), dp(20), dp(20), dp(20)
+    Label:
+        pos: self.pos
+        font_size: sp(20)
+        halign: 'left'
+        valign: 'center'
+        size_hint: 1, None
+        text_size: self.width, None
+        size: self.texture_size
+        text: '[size='+str(int(sp(20)))+'][color=023b80][font=assets/Inter-SemiBold.ttf]My Reported Pets'+'[size='+str(int(sp(14)))+'][color=6e7c97][font=assets/Inter-Medium.ttf]\n\nThis page contains a list of pets you have reported to our\ndatabase. If your pet has been found, please consider\ndeleting your post from our database.'
+        markup: True

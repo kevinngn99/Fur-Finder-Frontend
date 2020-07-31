@@ -29,6 +29,8 @@ from threading import Thread
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/profile.kv'))
 
 
+class MainProfileHeader(BoxLayout):
+    pass
 
 
 class ProfileAnchorLayout(AnchorLayout, StencilView):
@@ -231,20 +233,13 @@ class Profile(MDApp):
             self.load = True
 
     def create(self, data, author):
-        print("hey")
-        print(data)
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
-        box_layout = BoxLayout(orientation='vertical')
         grid_layout = GridLayout(cols=1)
-        header = self.Header().create()
-        midhead = self.MidHead().create()
         anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(0), dp(20), dp(0)))
-        anchor_layout2 = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(0), dp(20), dp(0)))
         rv2 = self.ProfileRV(pets_list=data, author=author, smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
 
         anchor_layout.add_widget(rv2)
-        grid_layout.add_widget(header)
-        grid_layout.add_widget(midhead)
+        grid_layout.add_widget(MainProfileHeader())
         grid_layout.add_widget(anchor_layout)
         rv_screen = Screen(name='RV2')
         rv_screen.add_widget(grid_layout)
