@@ -23,9 +23,11 @@ class RegisterView(Screen):
         global token
         global usr
         global pets_list
+        global author
         token = None
         usr = None
         pets_list = None
+        author = None
         self.sm = sm
         self.m = m
         self.screens = screens
@@ -55,6 +57,7 @@ class RegisterView(Screen):
                 self.m.token = regex.sub('', username)
                 LoginView.usr = self.m.token
                 print(self.m.token)
+                print(LoginView.usr)
                 LoginView.pets_list = pets_list
                 LoginView.author = self.email_text.text
 
