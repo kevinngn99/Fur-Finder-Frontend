@@ -234,7 +234,13 @@ class Reported(MDApp):
                             'author': pet['author']
                         }
                     )
+
+                self.foundBtn.state="normal"
+                self.lostBtn.state = "normal"
+                self.femaleBtn.state = "normal"
+                self.maleBtn.state = "normal"
                 self.refresh_done()
+
 
         def refresh_callback(self, *args):
             print('refreshed')
@@ -276,11 +282,41 @@ class Reported(MDApp):
             self.screen_manager = screen_manager
             self.load = True
 
+
     def __init__(self, root_sm=None, **kwargs):
         super().__init__(**kwargs)
         self.root_sm = root_sm
 
     def stateOfButtons(self, instance, value, rv=None):
+        if value is "normal":
+            if self.RV.foundBtn.state == "normal" and self.RV.lostBtn.state == "normal" and self.RV.femaleBtn.state == "normal" and self.RV.maleBtn.state == "normal":
+                rv.data.clear()
+                rv.refresh_from_data()
+                pets = rv.getReportedPetsFromBackend()
+                print(pets)
+
+                for pet in reversed(pets):
+                    rv.data.append(
+                        {
+                            'age': pet['age'],
+                            'breed': pet['breed'],
+                            'city': pet['city'],
+                            'color': pet['color'],
+                            'date': pet['date'],
+                            'gender': pet['gender'],
+                            'images': pet['images'],
+                            'name': pet['name'],
+                            'petid': pet['petid'],
+                            'pet_size': pet['size'],
+                            'state': pet['state'],
+                            'status': pet['status'].upper(),
+                            'summary': pet['summary'],
+                            'zip': pet['zip'],
+                            'author': pet['author']
+                        }
+                    )
+
+            return
         print(instance.text, value)  # male,female,lost,found
         if instance.text == "Found" and value == "down":
             self.stateOfFilter[3] = True
@@ -322,6 +358,10 @@ class Reported(MDApp):
                     'author': pet['author']
                 }
             )
+            rv.refresh_done()
+
+
+
 
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
@@ -335,26 +375,28 @@ class Reported(MDApp):
         box_layout.add_widget(header)
 
         filter_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
-        foundBtn = ToggleButton(text="Found", group="status", background_normal='',
+        self.RV.foundBtn = ToggleButton(text="Found", group="status", background_normal='',
                                 background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
 
-        foundBtn.fbind('state', self.stateOfButtons, rv=rv)
-        lostBtn = ToggleButton(text="Lost", group="status", background_normal='',
+        self.RV.foundBtn.fbind('state', self.stateOfButtons, rv=rv)
+
+
+        self.RV.lostBtn = ToggleButton(text="Lost", group="status", background_normal='',
                                background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
 
-        lostBtn.fbind('state', self.stateOfButtons, rv=rv)
-        femaleBtn = ToggleButton(text="Female", group="gender", background_normal='',
+        self.RV.lostBtn.fbind('state', self.stateOfButtons, rv=rv)
+        self.RV.femaleBtn = ToggleButton(text="Female", group="gender", background_normal='',
                                  background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
 
-        femaleBtn.fbind('state', self.stateOfButtons, rv=rv)
-        maleBtn = ToggleButton(text="Male", group="gender", background_normal='',
+        self.RV.femaleBtn.fbind('state', self.stateOfButtons, rv=rv)
+        self.RV.maleBtn = ToggleButton(text="Male", group="gender", background_normal='',
                                background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
 
-        maleBtn.fbind('state', self.stateOfButtons, rv=rv)
-        filter_layout.add_widget(foundBtn)
-        filter_layout.add_widget(lostBtn)
-        filter_layout.add_widget(femaleBtn)
-        filter_layout.add_widget(maleBtn)
+        self.RV.maleBtn.fbind('state', self.stateOfButtons, rv=rv)
+        filter_layout.add_widget(self.RV.foundBtn)
+        filter_layout.add_widget(self.RV.lostBtn)
+        filter_layout.add_widget(self.RV.femaleBtn)
+        filter_layout.add_widget(self.RV.maleBtn)
 
         box_layout.add_widget(filter_layout)
         box_layout.add_widget(anchor_layout)
