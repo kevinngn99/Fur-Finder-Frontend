@@ -6,8 +6,10 @@ from kivy.lang.builder import Builder
 from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.uix.togglebutton import ToggleButton
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivymd.app import MDApp
+from kivy.graphics import Color, RoundedRectangle
 from kivy.utils import get_color_from_hex
 from kivy.uix.label import Label
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
@@ -18,10 +20,12 @@ from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 from kivy.uix.stencilview import StencilView
 from kivy.effects.scroll import ScrollEffect
 from kivy.properties import StringProperty, ObjectProperty
+from kivy.graphics.stencil_instructions import StencilPop, StencilUse, StencilUnUse, StencilPush
 from kivy.metrics import dp, sp
 from screens.pet import Pet
 
 import requests
+import json
 
 import os
 from threading import Thread
@@ -123,7 +127,7 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             self.selected = False
 
 
-def filterBackend(male, lost, ifselected):
+def filterBackend(male, lost, statusSelected, genderSelected):
     headers = {
         'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
     }
@@ -140,7 +144,7 @@ def filterBackend(male, lost, ifselected):
     else:
         status = "Found"
 
-    if ifselected == True:
+    if statusSelected and genderSelected:
         for pet in reversed(data):
             if (pet['gender'] == gender and pet["status"] == status):
                 newdata.append(
@@ -162,7 +166,29 @@ def filterBackend(male, lost, ifselected):
                         'author': pet['author']
                     }
                 )
-    else:
+    elif genderSelected == True:
+        for pet in reversed(data):
+            if (pet['gender'] == gender):
+                newdata.append(
+                    {
+                        'age': pet['age'],
+                        'breed': pet['breed'],
+                        'city': pet['city'],
+                        'color': pet['color'],
+                        'date': pet['date'],
+                        'gender': pet['gender'],
+                        'images': pet['images'],
+                        'name': pet['name'],
+                        'petid': pet['petid'],
+                        'pet_size': pet['size'],
+                        'state': pet['state'],
+                        'status': pet['status'].upper(),
+                        'summary': pet['summary'],
+                        'zip': pet['zip'],
+                        'author': pet['author']
+                    }
+                )
+    elif statusSelected == True:
         for pet in reversed(data):
             if (pet["status"] == status):
                 newdata.append(
@@ -184,11 +210,33 @@ def filterBackend(male, lost, ifselected):
                         'author': pet['author']
                     }
                 )
+    else:
+        for pet in reversed(data):
+            newdata.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['pet_size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip'],
+                    'author': pet['author']
+                }
+            )
+    print("filtered data is done")
     return newdata
 
 
 class Reported(MDApp):
-    stateOfFilter = [True, True, False] #male lost, gender is selected
+    stateOfFilter = [True, True, False,False] #male lost, gender is selected, status is selected
 
     class CustomScreen(Screen):
         def __init__(self, **kwargs):
@@ -253,7 +301,9 @@ class Reported(MDApp):
                 self.lostBtn.state = "normal"
                 self.femaleBtn.state = "normal"
                 self.maleBtn.state = "normal"
+                print("did callback")
                 self.refresh_done()
+
 
         def refresh_callback(self, *args):
             print('refreshed')
@@ -295,6 +345,7 @@ class Reported(MDApp):
             self.screen_manager = screen_manager
             self.load = True
 
+
     def __init__(self, root_sm=None, **kwargs):
         super().__init__(**kwargs)
         self.root_sm = root_sm
@@ -305,46 +356,29 @@ class Reported(MDApp):
                 rv.data.clear()
                 rv.refresh_from_data()
                 pets = rv.getReportedPetsFromBackend()
-                print(pets)
-
-                for pet in reversed(pets):
-                    rv.data.append(
-                        {
-                            'age': pet['age'],
-                            'breed': pet['breed'],
-                            'city': pet['city'],
-                            'color': pet['color'],
-                            'date': pet['date'],
-                            'gender': pet['gender'],
-                            'images': pet['images'],
-                            'name': pet['name'],
-                            'petid': pet['petid'],
-                            'pet_size': pet['size'],
-                            'state': pet['state'],
-                            'status': pet['status'].upper(),
-                            'summary': pet['summary'],
-                            'zip': pet['zip'],
-                            'author': pet['author']
-                        }
-                    )
+                self.stateOfFilter[2] = False
+                self.stateOfFilter[3] = False
+                #rv.refresh_done()
+                print("all buttons are normal")
             return
 
-        print(instance.text, value)  # male,lost
+        print(instance.text, value)  # stateOfFilter[male,lost, statusSelect, genSelected]
         if instance.text == "Found" and value == "down":
             self.stateOfFilter[1] = False
-
+            self.stateOfFilter[2] = True
         if instance.text == "Male" and value == "down":
             self.stateOfFilter[0] = True
-            self.stateOfFilter[2] = True
+            self.stateOfFilter[3] = True
         if instance.text == "Female" and value == "down":
             self.stateOfFilter[0] = False
-            self.stateOfFilter[2] = True
+            self.stateOfFilter[3] = True
         if instance.text == "Lost" and value == "down":
             self.stateOfFilter[1] = True
-
+            self.stateOfFilter[2] = True
         rv.data.clear()
         rv.refresh_from_data()
-        data = filterBackend(self.stateOfFilter[0], self.stateOfFilter[1],self.stateOfFilter[2])
+        data = filterBackend(self.stateOfFilter[0], self.stateOfFilter[1], self.stateOfFilter[2], self.stateOfFilter[3])
+
         print(data)
         for pet in reversed(data):
             rv.data.append(
@@ -366,7 +400,10 @@ class Reported(MDApp):
                     'author': pet['author']
                 }
             )
-            rv.refresh_done()
+        rv.refresh_done()
+        print("end of state function")
+
+
 
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
@@ -374,21 +411,30 @@ class Reported(MDApp):
         box_layout = BoxLayout(orientation='vertical')
         header = self.Header().create()
         anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(20), dp(20), dp(20)))
-        rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
+        rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1),
+                     effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
         anchor_layout.add_widget(rv)
         box_layout.add_widget(header)
 
         filter_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
+        self.RV.foundBtn = ToggleButton(text="Found", group="status", background_normal='',
+                                background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
 
-        self.RV.foundBtn = ToggleButton(text="Found", group="status", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
         self.RV.foundBtn.fbind('state', self.stateOfButtons, rv=rv)
-        self.RV.lostBtn = ToggleButton(text="Lost", group="status", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-        self.RV.lostBtn.fbind('state', self.stateOfButtons, rv=rv)
-        self.RV.femaleBtn = ToggleButton(text="Female", group="gender", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-        self.RV.femaleBtn.fbind('state', self.stateOfButtons, rv=rv)
-        self.RV.maleBtn = ToggleButton(text="Male", group="gender", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-        self.RV.maleBtn.fbind('state', self.stateOfButtons, rv=rv)
 
+
+        self.RV.lostBtn = ToggleButton(text="Lost", group="status", background_normal='',
+                               background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+
+        self.RV.lostBtn.fbind('state', self.stateOfButtons, rv=rv)
+        self.RV.femaleBtn = ToggleButton(text="Female", group="gender", background_normal='',
+                                 background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+
+        self.RV.femaleBtn.fbind('state', self.stateOfButtons, rv=rv)
+        self.RV.maleBtn = ToggleButton(text="Male", group="gender", background_normal='',
+                               background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
+
+        self.RV.maleBtn.fbind('state', self.stateOfButtons, rv=rv)
         filter_layout.add_widget(self.RV.foundBtn)
         filter_layout.add_widget(self.RV.lostBtn)
         filter_layout.add_widget(self.RV.femaleBtn)
