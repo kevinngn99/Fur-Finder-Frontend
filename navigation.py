@@ -1,6 +1,5 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import ButtonBehavior
-from kivy.graphics import Color, Rectangle
 from kivy.utils import get_color_from_hex
 from kivy.uix.label import Label
 from kivy.metrics import sp

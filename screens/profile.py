@@ -90,6 +90,9 @@ class ProfileCustomCard(AnchorLayout):
 
         r = requests.delete(url='https://fur-finder.herokuapp.com/api/pets//'+self.petid, headers=headers)
         print(r.text)
+        print(self.parent)
+        self.parent.remove_widget(self)
+
 
 class ProfileSelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior, RecycleBoxLayout):
     pass

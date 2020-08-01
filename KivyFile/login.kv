@@ -15,7 +15,7 @@
                 color: utils.get_color_from_hex('#023b80')
                 text:"Login"
                 text_size: self.size
-                font_size: 40
+                font_size: dp(40)
                 halign: "center"
                 valign: "middle"
             MDTextField:
@@ -49,6 +49,6 @@
             RoundedRectangle:
                 pos:self.pos
                 size: self.size
-                radius: [0,0,20,20]
+                radius: [0,0,dp(20),dp(20)]
     BoxLayout:
         orientation: 'vertical'

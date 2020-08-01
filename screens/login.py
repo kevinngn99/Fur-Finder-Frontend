@@ -3,6 +3,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.snackbar import Snackbar
 from screens.profile import Profile
+from kivy.core.window import Window
+
+Window.softinput_mode = "below_target"
 
 import os
 import requests

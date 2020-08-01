@@ -6,10 +6,8 @@ from kivy.lang.builder import Builder
 from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.uix.togglebutton import ToggleButton
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivymd.app import MDApp
-from kivy.graphics import Color, RoundedRectangle
 from kivy.utils import get_color_from_hex
 from kivy.uix.label import Label
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
@@ -20,11 +18,9 @@ from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 from kivy.uix.stencilview import StencilView
 from kivy.effects.scroll import ScrollEffect
 from kivy.properties import StringProperty, ObjectProperty
-from kivy.graphics.stencil_instructions import StencilPop, StencilUse, StencilUnUse, StencilPush
 from kivy.metrics import dp, sp
 from screens.pet import Pet
 import requests
-import json
 
 import os
 from threading import Thread
@@ -241,7 +237,6 @@ class Reported(MDApp):
                 self.maleBtn.state = "normal"
                 self.refresh_done()
 
-
         def refresh_callback(self, *args):
             print('refreshed')
 
@@ -281,7 +276,6 @@ class Reported(MDApp):
                 )
             self.screen_manager = screen_manager
             self.load = True
-
 
     def __init__(self, root_sm=None, **kwargs):
         super().__init__(**kwargs)
@@ -360,39 +354,27 @@ class Reported(MDApp):
             )
             rv.refresh_done()
 
-
-
-
     def create(self):
         screen_manager = ScreenManager(transition=SlideTransition(), size_hint=(1, 1))
 
         box_layout = BoxLayout(orientation='vertical')
         header = self.Header().create()
         anchor_layout = AnchorLayout(size_hint=(1, 0.9), padding=(dp(20), dp(20), dp(20), dp(20)))
-        rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1),
-                     effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
+        rv = self.RV(smooth_scroll_end=dp(10), root=anchor_layout, screen_manager=screen_manager, size_hint=(1, 1), effect_cls=ScrollEffect, bar_inactive_color=(0, 0, 0, 0), bar_color=(0, 0, 0, 0))
         anchor_layout.add_widget(rv)
         box_layout.add_widget(header)
 
         filter_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.1))
-        self.RV.foundBtn = ToggleButton(text="Found", group="status", background_normal='',
-                                background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
 
+        self.RV.foundBtn = ToggleButton(text="Found", group="status", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
         self.RV.foundBtn.fbind('state', self.stateOfButtons, rv=rv)
-
-
-        self.RV.lostBtn = ToggleButton(text="Lost", group="status", background_normal='',
-                               background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-
+        self.RV.lostBtn = ToggleButton(text="Lost", group="status", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
         self.RV.lostBtn.fbind('state', self.stateOfButtons, rv=rv)
-        self.RV.femaleBtn = ToggleButton(text="Female", group="gender", background_normal='',
-                                 background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-
+        self.RV.femaleBtn = ToggleButton(text="Female", group="gender", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
         self.RV.femaleBtn.fbind('state', self.stateOfButtons, rv=rv)
-        self.RV.maleBtn = ToggleButton(text="Male", group="gender", background_normal='',
-                               background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
-
+        self.RV.maleBtn = ToggleButton(text="Male", group="gender", background_normal='', background_color=get_color_from_hex('#023b80'), font_name='assets/Inter-Medium.ttf')
         self.RV.maleBtn.fbind('state', self.stateOfButtons, rv=rv)
+
         filter_layout.add_widget(self.RV.foundBtn)
         filter_layout.add_widget(self.RV.lostBtn)
         filter_layout.add_widget(self.RV.femaleBtn)
