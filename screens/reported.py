@@ -127,7 +127,7 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             self.selected = False
 
 
-def filterBackend(male, lost, ifselected):
+def filterBackend(male, lost, statusSelected, genderSelected):
     headers = {
         'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
     }
@@ -144,7 +144,7 @@ def filterBackend(male, lost, ifselected):
     else:
         status = "Found"
 
-    if ifselected == True:
+    if statusSelected and genderSelected:
         for pet in reversed(data):
             if (pet['gender'] == gender and pet["status"] == status):
                 newdata.append(
@@ -166,7 +166,29 @@ def filterBackend(male, lost, ifselected):
                         'author': pet['author']
                     }
                 )
-    else:
+    elif genderSelected == True:
+        for pet in reversed(data):
+            if (pet['gender'] == gender):
+                newdata.append(
+                    {
+                        'age': pet['age'],
+                        'breed': pet['breed'],
+                        'city': pet['city'],
+                        'color': pet['color'],
+                        'date': pet['date'],
+                        'gender': pet['gender'],
+                        'images': pet['images'],
+                        'name': pet['name'],
+                        'petid': pet['petid'],
+                        'pet_size': pet['size'],
+                        'state': pet['state'],
+                        'status': pet['status'].upper(),
+                        'summary': pet['summary'],
+                        'zip': pet['zip'],
+                        'author': pet['author']
+                    }
+                )
+    elif statusSelected == True:
         for pet in reversed(data):
             if (pet["status"] == status):
                 newdata.append(
@@ -188,11 +210,33 @@ def filterBackend(male, lost, ifselected):
                         'author': pet['author']
                     }
                 )
+    else:
+        for pet in reversed(data):
+            newdata.append(
+                {
+                    'age': pet['age'],
+                    'breed': pet['breed'],
+                    'city': pet['city'],
+                    'color': pet['color'],
+                    'date': pet['date'],
+                    'gender': pet['gender'],
+                    'images': pet['images'],
+                    'name': pet['name'],
+                    'petid': pet['petid'],
+                    'pet_size': pet['pet_size'],
+                    'state': pet['state'],
+                    'status': pet['status'].upper(),
+                    'summary': pet['summary'],
+                    'zip': pet['zip'],
+                    'author': pet['author']
+                }
+            )
+    print("filtered data is done")
     return newdata
 
 
 class Reported(MDApp):
-    stateOfFilter = [True, True, False] #male lost, gender is selected
+    stateOfFilter = [True, True, False,False] #male lost, gender is selected, status is selected
 
     class CustomScreen(Screen):
         def __init__(self, **kwargs):
@@ -257,6 +301,7 @@ class Reported(MDApp):
                 self.lostBtn.state = "normal"
                 self.femaleBtn.state = "normal"
                 self.maleBtn.state = "normal"
+                print("did callback")
                 self.refresh_done()
 
 
@@ -311,46 +356,29 @@ class Reported(MDApp):
                 rv.data.clear()
                 rv.refresh_from_data()
                 pets = rv.getReportedPetsFromBackend()
-                print(pets)
-
-                for pet in reversed(pets):
-                    rv.data.append(
-                        {
-                            'age': pet['age'],
-                            'breed': pet['breed'],
-                            'city': pet['city'],
-                            'color': pet['color'],
-                            'date': pet['date'],
-                            'gender': pet['gender'],
-                            'images': pet['images'],
-                            'name': pet['name'],
-                            'petid': pet['petid'],
-                            'pet_size': pet['size'],
-                            'state': pet['state'],
-                            'status': pet['status'].upper(),
-                            'summary': pet['summary'],
-                            'zip': pet['zip'],
-                            'author': pet['author']
-                        }
-                    )
-
+                self.stateOfFilter[2] = False
+                self.stateOfFilter[3] = False
+                #rv.refresh_done()
+                print("all buttons are normal")
             return
-        print(instance.text, value)  # male,lost
+
+        print(instance.text, value)  # stateOfFilter[male,lost, statusSelect, genSelected]
         if instance.text == "Found" and value == "down":
             self.stateOfFilter[1] = False
-
+            self.stateOfFilter[2] = True
         if instance.text == "Male" and value == "down":
             self.stateOfFilter[0] = True
-            self.stateOfFilter[2] = True
+            self.stateOfFilter[3] = True
         if instance.text == "Female" and value == "down":
             self.stateOfFilter[0] = False
-            self.stateOfFilter[2] = True
+            self.stateOfFilter[3] = True
         if instance.text == "Lost" and value == "down":
             self.stateOfFilter[1] = True
-
+            self.stateOfFilter[2] = True
         rv.data.clear()
         rv.refresh_from_data()
-        data = filterBackend(self.stateOfFilter[0], self.stateOfFilter[1],self.stateOfFilter[2])
+        data = filterBackend(self.stateOfFilter[0], self.stateOfFilter[1], self.stateOfFilter[2], self.stateOfFilter[3])
+
         print(data)
         for pet in reversed(data):
             rv.data.append(
@@ -372,8 +400,8 @@ class Reported(MDApp):
                     'author': pet['author']
                 }
             )
-            rv.refresh_done()
-
+        rv.refresh_done()
+        print("end of state function")
 
 
 
