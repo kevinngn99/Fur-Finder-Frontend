@@ -24,6 +24,7 @@ from kivy.metrics import dp, sp
 import requests
 import json
 import os
+
 from threading import Thread
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), '../KivyFile/profile.kv'))
@@ -87,7 +88,7 @@ class ProfileCustomCard(AnchorLayout):
         headers = {
             'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
         }
-
+        print(self.petid)
         r = requests.delete(url='https://fur-finder.herokuapp.com/api/pets//'+self.petid, headers=headers)
         print(r.text)
 

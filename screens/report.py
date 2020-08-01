@@ -25,9 +25,8 @@ from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from datetime import datetime
 from screens.login import LoginView
-
 Window.softinput_mode = "below_target"
-
+import uuid
 import requests
 from threading import Thread
 import json
@@ -321,7 +320,7 @@ class Report(MDApp):
             zip = self._zip.ids.category.text.replace('Zip', '')
             city = self._city.ids.category.text.replace('City', '')
             images = self._images
-
+            id = uuid.uuid4()
             dict = {
                 'name': name.strip(),
                 'gender': gender.strip(),
@@ -335,7 +334,7 @@ class Report(MDApp):
                 'zip': zip.strip(),
                 'city': city.strip(),
                 'summary': summary,
-                'petid': 'N/A'
+                'petid': id
             }
 
             for key, value in dict.items():
@@ -371,8 +370,8 @@ class Report(MDApp):
                 'Authorization': 'Token ' + LoginView.token
             }
 
-            pet_list_size = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
-            data['petid'] = len(pet_list_size) - 1
+            #pet_list_size = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
+            #data['petid'] = len(pet_list_size) - 1
             resp = s.post('http://fur-finder.herokuapp.com/api/pets//', data=data, files=self.raw_images, headers=headers)
 
             if resp.ok:

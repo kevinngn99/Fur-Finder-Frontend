@@ -23,6 +23,7 @@ from kivy.properties import StringProperty, ObjectProperty
 from kivy.graphics.stencil_instructions import StencilPop, StencilUse, StencilUnUse, StencilPush
 from kivy.metrics import dp, sp
 from screens.pet import Pet
+
 import requests
 import json
 
@@ -116,7 +117,7 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             rv.screen_manager.get_screen('Pet').children[0].location = rv.data[index]['city'] + ', ' + rv.data[index][
                 'state']
             rv.screen_manager.get_screen('Pet').children[0].name = rv.data[index]['name']
-            rv.screen_manager.get_screen('Pet').children[0].petid = rv.data[index]['petid']
+            #rv.screen_manager.get_screen('Pet').children[0].petid = rv.data[index]['petid']
             rv.screen_manager.get_screen('Pet').children[0].pet_size = rv.data[index]['pet_size']
             rv.screen_manager.get_screen('Pet').children[0].status = rv.data[index]['status']
             rv.screen_manager.get_screen('Pet').children[0].summary = rv.data[index]['summary']
