@@ -214,8 +214,8 @@ class Pet:
         gender = CustomLabel(type='Gender', txt=str(self.float_layout.gender))
         self.float_layout.bind(gender=lambda instance, value: setattr(gender, 'txt', value))
 
-        petid = CustomLabel(type='Pet ID', txt=str(self.float_layout.petid))
-        self.float_layout.bind(petid=lambda instance, value: setattr(petid, 'txt', value))
+        #petid = CustomLabel(type='Pet ID', txt=str(self.float_layout.petid))
+        #self.float_layout.bind(petid=lambda instance, value: setattr(petid, 'txt', value))
 
         size = CustomLabel(type='Size', txt=str(self.float_layout.pet_size))
         self.float_layout.bind(pet_size=lambda instance, value: setattr(size, 'txt', value))
@@ -233,7 +233,7 @@ class Pet:
         details_layout.add_widget(color)
         details_layout.add_widget(date)
         details_layout.add_widget(gender)
-        details_layout.add_widget(petid)
+        #details_layout.add_widget(petid)
         details_layout.add_widget(size)
         details_layout.add_widget(status)
         details_layout.add_widget(zip)

@@ -20,6 +20,7 @@ from kivy.effects.scroll import ScrollEffect
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.metrics import dp, sp
 from screens.pet import Pet
+
 import requests
 
 import os
@@ -112,7 +113,7 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             rv.screen_manager.get_screen('Pet').children[0].location = rv.data[index]['city'] + ', ' + rv.data[index][
                 'state']
             rv.screen_manager.get_screen('Pet').children[0].name = rv.data[index]['name']
-            rv.screen_manager.get_screen('Pet').children[0].petid = rv.data[index]['petid']
+            #rv.screen_manager.get_screen('Pet').children[0].petid = rv.data[index]['petid']
             rv.screen_manager.get_screen('Pet').children[0].pet_size = rv.data[index]['pet_size']
             rv.screen_manager.get_screen('Pet').children[0].status = rv.data[index]['status']
             rv.screen_manager.get_screen('Pet').children[0].summary = rv.data[index]['summary']
@@ -122,55 +123,72 @@ class SelectableCard(RecycleDataViewBehavior, CustomCard):
             self.selected = False
 
 
-def filterBackend(male, female, lost, found):
+def filterBackend(male, lost, ifselected):
     headers = {
         'Authorization': 'Token 9a5de7d01e1ce563e4a08a862bf68268128d6f87'
     }
     data = requests.get(url='https://fur-finder.herokuapp.com/api/pets//', headers=headers).json()
     newdata = []
+
     if male == True:
         gender = "Male"
     else:
         gender = "Female"
-    if female == True:
-        gender = "Female"
-    else:
-        gender = "Male"
+
     if lost == True:
         status = "Lost"
     else:
         status = "Found"
-    if found == True:
-        status = "Found"
-    else:
-        status = "Lost"
-    for pet in reversed(data):
 
-        if (pet['gender'] == gender and pet["status"] == status):
-            newdata.append(
-                {
-                    'age': pet['age'],
-                    'breed': pet['breed'],
-                    'city': pet['city'],
-                    'color': pet['color'],
-                    'date': pet['date'],
-                    'gender': pet['gender'],
-                    'images': pet['images'],
-                    'name': pet['name'],
-                    'petid': pet['petid'],
-                    'pet_size': pet['size'],
-                    'state': pet['state'],
-                    'status': pet['status'].upper(),
-                    'summary': pet['summary'],
-                    'zip': pet['zip'],
-                    'author': pet['author']
-                }
-            )
+    if ifselected == True:
+        for pet in reversed(data):
+            if (pet['gender'] == gender and pet["status"] == status):
+                newdata.append(
+                    {
+                        'age': pet['age'],
+                        'breed': pet['breed'],
+                        'city': pet['city'],
+                        'color': pet['color'],
+                        'date': pet['date'],
+                        'gender': pet['gender'],
+                        'images': pet['images'],
+                        'name': pet['name'],
+                        'petid': pet['petid'],
+                        'pet_size': pet['size'],
+                        'state': pet['state'],
+                        'status': pet['status'].upper(),
+                        'summary': pet['summary'],
+                        'zip': pet['zip'],
+                        'author': pet['author']
+                    }
+                )
+    else:
+        for pet in reversed(data):
+            if (pet["status"] == status):
+                newdata.append(
+                    {
+                        'age': pet['age'],
+                        'breed': pet['breed'],
+                        'city': pet['city'],
+                        'color': pet['color'],
+                        'date': pet['date'],
+                        'gender': pet['gender'],
+                        'images': pet['images'],
+                        'name': pet['name'],
+                        'petid': pet['petid'],
+                        'pet_size': pet['size'],
+                        'state': pet['state'],
+                        'status': pet['status'].upper(),
+                        'summary': pet['summary'],
+                        'zip': pet['zip'],
+                        'author': pet['author']
+                    }
+                )
     return newdata
 
 
 class Reported(MDApp):
-    stateOfFilter = [True, True, True, False]
+    stateOfFilter = [True, True, False] #male lost, gender is selected
 
     class CustomScreen(Screen):
         def __init__(self, **kwargs):
@@ -309,28 +327,24 @@ class Reported(MDApp):
                             'author': pet['author']
                         }
                     )
-
             return
-        print(instance.text, value)  # male,female,lost,found
+
+        print(instance.text, value)  # male,lost
         if instance.text == "Found" and value == "down":
-            self.stateOfFilter[3] = True
-            self.stateOfFilter[2] = False
+            self.stateOfFilter[1] = False
 
         if instance.text == "Male" and value == "down":
             self.stateOfFilter[0] = True
-            self.stateOfFilter[1] = False
-
+            self.stateOfFilter[2] = True
         if instance.text == "Female" and value == "down":
             self.stateOfFilter[0] = False
-            self.stateOfFilter[1] = True
-
-        if instance.text == "Lost" and value == "down":
             self.stateOfFilter[2] = True
-            self.stateOfFilter[3] = False
+        if instance.text == "Lost" and value == "down":
+            self.stateOfFilter[1] = True
 
         rv.data.clear()
         rv.refresh_from_data()
-        data = filterBackend(self.stateOfFilter[0], self.stateOfFilter[1], self.stateOfFilter[2], self.stateOfFilter[3])
+        data = filterBackend(self.stateOfFilter[0], self.stateOfFilter[1],self.stateOfFilter[2])
         print(data)
         for pet in reversed(data):
             rv.data.append(
